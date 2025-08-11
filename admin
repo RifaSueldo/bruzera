@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.png">
+<!-- O para .ico -->
+<link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.ico">
+  <title>Hitorial Médico</title>
+  <style>
+html {
+  scroll-behavior: smooth;
+}
+    /* ======== ESTILOS GENERALES ======== */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(54, 42, 111, 0.9);
+  color: white;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+}
+
+
+    .container {
+      margin: 20px auto;
+      max-width: 900px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* ======== LOGIN MODERNO CENTRADO ======== */
+    #loginDiv {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 350px;
+      width: 90%;
+      background: #fff;
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      z-index: 1000;
+    }
+
+    #loginDiv h2 {
+      margin-bottom: 15px;
+      color: #C42685;
+      font-size: 20px;
+    }
+
+    #loginDiv input[type="text"],
+    #loginDiv input[type="password"] {
+      width: 80%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fdfdfd;
+      transition: border 0.2s;
+    }
+
+    #loginDiv input:focus {
+      border-color: #C42685;
+      outline: none;
+    }
+
+    #loginDiv button {
+      width: 100%;
+      background: #C42685;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+
+    #loginDiv button:hover {
+      background: #a71d6d;
+    }
+
+    #errorLogin {
+      color: red;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    /* ======== INPUTS Y BOTONES ======== */
+    input[type="text"], input[type="email"], textarea, select, input[type="date"] {
+      width: 80%;
+      padding: 8px;
+      margin: 4px 0 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 13px;
+      background: #fff;
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #C42685;
+      outline: none;
+    }
+
+    button {
+      background: #C42685;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      margin: 6px 2px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #a71d6d;
+    }
+
+    /* ======== RESULTADOS (FICHA MÉDICA) ======== */
+    /* Centrar resultados y reducir espacio */
+    .resultado {
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .resultado.alternado {
+      background-color: #f0f0f0;
+    }
+
+    .resultado label {
+      font-size: 11px;
+      margin-bottom: 1px;
+      display: block;
+      font-weight: bold;
+    }
+
+    .resultado input,
+    .resultado textarea,
+    .resultado select {
+      font-size: 13px;
+      padding: 6px;
+      margin-bottom: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .resultado textarea {
+      min-height: 40px;
+    }
+
+    .resultado .acciones {
+      margin-top: 6px;
+    }
+
+    .resultado button {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* Extra campos dinámicos */
+    .campo-extra {
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .campo-extra button {
+      position: absolute;
+      top: 30px;
+      right: 0;
+      background: #e74c3c;
+      padding: 2px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+
+    /* ======== OTROS ======== */
+    #cargando {
+      display: none;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive móvil */
+    @media (max-width: 768px) {
+      .resultado-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Modal nuevo campo */
+    #modalCampo {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background:#fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 2000;
+      width: 300px;
+    }
+    #modalCampo label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    #modalCampo input[type=text], #modalCampo select {
+      margin-top: 5px;
+    }
+
+    /* NUEVO: Contenedor para búsqueda por fecha */
+    #busquedaFecha {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(196, 38, 133, 0.2);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+    .bloque-campos {
+  border-top: 1px dotted #999;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+ 
+    .btn-redireccion {
+  display: inline-block;
+  background-color: #C42685;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.btn-redireccion:hover {
+  background-color: #a01e6a;
+}
+
+  .mensaje-bienvenida {
+  background-color: #362A6F;  
+  color: white;
+  font-weight: 600;
+  padding: 12px 20px;
+  
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  text-align: right;
+  box-shadow: 0 2px 6px rgba(196, 38, 133, 0.4);
+  user-select: none;
+}
+
+/* Navbar principal */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(54, 42, 111, 0.9);
+  color: white;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+}
+
+.navbar-logo img {
+  width: 60px;
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 0.2) forwards,
+             saltitoSutil 6s ease-in-out 1.2s infinite; /* ciclo total de 6s */
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  80% {
+    transform: translateX(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes saltitoSutil {
+  0%, 80%, 100% { transform: translateY(0); } /* Pausa mayor parte del ciclo */
+  85% { transform: translateY(-4px); }  /* Pequeño pique */
+  90% { transform: translateY(0); }
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 20px;
+  transition: max-height 0.3s ease-out;
+}
+
+.navbar-menu .nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-menu .nav-link:hover {
+  background-color: #C42685;
+}
+
+/* Botón hamburguesa */
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Estado de X */
+.navbar-toggle.active i {
+  transform: rotate(90deg);
+}
+.navbar-toggle.active i::before {
+  content: "\f00d"; /* Ícono X (Font Awesome) */
+}
+
+/* Modo móvil */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 85px;
+    right: 2px;
+    background: rgba(54, 42, 111, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    overflow: hidden;
+    max-height: 0;
+  }
+
+  .navbar-menu.active {
+    max-height: 300px; /* altura suficiente para mostrar todos los links */
+    transition: max-height 0.4s ease-in-out;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-menu .nav-link {
+    padding: 10px;
+    text-align: center;
+  }
+}
+    
+    #creditosDiv {
+  text-align: center;    /* Centra texto dentro */
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* Centra contenido horizontalmente */
+  gap: 10px;             /* Espacio entre elementos */
+}
+
+#creditosDiv h3 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.opciones-compra {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center; /* Centra los botones */
+}
+
+#creditosDiv button {
+  max-width: 250px;  /* Limita ancho máximo */
+  width: 100%;       /* Ocupa todo el ancho del contenedor */
+  margin: 0 auto;    /* Centra horizontalmente */
+  box-sizing: border-box;
+  background-color: #C42685;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#creditosDiv button:hover {
+  background-color: #a71e6b;
+}
+
+
+.oculto {
+  display: none;
+}
+
+
+
+#navbarToggle,
+#navbarMenu {
+  display: none;
+}
+    body.logueado #navbarToggle,
+body.logueado #navbarMenu {
+  display: flex;
+}
+    #navbarMenu {
+  display: none;
+}
+
+#navbarMenu.open {
+  display: flex; /* o block, según diseño */
+}
+  </style>
+<meta name='google-adsense-platform-account' content='ca-host-pub-1556223355139109'/>
+<meta name='google-adsense-platform-domain' content='blogspot.com'/>
+</head>
+<body>
+
+<header>
+  <div class="navbar-logo">
+    <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo" />
+  </div>
+ <div class="navbar-action">
+    <button class="btn-redireccion" onclick="window.location.href='https://turnosbruzera.blogspot.com/'">
+      VOLVER A TURNERO
+    </button>
+  </div>
+    <!-- Botón hamburguesa-->
+  <button class="navbar-toggle" id="navbarToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Menú de enlaces -->
+  <nav class="navbar-menu" id="navbarMenu">
+    <a href="https://alertasbruzera.blogspot.com/?m=1" class="nav-link">Próximas Vacunas</a>
+    <a href="#galeria" class="nav-link">Galería</a>
+     <a href="#turnos" class="nav-link">Turnos</a>
+    <a href="#contacto" class="nav-link">Contacto</a>
+    <button onclick="logout()" style="background:#999;">Cerrar sesión</button>
+  </nav>
+  
+  
+ 
+
+</header>
+<!-- LOGIN --><div id="mensajeBienvenida" class="mensaje-bienvenida" style="display:none;"></div>
+  
+<div id="loginDiv">
+ 
+  
+  <div class="container">
+    <p>Ingresá usuario y clave para continuar:</p>
+    <input type="text" id="usuario" placeholder="Usuario" />
+    <input type="password" id="clave" style="text-align: center;" placeholder="Clave" />
+    <button onclick="login()">Ingresar</button>
+    <p id="errorLogin" style="color:red; display:none;">Usuario o clave incorrecta</p>
+  </div>
+</div>
+
+<!-- APP PRINCIPAL -->
+  <div id="mensajeBienvenida" class="mensaje-bienvenida" style="display:none;"></div>
+<div id="creditosDiv" style="display:none; margin-top:20px;">
+  <h3>Créditos disponibles: <span id="creditosActuales">Cargando...</span></h3>
+
+  <button id="btnMostrarCompraCreditos">Comprar créditos</button>
+
+  <div id="opcionesCompra" class="opciones-compra oculto">
+    <button onclick="comprarCreditos(50, 10000)">50 créditos - $10.000</button>
+    <button onclick="comprarCreditos(100, 18000)">100 créditos - $18.000</button>
+    <button onclick="comprarCreditos(200, 34000)">200 créditos - $34.000</button>
+  </div>
+</div>
+
+
+
+<div id="appDiv" style="text-align: center; display:none;">
+  <div class="container">
+
+    <!-- BUSQUEDA GENERAL -->
+    <p style="font-size: 10px; text-align: center;">Buscar por Nombre: Si no sabes el ID de la mascota, ingresa el nombre del humano o de la mascota y así obtendras el ID.</p>
+    <p style="font-size: 10px; text-align: center;">Buscar por ID: Para acceder a la ficha Médica necesitas el ID, si no lo tenés, buscá por nombre primero.</p>
+    <input type="text" id="inputBusquedaGeneral"  style="text-align: center;" placeholder="Ej: Fido, Juan Pérez, o ABC123" />
+    <button onclick="buscarGeneral()" style="text-align: center;"><i class="fas fa-search"></i> Buscar por nombre</button>
+    <button onclick="verHistorial()" style="text-align: center;"><i class="fas fa-clock-rotate-left"></i> Acceder con ID</button>
+   
+
+    <div id="cargando" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Cargando, por favor esperá...</div>
+    
+    
+
+    <div id="resultadoGeneral"></div>
+
+    <!-- NUEVO: BUSCADOR POR FECHA -->
+    <section id="turnos">
+    <div id="busquedaFecha">
+      <label for="fechaTurno"><strong>TURNOS:</strong></label>
+      <input type="date" id="fechaTurno" />
+      <button onclick="buscarPorFecha()"><i class="fas fa-calendar-check"></i> Buscar turnos</button>
+      <div id="cargandoFecha" style="display:none; margin-top:8px; color:#666;">⏳ Buscando turnos...</div>
+      <div id="resultadoFecha" style="margin-top: 15px;"></div>
+    </div>
+</section>
+  </div>
+</div>
+
+<!-- MODAL NUEVO CAMPO -->
+<div id="modalCampo">
+  <h4>Agregar nuevo campo</h4>
+  
+  <label for="tipoCampo">Tipo de campo:</label>
+  <select id="tipoCampo">
+    <option value="texto">Texto corto</option>
+    <option value="textarea">Texto largo</option>
+    <option value="fecha">Fecha (dd/mm/aaaa)</option>
+    <option value="opciones">Múltiples opciones</option>
+  </select>
+
+  <div id="opcionesExtra" style="display:none; margin-top:8px;">
+    <label for="listaOpciones">Opciones (separadas por coma):</label>
+    <input type="text" id="listaOpciones" placeholder="Ej: Vacuna, Desparasitante, Otro" />
+  </div>
+
+  <label for="nombreCampo">Nombre del campo:</label>
+  <input type="text" id="nombreCampo" placeholder="Ej: Vacuna aplicada" />
+
+  <div style="margin-top:10px; text-align:right;">
+    <button onclick="confirmarNuevoCampo()">Agregar</button>
+    <button onclick="cerrarModalCampo()" style="background:#999;">Cancelar</button>
+  </div>
+</div>
+
+<script>
+  const bloquesVisiblesPorRegistro = {};
+const urlScript = "https://script.google.com/macros/s/AKfycbxjjF5fx4xQtVpaSsigm4idgLyCGFSbJiyYxh9pyrvioLB3bETGKym-baU4d-wvXlpITQ/exec";
+
+// LOGIN (validación desde backend)
+function login() {
+  const usuario = document.getElementById("usuario").value.trim();
+  const clave = document.getElementById("clave").value.trim();
+
+  fetch(urlScript, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `accion=login&usuario=${encodeURIComponent(usuario)}&clave=${encodeURIComponent(clave)}`
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      sessionStorage.setItem("logueado", "true");
+      sessionStorage.setItem("usuario", usuario); // Guardar usuario
+      document.body.classList.add("logueado"); // 👈 Hacemos visible el botón flotante
+      mostrarApp(true);
+      mostrarMensajeBienvenida(usuario);
+    } else {
+      document.getElementById("errorLogin").style.display = "block";
+      document.getElementById("errorLogin").textContent = data.error || "Usuario o clave incorrecta";
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("errorLogin").style.display = "block";
+    document.getElementById("errorLogin").textContent = "Error en la conexión";
+  });
+}
+
+function mostrarMensajeBienvenida(usuario) {
+  const contenedor = document.getElementById("mensajeBienvenida");
+  contenedor.textContent = `¡Hola, ${usuario}!`;
+  contenedor.style.display = "block";
+}
+
+function logout() {
+  sessionStorage.removeItem("logueado");
+  mostrarApp(false);
+}
+
+  
+
+function mostrarApp(show) {
+  document.getElementById("loginDiv").style.display = show ? "none" : "block";
+  document.getElementById("appDiv").style.display = show ? "block" : "none";
+  // Mostrar u ocultar créditos según login
+  document.getElementById("creditosDiv").style.display = show ? "block" : "none";
+  if (!show) document.getElementById("resultadoGeneral").innerHTML = "";
+}
+
+window.onload = () => {
+  const logueado = sessionStorage.getItem("logueado") === "true";
+  mostrarApp(logueado);
+  if (logueado) {
+    const usuario = sessionStorage.getItem("usuario") || "";
+    mostrarMensajeBienvenida(usuario);
+    const hoy = new Date().toISOString().split("T")[0];
+    document.getElementById("fechaTurno").value = hoy;
+    buscarPorFecha();
+  }
+};
+
+ 
+function fechaVacunaToString(fechaStr) {
+  // Formatear fecha para mostrar en lista (DD/MM/YYYY)
+  function parseFechaDDMMYYYY(str) {
+    if (!str) return null;
+    const partes = str.split("/");
+    if (partes.length !== 3) return null;
+    const [dia, mes, anio] = partes.map(Number);
+    return new Date(anio, mes - 1, dia);
+  }
+  let fecha = parseFechaDDMMYYYY(fechaStr);
+  if (!fecha) fecha = new Date(fechaStr);
+  if (!fecha || isNaN(fecha.getTime())) return fechaStr;
+  return fecha.toLocaleDateString("es-AR");
+}
+
+  // BUSQUEDA GENERAL
+  function buscarGeneral() {
+    const query = document.getElementById("inputBusquedaGeneral").value.trim().toLowerCase();
+    if (!query) return alert("Ingresá un dato para buscar.");
+    ejecutarBusqueda("?buscar=" + encodeURIComponent(query), "Resultados encontrados:");
+  }
+
+  function verHistorial() {
+    const dni = document.getElementById("inputBusquedaGeneral").value.trim().toUpperCase();
+    if (!dni) return alert("Ingresá un ID válido.");
+    ejecutarBusqueda("?historial=" + dni, `Ficha Médica ID: ${dni}`);
+  }
+
+  function ejecutarBusqueda(parametro, titulo) {
+  const resultadoDiv = document.getElementById("resultadoGeneral");
+  const cargando = document.getElementById("cargando");
+  resultadoDiv.innerHTML = "";
+  cargando.style.display = "block";
+
+  fetch(urlScript + parametro)
+    .then(res => res.json())
+    .then(data => {
+      cargando.style.display = "none";
+      if (data.success && data.resultados.length > 0) {
+        const esBusquedaGeneral = parametro.startsWith("?buscar=");
+        mostrarResultados(data.resultados, titulo, esBusquedaGeneral);
+      } else {
+        resultadoDiv.innerHTML = "<p style='color:#C42685;'>⚠️ No se encontraron datos.</p>";
+      }
+    })
+    .catch(() => {
+      cargando.style.display = "none";
+      alert("❌ Error al buscar en la base de datos.");
+    });
+}
+
+
+  function mostrarResultados(lista, titulo, esBusquedaGeneral = false) {
+  const resultadoDiv = document.getElementById("resultadoGeneral");
+  let html = `<h3>${titulo}</h3>`;
+
+  lista.forEach((r, index) => {
+    const claseFondo = index % 2 === 0 ? "" : "alternado";
+
+    if (esBusquedaGeneral) {
+      // Solo campos básicos para búsqueda general
+      html += `
+        <div class="resultado ${claseFondo}" id="registro-${index}">
+          <label>Nombre Humano:</label>
+          <input type="text" value="${r.nombre}" disabled>
+
+          <label>Nombre Mascota:</label>
+          <input type="text" value="${r.nombreMascota}" disabled>
+
+          <label>ID Mascota:</label>
+          <input type="text" value="${r.dniMascota}" disabled>
+        </div>
+      `;
+    } else {
+      // Mostrar todos los campos completos para historial o búsqueda detallada
+      html += `
+        <div class="resultado ${claseFondo}" id="registro-${index}">
+          <label>Paciente desde:</label>
+          <input type="text" value="${r.fecha}" disabled>
+          
+          <label>ID Mascota:</label>
+          <input type="text" id="dni-${index}" value="${r.dniMascota}" disabled>
+          
+          <label>Nombre Humano:</label>
+          <input type="text" id="nombre-${index}" value="${r.nombre}" disabled>
+          
+          <label>Nombre Mascota:</label>
+          <input type="text" id="mascota-${index}" value="${r.nombreMascota}" disabled>
+          
+          <label>Especie:</label>
+          <input type="text" id="tipo-${index}" value="${r.tipoMascota}" disabled>
+          
+          <label>Email:</label>
+          <input type="email" id="email-${index}" value="${r.email}" disabled>
+          
+          <label>Teléfono:</label>
+          <input type="text" id="tel-${index}" value="${r.telefono}" disabled>
+
+          <label>Fecha de Nac:</label>
+<input type="text" id="fehcaDeNac-${index}" 
+  value="${r.fehcaDeNac ? new Date(r.fehcaDeNac).toLocaleDateString('es-AR') : ''}" 
+  disabled>
+
+          
+          <label>Peso:</label>
+          <input type="text" id="peso-${index}" value="${r.peso || ''}" disabled>
+          
+          <label>Veterinario que lo atiende:</label>
+          <textarea id="historial-${index}" disabled>${r.veterinario || ''}</textarea>
+          
+          <label>Próxima vacuna:</label>
+<input type="text" id="proximaVacuna-${index}" 
+  value="${r.proxima_vacuna ? new Date(r.proxima_vacuna).toLocaleDateString('es-AR') : ''}" 
+  disabled>
+
+
+          <div id="extraCampos-${index}"></div>
+
+          <button type="button" onclick="agregarBloqueCampos(${index})" style="margin-top: 5px;">
+            <i class="fas fa-plus"></i> Agregar Datos Médicos
+          </button>
+
+          <button id="btnEditar-${index}" onclick="habilitarEdicion(${index})" style="margin-top: 10px;">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+        </div>
+      `;
+    }
+  });
+
+  resultadoDiv.innerHTML = html;
+
+  // Renderizar los bloques extras solo en búsqueda detallada
+  if (!esBusquedaGeneral) {
+    lista.forEach((r, index) => {
+      renderizarBloquesExtras(index, r.extras);
+    });
+  }
+}
+
+
+  // HABILITAR EDICIÓN
+  function habilitarEdicion(index) {
+  // Campos fijos
+  const campos = [
+    `nombre-${index}`, `mascota-${index}`, `tipo-${index}`, `email-${index}`, `tel-${index}`,
+    `fehcaDeNac-${index}`, `peso-${index}`, `historial-${index}`, `proximaVacuna-${index}`
+  ];
+  campos.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = false;
+  });
+ // Habilitar y convertir a <input type="date"> el campo Próxima vacuna
+  const proximaVacunaInput = document.getElementById(`proximaVacuna-${index}`);
+  if (proximaVacunaInput) {
+    let fechaISO = "";
+    if (proximaVacunaInput.value) {
+      const partes = proximaVacunaInput.value.split("/");
+      if (partes.length === 3) {
+        fechaISO = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+      }
+    }
+    proximaVacunaInput.type = "date";
+    proximaVacunaInput.value = fechaISO;
+    proximaVacunaInput.disabled = false;
+  }
+    // ✅ Habilitar y convertir a <input type="date"> el campo Fecha de nacimiento
+  const fechaNacInput = document.getElementById(`fehcaDeNac-${index}`);
+  if (fechaNacInput) {
+    let fechaISO = "";
+    if (fechaNacInput.value) {
+      const partes = fechaNacInput.value.split("/"); // Formato dd/mm/yyyy
+      if (partes.length === 3) {
+        fechaISO = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+      }
+    }
+    fechaNacInput.type = "date";
+    fechaNacInput.value = fechaISO;
+    fechaNacInput.disabled = false;
+  }
+  // Campos dinámicos dentro de los bloques
+  const contenedorExtras = document.getElementById(`extraCampos-${index}`);
+  if (contenedorExtras) {
+    // Habilitar todos los inputs, selects y textareas dentro de los bloques dinámicos
+    contenedorExtras.querySelectorAll('input, select, textarea').forEach(campo => {
+      campo.disabled = false;
+    });
+  }
+
+  // Cambiar el botón para que guarde los cambios
+  const btn = document.getElementById(`btnEditar-${index}`);
+  if (btn) {
+    btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+    btn.onclick = () => guardarCambios(index);
+  }
+}
+
+
+  // GUARDAR CAMBIOS
+ function guardarCambios(index) {
+  const datosActualizados = {
+    dniMascota: document.getElementById(`dni-${index}`).value.trim(),
+    nombre: document.getElementById(`nombre-${index}`).value.trim(),
+    nombreMascota: document.getElementById(`mascota-${index}`).value.trim(),
+    tipoMascota: document.getElementById(`tipo-${index}`).value.trim(),
+    email: document.getElementById(`email-${index}`).value.trim(),
+    telefono: document.getElementById(`tel-${index}`).value.trim(),
+    fehcaDeNac: document.getElementById(`fehcaDeNac-${index}`).value.trim(),
+    peso: document.getElementById(`peso-${index}`).value.trim(),
+    veterinario: document.getElementById(`historial-${index}`).value.trim(),
+    proxima_vacuna: document.getElementById(`proximaVacuna-${index}`).value.trim(),
+    extras: {}
+  };
+
+  const contenedorExtras = document.getElementById(`extraCampos-${index}`);
+  if (contenedorExtras) {
+    const bloques = contenedorExtras.getElementsByClassName("bloque-campos");
+
+    for (let i = 0; i < bloques.length; i++) {
+      const bloque = bloques[i];
+
+      // Obtener valores de cada campo dentro del bloque
+      const fecha = bloque.querySelector('input[type="date"]')?.value || "";
+      const selectMotivo = bloque.querySelector('select[multiple]');
+      const motivos = selectMotivo
+        ? Array.from(selectMotivo.selectedOptions).map(opt => opt.value).join(", ")
+        : "";
+      const descripcion = bloque.querySelector('input[type="text"]')?.value || "";
+      const observaciones = bloque.querySelector('textarea')?.value || "";
+
+      // Guardar con claves ordenadas para backend
+      datosActualizados.extras[`Fecha_${i+1}`] = fecha;
+      datosActualizados.extras[`Motivo_${i+1}`] = motivos;
+      datosActualizados.extras[`Descripción_${i+1}`] = descripcion;
+      datosActualizados.extras[`Observaciones_${i+1}`] = observaciones;
+    }
+  }
+
+  fetch(urlScript, {
+    method: "POST",
+    body: new URLSearchParams({
+      accion: "editar",
+      datos: JSON.stringify(datosActualizados),
+    }),
+  })
+    .then(res => res.json())
+    .then(resp => {
+      if (resp.success) {
+        alert("✅ Cambios guardados correctamente.");
+        buscarGeneral();
+      } else {
+        alert("⚠️ Error: " + resp.error);
+      }
+    })
+    .catch(() => alert("❌ Error de conexión al guardar los cambios."));
+}
+
+</script>
+
+  <script>
+   function formatearHora(hora) {
+  if (!hora) return "";
+
+  let fechaObj;
+
+  // Si la hora viene como ISO (e.g. "2025-08-01T20:16:00.000Z")
+  if (typeof hora === "string" && hora.includes("T")) {
+    fechaObj = new Date(hora);
+  }
+  // Si la hora viene como "16:00:00" o "16:00"
+  else if (typeof hora === "string" && hora.includes(":")) {
+    const [h, m] = hora.split(":");
+    fechaObj = new Date();
+    fechaObj.setHours(parseInt(h, 10), parseInt(m, 10), 0, 0);
+  }
+  // Si ya es Date o timestamp
+  else if (hora instanceof Date || typeof hora === "number") {
+    fechaObj = new Date(hora);
+  }
+
+  if (!fechaObj) return hora;
+
+  // ✅ Restar 1 hora y 15 minutos manualmente
+  fechaObj.setMinutes(fechaObj.getMinutes() - 75);
+
+  return fechaObj.toLocaleTimeString("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+
+    
+function buscarPorFecha() {
+  const fecha = document.getElementById("fechaTurno").value;
+  const resultadoFecha = document.getElementById("resultadoFecha");
+  const cargandoFecha = document.getElementById("cargandoFecha");
+
+  if (!fecha) {
+    alert("Por favor, seleccioná una fecha.");
+    return;
+  }
+
+  resultadoFecha.innerHTML = "";
+  cargandoFecha.style.display = "block";
+
+  fetch(urlScript + "?fecha=" + encodeURIComponent(fecha))
+    .then(res => res.text()) // ✅ Primero obtenemos la respuesta como texto
+    .then(text => {
+      console.log("Respuesta cruda:", text); // 🔍 Mostrar respuesta en consola
+
+      let data;
+      try {
+        data = JSON.parse(text); // Intentar parsear el JSON manualmente
+      } catch (err) {
+        console.error("Error al parsear JSON:", err);
+        alert("❌ La respuesta del servidor no es un JSON válido.");
+        cargandoFecha.style.display = "none";
+        return;
+      }
+
+      cargandoFecha.style.display = "none";
+
+      if (data.success && data.resultados.length > 0) {
+        let html = `<h3>Turnos para el día ${new Date(fecha).toLocaleDateString("es-AR")}</h3>`;
+
+        data.resultados.forEach((turno, i) => {
+          html += `
+            <div class="resultado ${i % 2 === 0 ? "" : "alternado"}">
+              <label>Hora:</label>
+              <input type="text" value="${formatearHora(turno.turno)}" disabled />
+              <label>Nombre Humano:</label>
+              <input type="text" value="${turno.nombre}" disabled />
+              <label>Nombre Mascota:</label>
+              <input type="text" value="${turno.nombreMascota}" disabled />
+              <label>ID Mascota:</label>
+              <input type="text" value="${turno.dniMascota}" disabled />
+            </div>`;
+        });
+
+        resultadoFecha.innerHTML = html;
+      } else {
+        resultadoFecha.innerHTML = `<p style="color:#C42685;">⚠️ No se encontraron turnos para esa fecha.</p>`;
+      }
+    })
+    .catch(err => {
+      cargandoFecha.style.display = "none";
+      console.error("Error en fetch o en el parseo:", err);
+      alert("❌ Error al buscar turnos por fecha.");
+    });
+}
+
+// Test de depuración manual:
+fetch(urlScript + "?fecha=2025-07-30")
+  .then(res => res.text())
+  .then(console.log)
+  .catch(err => console.error("Fetch error:", err));
+
+</script>
+  <script>
+    
+    function renderizarBloquesExtras(index, extras) {
+  const contenedor = document.getElementById(`extraCampos-${index}`);
+  if (!contenedor) return;
+  contenedor.innerHTML = ""; // Limpiar bloques previos
+
+  if (!extras) return; // No hay extras, no hacemos nada
+
+  // Agrupar datos por número de bloque
+  const bloques = {};
+
+  Object.entries(extras).forEach(([clave, valor]) => {
+    const partes = clave.split("_");
+    if (partes.length !== 2) return; // clave mal formada
+    const campo = partes[0];
+    const num = partes[1];
+    if (!bloques[num]) bloques[num] = {};
+    bloques[num][campo] = valor;
+  });
+
+  // Crear bloques solo si tienen datos (al menos un campo con texto)
+  Object.entries(bloques).forEach(([num, bloque]) => {
+    const tieneDatos = Object.values(bloque).some(v => v && v.trim() !== "");
+    if (tieneDatos) {
+      crearBloqueConDatos(contenedor, bloque);
+    }
+  });
+}
+
+function crearBloqueConDatos(contenedor, bloque) {
+  const bloqueDiv = document.createElement("div");
+  bloqueDiv.className = "bloque-campos";
+  bloqueDiv.style.borderTop = "1px dotted #999";
+  bloqueDiv.style.marginTop = "10px";
+  bloqueDiv.style.paddingTop = "10px";
+
+  // Fecha
+  const labelFecha = document.createElement("label");
+  labelFecha.textContent = "Fecha:";
+  const inputFecha = document.createElement("input");
+  inputFecha.type = "date";
+  if (bloque.Fecha) {
+  // Convertir "2025-08-01" o ISO a formato válido para <input type="date">
+  const fechaISO = new Date(bloque.Fecha).toISOString().split("T")[0];
+  inputFecha.value = fechaISO;
+} else {
+  inputFecha.value = "";
+}
+
+  inputFecha.disabled = true;
+
+  // Motivo (multiple)
+  const labelMotivo = document.createElement("label");
+  labelMotivo.textContent = "Motivo:";
+  const selectMotivo = document.createElement("select");
+  selectMotivo.multiple = true;
+  selectMotivo.disabled = true;
+  ["Consulta", "Vacuna", "Antiparasitario", "Tratamiento", "Cirugía", "Otro"].forEach(opcion => {
+    const opt = document.createElement("option");
+    opt.value = opcion;
+    opt.textContent = opcion;
+    // Seleccionar si está en los datos
+    if (bloque.Motivo) {
+      const motivos = bloque.Motivo.split(",").map(s => s.trim());
+      if (motivos.includes(opcion)) opt.selected = true;
+    }
+    selectMotivo.appendChild(opt);
+  });
+
+  // Descripción
+  const labelDescripcion = document.createElement("label");
+  labelDescripcion.textContent = "Descripción:";
+  const inputDescripcion = document.createElement("input");
+  inputDescripcion.type = "text";
+  inputDescripcion.value = bloque.Descripción || "";
+  inputDescripcion.disabled = true;
+
+  // Observaciones
+  const labelObs = document.createElement("label");
+  labelObs.textContent = "Observaciones:";
+  const textareaObs = document.createElement("textarea");
+  textareaObs.rows = 3;
+  textareaObs.value = bloque.Observaciones || "";
+  textareaObs.disabled = true;
+
+  // Agregar todos los elementos al bloque
+  bloqueDiv.appendChild(labelFecha);
+  bloqueDiv.appendChild(inputFecha);
+  bloqueDiv.appendChild(labelMotivo);
+  bloqueDiv.appendChild(selectMotivo);
+  bloqueDiv.appendChild(labelDescripcion);
+  bloqueDiv.appendChild(inputDescripcion);
+  bloqueDiv.appendChild(labelObs);
+  bloqueDiv.appendChild(textareaObs);
+
+  contenedor.appendChild(bloqueDiv);
+}
+
+    
+  function agregarBloqueCampos(index) {
+  const container = document.getElementById(`extraCampos-${index}`);
+
+  const bloque = document.createElement("div");
+  bloque.className = "bloque-campos";
+  bloque.style.borderTop = "1px dotted #999";
+  bloque.style.marginTop = "10px";
+  bloque.style.paddingTop = "10px";
+
+  // Fecha (automática)
+  const fechaLabel = document.createElement("label");
+  fechaLabel.textContent = "Fecha:";
+  const fechaInput = document.createElement("input");
+  fechaInput.type = "date";
+  fechaInput.valueAsDate = new Date();
+  fechaInput.disabled = true;  // DESHABILITADO al crear
+
+  // Motivo (multi-opciones)
+  const motivoLabel = document.createElement("label");
+  motivoLabel.textContent = "Motivo:";
+  const motivoSelect = document.createElement("select");
+  motivoSelect.multiple = true;
+  motivoSelect.disabled = true; // DESHABILITADO al crear
+  ["Consulta", "Vacuna", "Antiparasitario", "Tratamiento", "Cirugía"].forEach(opcion => {
+    const opt = document.createElement("option");
+    opt.value = opcion;
+    opt.textContent = opcion;
+    motivoSelect.appendChild(opt);
+  });
+
+  // Descripción (texto corto)
+  const descripcionLabel = document.createElement("label");
+  descripcionLabel.textContent = "Descripción:";
+  const descripcionInput = document.createElement("input");
+  descripcionInput.type = "text";
+  descripcionInput.disabled = true;  // DESHABILITADO al crear
+
+  // Observaciones (texto largo)
+  const observacionesLabel = document.createElement("label");
+  observacionesLabel.textContent = "Observaciones:";
+  const observacionesTextarea = document.createElement("textarea");
+  observacionesTextarea.disabled = true; // DESHABILITADO al crear
+
+  // Agregar todos los campos al bloque
+  bloque.appendChild(fechaLabel);
+  bloque.appendChild(fechaInput);
+
+  bloque.appendChild(motivoLabel);
+  bloque.appendChild(motivoSelect);
+
+  bloque.appendChild(descripcionLabel);
+  bloque.appendChild(descripcionInput);
+
+  bloque.appendChild(observacionesLabel);
+  bloque.appendChild(observacionesTextarea);
+
+  // Agregar el bloque al contenedor del registro indicado
+  container.appendChild(bloque);
+}
+function parseFechaDDMMYYYY(str) {
+  // str esperado: "05/08/2025"
+  if (!str) return null;
+  const partes = str.split("/");
+  if (partes.length !== 3) return null;
+  const [dia, mes, anio] = partes.map(Number);
+  return new Date(anio, mes - 1, dia);
+}
+
+</script>
+ <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.getItem('logueado') === 'true') {
+      document.body.classList.add('logueado');
+    }
+  });
+</script> 
+  <script>
+  const creditosSpan = document.getElementById("creditosActuales");
+  
+
+  // Cargar créditos al inicio
+  function cargarCreditos() {
+    fetch(urlScript + "?accion=creditos")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          creditosSpan.textContent = data.creditos;
+        } else {
+          creditosSpan.textContent = "Error al cargar créditos";
+        }
+      });
+  }
+
+  // Redirigir a Mercado Pago para comprar créditos
+  function comprarCreditos(cantCreditos, precio) {
+    // Aquí debes poner el link real generado en Mercado Pago para cada paquete
+    // Ejemplo genérico:
+    const linksPago = {
+      50: "https://www.mercadopago.com/checkout/50creditos",
+      100: "https://www.mercadopago.com/checkout/100creditos",
+      200: "https://www.mercadopago.com/checkout/200creditos"
+    };
+    window.open(linksPago[cantCreditos], "_blank");
+  }
+
+  cargarCreditos();
+    
+    document.getElementById("btnMostrarCompraCreditos").addEventListener("click", () => {
+  const opciones = document.getElementById("opcionesCompra");
+  opciones.classList.toggle("oculto");
+});
+
+</script>
+  <script>
+  const toggleBtn = document.getElementById('navbarToggle');
+  const menu = document.getElementById('navbarMenu');
+
+  // Abrir/cerrar menú
+  toggleBtn.addEventListener('click', () => {
+    menu.classList.toggle('active');
+    toggleBtn.classList.toggle('active'); // Cambia hamburguesa a X
+  });
+
+  // Cerrar menú al hacer clic en un enlace
+  document.querySelectorAll('.navbar-menu .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('active');
+      toggleBtn.classList.remove('active'); // Volver a hamburguesa
+    });
+  });
+    
+    function logout() {
+  sessionStorage.removeItem("logueado");
+  mostrarApp(false);
+
+  // Cerrar menú y resetear botón hamburguesa
+  menu.classList.remove('active');
+  toggleBtn.classList.remove('active');
+
+  // Opcional: si ocultás todo con una clase en body, la quitás también
+  document.body.classList.remove('logueado');
+}
+
+</script>
+</body>
+</html>
