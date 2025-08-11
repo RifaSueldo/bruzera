@@ -994,9 +994,9 @@ function buscarPorFecha() {
       cargandoFecha.style.display = "none";
 
       if (data.success && data.resultados.length > 0) {
-        let partes = fecha.split("-");
-let fechaLocal = new Date(partes[0], partes[1] - 1, partes[2]);
-let html = `<h3>Turnos para el día ${fechaLocal.toLocaleDateString("es-AR")}</h3>`;
+        let [anio, mes, dia] = fecha.split("-");
+let fechaFormateada = `${dia}/${mes}/${anio}`;
+let html = `<h3>Turnos para el día ${fechaFormateada}</h3>`;
 
         data.resultados.forEach((turno, i) => {
           html += `
