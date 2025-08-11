@@ -289,7 +289,7 @@ html {
   
   margin-bottom: 1rem;
   font-size: 1.1rem;
-  text-align: right;
+  text-align: left;
   box-shadow: 0 2px 6px rgba(196, 38, 133, 0.4);
   user-select: none;
 }
@@ -309,12 +309,13 @@ html {
   backdrop-filter: blur(6px);
 }
 
+/* Logo con animación */
 .navbar-logo img {
   width: 60px;
   opacity: 0;
   transform: translateX(100px);
   animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 0.2) forwards,
-             saltitoSutil 6s ease-in-out 1.2s infinite; /* ciclo total de 6s */
+             saltitoSutil 6s ease-in-out 1.2s infinite;
 }
 
 @keyframes slideInRight {
@@ -333,17 +334,19 @@ html {
 }
 
 @keyframes saltitoSutil {
-  0%, 80%, 100% { transform: translateY(0); } /* Pausa mayor parte del ciclo */
-  85% { transform: translateY(-4px); }  /* Pequeño pique */
+  0%, 80%, 100% { transform: translateY(0); }
+  85% { transform: translateY(-4px); }
   90% { transform: translateY(0); }
 }
 
+/* Menú de navegación */
 .navbar-menu {
   display: flex;
   gap: 20px;
   transition: max-height 0.3s ease-out;
 }
 
+/* Enlaces del menú */
 .navbar-menu .nav-link {
   color: white;
   text-decoration: none;
@@ -353,12 +356,11 @@ html {
   border-radius: 4px;
   transition: background-color 0.2s ease;
 }
-
 .navbar-menu .nav-link:hover {
   background-color: #C42685;
 }
 
-/* Botón hamburguesa */
+/* Botón hamburguesa - oculto por defecto */
 .navbar-toggle {
   display: none;
   background: none;
@@ -369,7 +371,7 @@ html {
   transition: transform 0.3s ease;
 }
 
-/* Estado de X */
+/* Estado activo - ícono X */
 .navbar-toggle.active i {
   transform: rotate(90deg);
 }
@@ -391,22 +393,49 @@ html {
     overflow: hidden;
     max-height: 0;
   }
-
   .navbar-menu.active {
-    max-height: 300px; /* altura suficiente para mostrar todos los links */
+    max-height: 300px;
     transition: max-height 0.4s ease-in-out;
   }
-
   .navbar-toggle {
     display: block;
   }
-
   .navbar-menu .nav-link {
     padding: 10px;
     text-align: center;
   }
 }
-    
+
+/* Por defecto ocultar botón y menú */
+#navbarToggle,
+#navbarMenu {
+  display: none;
+}
+
+/* Mostrar botón hamburguesa sólo en móvil y cuando está logueado */
+@media (max-width: 768px) {
+  body.logueado #navbarToggle {
+    display: flex;
+  }
+}
+
+/* En PC oculto aunque esté logueado */
+@media (min-width: 769px) {
+  body.logueado #navbarToggle {
+    display: none !important;
+  }
+}
+
+body.logueado #navbarMenu {
+  display: flex;
+  /* Para PC y móviles */
+}
+
+/* Control para mostrar menú cuando está abierto */
+#navbarMenu.open {
+  display: flex;
+}
+
     #creditosDiv {
   text-align: center;    /* Centra texto dentro */
   display: flex;
@@ -433,7 +462,7 @@ html {
   width: 100%;       /* Ocupa todo el ancho del contenedor */
   margin: 0 auto;    /* Centra horizontalmente */
   box-sizing: border-box;
-  background-color: #C42685;
+  background-color: #362A6F;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -454,21 +483,7 @@ html {
 
 
 
-#navbarToggle,
-#navbarMenu {
-  display: none;
-}
-    body.logueado #navbarToggle,
-body.logueado #navbarMenu {
-  display: flex;
-}
-    #navbarMenu {
-  display: none;
-}
 
-#navbarMenu.open {
-  display: flex; /* o block, según diseño */
-}
   </style>
 <meta name='google-adsense-platform-account' content='ca-host-pub-1556223355139109'/>
 <meta name='google-adsense-platform-domain' content='blogspot.com'/>
@@ -480,7 +495,7 @@ body.logueado #navbarMenu {
     <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo" />
   </div>
  <div class="navbar-action">
-    <button class="btn-redireccion" onclick="location.href='inicio/'">
+    <button class="btn-redireccion" onclick="window.location.href='https://turnosbruzera.blogspot.com/'">
       VOLVER A TURNERO
     </button>
   </div>
@@ -491,10 +506,9 @@ body.logueado #navbarMenu {
 
   <!-- Menú de enlaces -->
   <nav class="navbar-menu" id="navbarMenu">
+    <a href="#turnos" class="nav-link">Turnos</a>
     <a href="https://alertasbruzera.blogspot.com/?m=1" class="nav-link">Próximas Vacunas</a>
-    <a href="#galeria" class="nav-link">Galería</a>
-     <a href="#turnos" class="nav-link">Turnos</a>
-    <a href="#contacto" class="nav-link">Contacto</a>
+     
     <button onclick="logout()" style="background:#999;">Cerrar sesión</button>
   </nav>
   
@@ -590,7 +604,7 @@ body.logueado #navbarMenu {
 
 <script>
   const bloquesVisiblesPorRegistro = {};
-const urlScript = "https://script.google.com/macros/s/AKfycbxjjF5fx4xQtVpaSsigm4idgLyCGFSbJiyYxh9pyrvioLB3bETGKym-baU4d-wvXlpITQ/exec";
+const urlScript = "https://script.google.com/macros/s/AKfycbwA_lwWMazJkNsZLctLld_O4tf4RFTSaOpxpx4LMJdOpwOgygwchokuea0QEY1mlzeQvQ/exec";
 
 // LOGIN (validación desde backend)
 function login() {
