@@ -751,59 +751,18 @@ section.visible {
     <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo" />
   </div>
  <div class="navbar-action">
-    <button class="btn-redireccion" onclick="location.href='panel/index.html'">
+    <button class="btn-redireccion" onclick="window.location.href='https://vetebruzera.blogspot.com/?m=1'">
       INGRESO VETERINARIO
     </button>
   </div>
-  <!-- Botón hamburguesa 
-  <button class="navbar-toggle" id="navbarToggle">
-    <i class="fas fa-bars"></i>
-  </button>-->
-
-  <!-- Menú de enlaces 
-  <nav class="navbar-menu" id="navbarMenu">
-    <a href="#inicio" class="nav-link">Inicio</a>
-    <a href="#galeria" class="nav-link">Galería</a>
-     <a href="#turnos" class="nav-link">Turnos</a>
-    <a href="#contacto" class="nav-link">Contacto</a>
-  </nav>-->
+  
 </header>
   <!-- Loader -->
 <div id="loaderOverlay">
   <div class="loader"></div>
   <p>Cargando...</p>
 </div>
-<!--<section id="inicio" style="padding:60px 20px; text-align:center; background:#f8f8f8;">
-  <h1 style="color:#362A6F; font-size:32px; margin-bottom:15px;">Bienvenido.....</h1>
-  <p style="max-width:600px; margin:0 auto; font-size:18px; color:#555;">
-    Gestioná fácilmente los turnos de tus mascotas, consultá disponibilidad y reservá tu cita de manera rápida y sencilla.
-  </p>
-  <button onclick="document.querySelector('#calendario').scrollIntoView({behavior:'smooth'})"
-          style="margin-top:20px; background:#C42685; color:white; border:none; padding:12px 20px; font-size:16px; border-radius:6px; cursor:pointer;">
-    Reservar Turno
-  </button>
-</section>
-<!--
-<section id="galeria" style="padding:40px; text-align:center;">
-  <h2>Galería</h2>
-  <div class="carrusel-container">
-    <button class="flecha izquierda">&#10094;</button>
-    <div class="carrusel">
-      <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-      <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-      <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-      <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-     <div class="item"><img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Mascota 1"></div>
-    </div>
-    <button class="flecha derecha">&#10095;</button>
-  </div>
-</section>
--->
+
  
 
 <div class="calendario">
@@ -903,7 +862,7 @@ section.visible {
   const mesActualElemento = document.getElementById("mesActual");
   const turnosElemento = document.getElementById("turnos");
   const formularioElemento = document.getElementById("formularioReserva");
-  const urlScript = "https://script.google.com/macros/s/AKfycbxjjF5fx4xQtVpaSsigm4idgLyCGFSbJiyYxh9pyrvioLB3bETGKym-baU4d-wvXlpITQ/exec";
+  const urlScript = "https://script.google.com/macros/s/AKfycbwA_lwWMazJkNsZLctLld_O4tf4RFTSaOpxpx4LMJdOpwOgygwchokuea0QEY1mlzeQvQ/exec";
 
   let fecha = new Date();
   let diaSeleccionado = null;
@@ -1126,7 +1085,7 @@ contenedorTurnos.appendChild(btn);
 
         alert("Reserva enviada exitosamente");
       } else {
-        alert("Ese turno ya fue reservado");
+        alert("Error al reservar turno, consulte con su veterinario");
       }
     });
   }
@@ -1251,24 +1210,7 @@ function buscarDni() {
     });
 }
 </script>
-  <script>
-  const toggleBtn = document.getElementById('navbarToggle');
-  const menu = document.getElementById('navbarMenu');
-
-  // Abrir/cerrar menú
-  toggleBtn.addEventListener('click', () => {
-    menu.classList.toggle('active');
-    toggleBtn.classList.toggle('active'); // Cambia hamburguesa a X
-  });
-
-  // Cerrar menú al hacer clic en un enlace
-  document.querySelectorAll('.navbar-menu .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('active');
-      toggleBtn.classList.remove('active'); // Volver a hamburguesa
-    });
-  });
-</script>
+  
 <script>
  
   // ✅ Evento especial para "Turnos"
