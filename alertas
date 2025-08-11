@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alertas de Vacunas</title>
+  <style>
+   body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #362A6F; /* Azul */
+}
+
+.alertas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.grupo {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.grupo h2 {
+  margin-top: 0;
+  font-size: 18px;
+  border-bottom: 2px solid #C42685; /* Magenta */
+  padding-bottom: 6px;
+  color: #C42685;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+th, td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  color: #362A6F;
+}
+
+th {
+  background: #f0f0f0;
+  font-weight: 700;
+}
+
+.sin-alertas {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  padding: 15px 0;
+  font-size: 15px;
+}
+
+/* Enlaces de WhatsApp */
+a.whatsapp-link {
+  color: #C42685;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+a.whatsapp-link:hover {
+  color: #362A6F;
+}
+
+/* Botón flotante */
+.boton-flotante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #362A6F; 
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px 25px;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 999;
+}
+
+.boton-flotante:hover {
+  background-color: #C42685;
+  transform: scale(1.05);
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+
+  .grupo {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .grupo h2 {
+    font-size: 16px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px 6px;
+  }
+
+  .boton-flotante {
+    font-size: 14px;
+    padding: 12px 20px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+  </style>
+</head>
+<body>
+  <a href="https://vetebruzera.blogspot.com/?m=1" class="boton-flotante">volver a Admin</a>
+  <h1>📋 Vacunas Próximas</h1>
+  <div class="alertas-container">
+    <div class="grupo" id="semana">
+      <h2>Vacunas de la semana (7 días)</h2>
+      <div id="tablaSemana" class="sin-alertas">Cargando...</div>
+    </div>
+    <div class="grupo" id="mes">
+      <h2>Vacunas del mes (30 días)</h2>
+      <div id="tablaMes" class="sin-alertas">Cargando...</div>
+    </div>
+  </div>
+
+  <script>
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzOWJWx4ncq1Py8CYJ4wU-AH2h7e3a8j9RwNvO1h3JAxi_oqf3gyGqFMBPvr07p-AwUPg/exec";
+
+    function logConsole(msg) {
+      // console.log(msg); // Puedes activar para debug en navegador
+    }
+
+    async function cargarAlertas() {
+      try {
+        logConsole("🔄 Cargando datos desde Apps Script...");
+        const res = await fetch(`${scriptUrl}?buscar=todos`);
+        const data = await res.json();
+
+        const tablaSemana = document.getElementById("tablaSemana");
+        const tablaMes = document.getElementById("tablaMes");
+
+        if (!data.success || !data.resultados) {
+          logConsole("❌ Error: No se pudieron obtener datos");
+          tablaSemana.textContent = "Error cargando datos";
+          tablaMes.textContent = "Error cargando datos";
+          return;
+        }
+
+        logConsole(`✅ Datos recibidos: ${data.resultados.length} registros`);
+        const hoy = new Date();
+        const semana = [];
+        const mes = [];
+
+        data.resultados.forEach(r => {
+          logConsole(`➡️ Mascota: ${r.nombreMascota} | Prox. Vacuna: ${r.proxima_vacuna}`);
+          if (!r.proxima_vacuna) return;
+          const fechaVacuna = parseFecha(r.proxima_vacuna);
+          if (!fechaVacuna) {
+            logConsole("⚠️ No se pudo parsear la fecha: " + r.proxima_vacuna);
+            return;
+          }
+
+          const diff = Math.floor((fechaVacuna - hoy) / (1000 * 60 * 60 * 24));
+          logConsole(`📅 Diferencia en días: ${diff}`);
+
+          if (diff >= 0 && diff <= 7) {
+            semana.push({ ...r, fecha: fechaVacuna });
+          } else if (diff > 7 && diff <= 30) {
+            mes.push({ ...r, fecha: fechaVacuna });
+          }
+        });
+
+        renderTabla(semana, tablaSemana, "semana");
+        renderTabla(mes, tablaMes, "mes");
+
+      } catch (error) {
+        logConsole("❌ Error en fetch: " + error.message);
+      }
+    }
+
+ function renderTabla(lista, contenedor, tipo) {
+  if (lista.length === 0) {
+    contenedor.innerHTML = `<div class="sin-alertas">✅ No hay vacunas programadas en este período</div>`;
+    logConsole(`ℹ️ No hay vacunas para ${tipo}`);
+    return;
+  }
+  logConsole(`📋 Mostrando ${lista.length} vacunas para ${tipo}`);
+
+  const filas = lista.map(item => {
+    const texto = `Hola! Este es un recordatorio para que ${item.nombreMascota} (DNI: ${item.dniMascota}), cuyo dueño es ${item.nombre}, reciba su vacuna el día ${item.fecha.toLocaleDateString()}.`;
+    const textoUrl = encodeURIComponent(texto);
+
+    // Aquí el cambio clave para que funcione en móvil
+    const waLink = `https://api.whatsapp.com/send?text=${textoUrl}`;
+
+    return `
+      <tr>
+        <td>${item.nombre}</td>
+        <td>${item.nombreMascota}</td>
+        <td>${item.dniMascota}</td>
+        <td>${item.fecha.toLocaleDateString()}</td>
+        <td><a href="${waLink}" target="_blank" rel="noopener" class="whatsapp-link">Compartir WhatsApp</a></td>
+      </tr>
+    `;
+  }).join("");
+
+  contenedor.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Dueño</th>
+          <th>Mascota</th>
+          <th>DNI Mascota</th>
+          <th>Fecha Próxima Vacuna</th>
+          <th>Compartir</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filas}
+      </tbody>
+    </table>
+  `;
+}
+
+
+    function parseFecha(fechaStr) {
+      if (!fechaStr) return null;
+
+      if (fechaStr instanceof Date) return fechaStr;
+
+      if (typeof fechaStr === "string" && fechaStr.includes("T")) {
+        const fechaISO = new Date(fechaStr);
+        return isNaN(fechaISO) ? null : fechaISO;
+      }
+
+      if (typeof fechaStr === "string" && fechaStr.includes("/")) {
+        const partes = fechaStr.split("/");
+        if (partes.length === 3) {
+          return new Date(partes[2], partes[1] - 1, partes[0]);
+        }
+      }
+
+      if (typeof fechaStr === "string" && fechaStr.includes("-")) {
+        const partes = fechaStr.split("-");
+        if (partes.length === 3) {
+          return new Date(partes[0], partes[1] - 1, partes[2]);
+        }
+      }
+
+      const fechaAuto = new Date(fechaStr);
+      return isNaN(fechaAuto) ? null : fechaAuto;
+    }
+
+    cargarAlertas();
+  </script>
+</body>
+</html>
