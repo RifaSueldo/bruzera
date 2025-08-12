@@ -1245,7 +1245,24 @@ function parseFechaDDMMYYYY(str) {
         }
       });
   }
+// Redirigir a Mercado Pago para comprar créditos
+  function comprarCreditos(cantCreditos, precio) {
+    // Aquí debes poner el link real generado en Mercado Pago para cada paquete
+    // Ejemplo genérico:
+    const linksPago = {
+      50: "https://mpago.la/12o23uD",
+      100: "https://www.mercadopago.com/checkout/100creditos",
+      200: "https://www.mercadopago.com/checkout/200creditos"
+    };
+    window.open(linksPago[cantCreditos], "_blank");
+  }
 
+  cargarCreditos();
+    
+    document.getElementById("btnMostrarCompraCreditos").addEventListener("click", () => {
+  const opciones = document.getElementById("opcionesCompra");
+  opciones.classList.toggle("oculto");
+});
   
 
 </script>
