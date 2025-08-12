@@ -508,7 +508,18 @@ body.logueado #navbarMenu {
 .tooltip.visible {
   display: flex;
 }
+.busqueda-container {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  flex-wrap: wrap; /* Permite que se acomoden si no hay espacio */
+  gap: 8px; /* Espacio entre el input y el botón */
+}
 
+.busqueda-container input,
+.busqueda-container button {
+  height: 40px;
+  font-size: 14px;
+}
   </style>
 
 </head>
@@ -580,12 +591,12 @@ body.logueado #navbarMenu {
   </div>
 </div>
     <!-- BUSQUEDA GENERAL -->
-    
+ <div class="busqueda-container">   
     <p style="font-size: 14px; text-align: center;">Para acceder a la Ficha Médica necesitas el ID, si no lo tenés, buscá por Nombre primero.</p>
     <input type="text" id="inputBusquedaGeneral"  style="text-align: center;" placeholder="Ej: Fido o ABC123 para Ficha Médica" />
     <button onclick="buscarGeneral()" style="text-align: center;"><i class="fas fa-search"></i> Nombre</button>
     <button onclick="verHistorial()" style="text-align: center;"><i class="fas fa-clock-rotate-left"></i> Ficha Médica</button>
-   
+   </div>
 
     <div id="cargando" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Cargando, por favor esperá...</div>
     
