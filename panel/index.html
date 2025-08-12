@@ -3,7 +3,9 @@
 <head>
    <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.png">
 <!-- O para .ico -->
@@ -15,11 +17,15 @@ html {
 }
     /* ======== ESTILOS GENERALES ======== */
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
       background: #f4f6f9;
       margin: 0;
       padding: 0;
       color: #333;
+      font-size: 14px;
     }
 
     header {
@@ -36,7 +42,12 @@ html {
   backdrop-filter: blur(6px);
 }
 
-
+#fechaTurno {
+  font-family: font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
     .container {
       margin: 20px auto;
       max-width: 900px;
@@ -73,11 +84,15 @@ html {
       width: 80%;
       padding: 10px;
       margin: 8px 0;
-      border: 1px solid #ccc;
+      border: 1px solid #EDEDED;
       border-radius: 6px;
       font-size: 14px;
       background: #fdfdfd;
       transition: border 0.2s;
+      font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
     }
 
     #loginDiv input:focus {
@@ -91,7 +106,7 @@ html {
       color: #fff;
       border: none;
       padding: 12px;
-      font-size: 16px;
+      font-size: 14px;
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.2s;
@@ -104,7 +119,7 @@ html {
 
     #errorLogin {
       color: red;
-      font-size: 13px;
+      font-size: 14px;
       margin-top: 6px;
       display: none;
     }
@@ -114,9 +129,9 @@ html {
       width: 80%;
       padding: 8px;
       margin: 4px 0 10px;
-      border: 1px solid #ccc;
+      border: 1px solid #EDEDED;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 14px;
       background: #fff;
       transition: border-color 0.2s;
       text-align: center;
@@ -133,7 +148,7 @@ html {
       border: none;
       padding: 8px 14px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
       margin: 6px 2px;
       transition: background 0.3s;
@@ -159,7 +174,7 @@ html {
     }
 
     .resultado label {
-      font-size: 11px;
+      font-size: 14px;
       margin-bottom: 1px;
       display: block;
       font-weight: bold;
@@ -168,7 +183,7 @@ html {
     .resultado input,
     .resultado textarea,
     .resultado select {
-      font-size: 13px;
+      font-size: 14px;
       padding: 6px;
       margin-bottom: 6px;
       width: 100%;
@@ -185,7 +200,7 @@ html {
 
     .resultado button {
       padding: 6px 10px;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     /* Extra campos dinámicos */
@@ -199,7 +214,7 @@ html {
       right: 0;
       background: #e74c3c;
       padding: 2px 8px;
-      font-size: 12px;
+      font-size: 14px;
       border-radius: 4px;
       margin-left: 5px;
     }
@@ -208,7 +223,7 @@ html {
     #cargando {
       display: none;
       margin-top: 8px;
-      font-size: 13px;
+      font-size: 14px;
       color: #666;
       text-align: center;
     }
@@ -261,7 +276,7 @@ html {
       text-align: center;
     }
     .bloque-campos {
-  border-top: 1px dotted #999;
+  border-top: 1px dotted #EDEDED;
   margin-top: 10px;
   padding-top: 10px;
 }
@@ -273,7 +288,7 @@ html {
   padding: 8px 15px;
   border-radius: 5px;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   transition: background 0.3s ease;
 }
 
@@ -448,16 +463,18 @@ body.logueado #navbarMenu {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+ 
 }
 
 /* Botón */
 #creditosBtn {
-  background: #EFEDF5;
+  background: #EDEDED;
+  color: #999;
   border: none;
   padding: 0px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
 
    display: inline-flex;           /* Para que estén en fila, lado a lado */
   align-items: center;            /* Centra verticalmente */
@@ -469,7 +486,7 @@ body.logueado #navbarMenu {
 /* Burbuja */
 .tooltip {
   background: white;
-  border: 1px solid #ccc;
+  border: 1px solid #EDEDED;
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
@@ -506,14 +523,14 @@ body.logueado #navbarMenu {
     <a href="#turnos" class="nav-link">Turnos</a>
     <a href="https://alertasbruzera.blogspot.com/?m=1" class="nav-link">Próximas Vacunas</a>
      
-    <button onclick="logout()" style="background:#999;">Cerrar sesión</button>
+    <button onclick="logout()" style="background:#EDEDED; color:#999">Cerrar sesión</button>
   </nav>
   
   
  
 
 </header>
-<!-- LOGIN --><div id="mensajeBienvenida" class="mensaje-bienvenida" style="display:none;"></div>
+
   
 <div id="loginDiv">
  
@@ -527,8 +544,12 @@ body.logueado #navbarMenu {
   </div>
 </div>
 
-<!-- APP PRINCIPAL -->
- 
+
+
+<div id="appDiv" style="text-align: center; display:none;">
+  <!-- APP PRINCIPAL -->
+<div id="mensajeBienvenida" class="mensaje-bienvenida" style="display:none;"></div>
+  <div class="container">
 <div class="creditos-container">
   <!-- Botón con SVG -->
   <button id="creditosBtn" class="creditos-btn" title="Ver créditos">
@@ -545,25 +566,15 @@ body.logueado #navbarMenu {
   <!-- Burbuja -->
   <div id="tooltip" class="tooltip">
     <div id="tooltipText">Cargando...</div>
-    <button id="agregarCreditosBtn">Comprar créditos</button>
+    <button id="agregarCreditosBtn">Agregar créditos</button>
   </div>
 </div>
-
-
-
-
-
-
-
-<div id="appDiv" style="text-align: center; display:none;">
-  <div class="container">
-
     <!-- BUSQUEDA GENERAL -->
-    <p style="font-size: 10px; text-align: center;">Buscar por Nombre: Si no sabes el ID de la mascota, ingresa el nombre del humano o de la mascota y así obtendras el ID.</p>
-    <p style="font-size: 10px; text-align: center;">Buscar por ID: Para acceder a la ficha Médica necesitas el ID, si no lo tenés, buscá por nombre primero.</p>
-    <input type="text" id="inputBusquedaGeneral"  style="text-align: center;" placeholder="Ej: Fido, Juan Pérez, o ABC123" />
-    <button onclick="buscarGeneral()" style="text-align: center;"><i class="fas fa-search"></i> Buscar por nombre</button>
-    <button onclick="verHistorial()" style="text-align: center;"><i class="fas fa-clock-rotate-left"></i> Acceder con ID</button>
+    
+    <p style="font-size: 14px; text-align: center;">Para acceder a la Ficha Médica necesitas el ID, si no lo tenés, buscá por Nombre primero.</p>
+    <input type="text" id="inputBusquedaGeneral"  style="text-align: center;" placeholder="Ej: Fido o ABC123 para Ficha Médica" />
+    <button onclick="buscarGeneral()" style="text-align: center;"><i class="fas fa-search"></i> Nombre</button>
+    <button onclick="verHistorial()" style="text-align: center;"><i class="fas fa-clock-rotate-left"></i> Ficha Médica</button>
    
 
     <div id="cargando" style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Cargando, por favor esperá...</div>
@@ -578,7 +589,7 @@ body.logueado #navbarMenu {
       <label for="fechaTurno"><strong>TURNOS:</strong></label>
       <input type="date" id="fechaTurno" />
       <button onclick="buscarPorFecha()"><i class="fas fa-calendar-check"></i> Buscar turnos</button>
-      <div id="cargandoFecha" style="display:none; margin-top:8px; color:#666;">⏳ Buscando turnos...</div>
+      <div id="cargandoFecha" style="display:none; margin-top:8px; color:#666;"> Buscando turnos...</div>
       <div id="resultadoFecha" style="margin-top: 15px;"></div>
     </div>
 </section>
@@ -607,7 +618,7 @@ body.logueado #navbarMenu {
 
   <div style="margin-top:10px; text-align:right;">
     <button onclick="confirmarNuevoCampo()">Agregar</button>
-    <button onclick="cerrarModalCampo()" style="background:#999;">Cancelar</button>
+    <button onclick="cerrarModalCampo()" style="background:#EDEDED;">Cancelar</button>
   </div>
 </div>
 
@@ -721,12 +732,12 @@ function fechaVacunaToString(fechaStr) {
         const esBusquedaGeneral = parametro.startsWith("?buscar=");
         mostrarResultados(data.resultados, titulo, esBusquedaGeneral);
       } else {
-        resultadoDiv.innerHTML = "<p style='color:#C42685;'>⚠️ No se encontraron datos.</p>";
+        resultadoDiv.innerHTML = "<p style='color:#C42685;'>No se encontraron datos.</p>";
       }
     })
     .catch(() => {
       cargando.style.display = "none";
-      alert("❌ Error al buscar en la base de datos.");
+      alert("Error al buscar en la base de datos.");
     });
 }
 
@@ -927,13 +938,13 @@ function fechaVacunaToString(fechaStr) {
     .then(res => res.json())
     .then(resp => {
       if (resp.success) {
-        alert("✅ Cambios guardados correctamente.");
+        alert("Cambios guardados correctamente.");
         buscarGeneral();
       } else {
-        alert("⚠️ Error: " + resp.error);
+        alert("Error: " + resp.error);
       }
     })
-    .catch(() => alert("❌ Error de conexión al guardar los cambios."));
+    .catch(() => alert("Error de conexión al guardar los cambios."));
 }
 
 </script>
@@ -995,7 +1006,7 @@ function buscarPorFecha() {
         data = JSON.parse(text); // Intentar parsear el JSON manualmente
       } catch (err) {
         console.error("Error al parsear JSON:", err);
-        alert("❌ La respuesta del servidor no es un JSON válido.");
+        alert("La respuesta del servidor no es un JSON válido.");
         cargandoFecha.style.display = "none";
         return;
       }
@@ -1023,13 +1034,13 @@ let html = `<h3>Turnos para el día ${fechaFormateada}</h3>`;
 
         resultadoFecha.innerHTML = html;
       } else {
-        resultadoFecha.innerHTML = `<p style="color:#C42685;">⚠️ No se encontraron turnos para esa fecha.</p>`;
+        resultadoFecha.innerHTML = `<p style="color:#C42685;">No hay turnos para este día</p>`;
       }
     })
     .catch(err => {
       cargandoFecha.style.display = "none";
       console.error("Error en fetch o en el parseo:", err);
-      alert("❌ Error al buscar turnos por fecha.");
+      alert("Error al buscar turnos por fecha.");
     });
 }
 
@@ -1073,7 +1084,7 @@ fetch(urlScript + "?fecha=2025-07-30")
 function crearBloqueConDatos(contenedor, bloque) {
   const bloqueDiv = document.createElement("div");
   bloqueDiv.className = "bloque-campos";
-  bloqueDiv.style.borderTop = "1px dotted #999";
+  bloqueDiv.style.borderTop = "1px dotted #EDEDED";
   bloqueDiv.style.marginTop = "10px";
   bloqueDiv.style.paddingTop = "10px";
 
@@ -1145,7 +1156,7 @@ function crearBloqueConDatos(contenedor, bloque) {
 
   const bloque = document.createElement("div");
   bloque.className = "bloque-campos";
-  bloque.style.borderTop = "1px dotted #999";
+  bloque.style.borderTop = "1px dotted #EDEDED";
   bloque.style.marginTop = "10px";
   bloque.style.paddingTop = "10px";
 
@@ -1238,17 +1249,17 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => creditosSpan.textContent = "Error");
   }
 
-  // 2️⃣ Redirigir a Mercado Pago
-  function comprarCreditos(cantCreditos) {
-    const linksPago = {
-      50: "https://mpago.la/12o23uD",
-      100: "https://www.mercadopago.com/checkout/100creditos",
-      200: "https://www.mercadopago.com/checkout/200creditos"
-    };
-    if (linksPago[cantCreditos]) {
-      window.open(linksPago[cantCreditos], "_blank");
-    }
-  }
+  document.getElementById("agregarCreditosBtn").addEventListener("click", () => {
+  const numero = "5493435020970";
+
+  // Leer usuario guardado en sessionStorage
+  const usuario = sessionStorage.getItem("usuario") || "Usuario";
+
+  const mensaje = encodeURIComponent(`Hola, soy ${usuario} y quiero agregar créditos.`);
+  const url = `https://wa.me/${numero}?text=${mensaje}`;
+  window.open(url, "_blank");
+});
+
 
   // 3️⃣ Mostrar/ocultar burbuja
   btnCreditos.addEventListener("click", (e) => {
