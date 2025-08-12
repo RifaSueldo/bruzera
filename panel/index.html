@@ -1124,7 +1124,7 @@ function crearBloqueConDatos(contenedor, bloque) {
   // Descripción
   const labelDescripcion = document.createElement("label");
 labelDescripcion.textContent = "Descripción:";
-const inputDescripcion = document.createElement("input");
+const inputDescripcion = document.createElement("textarea");
 inputDescripcion.type = "text";
 inputDescripcion.value = bloque.Descripción || "";
 inputDescripcion.disabled = true;
@@ -1184,9 +1184,9 @@ inputDescripcion.disabled = true;
   // Descripción (texto corto)
   const descripcionLabel = document.createElement("label");
   descripcionLabel.textContent = "Descripción:";
-  const descripcionInput = document.createElement("input");
-  descripcionInput.type = "text";
-  descripcionInput.disabled = true;  // DESHABILITADO al crear
+  const descripcionTextarea = document.createElement("textarea");
+  descripcionTextarea.type = "text";
+  descripcionTextarea.disabled = true;  // DESHABILITADO al crear
 
   // Observaciones (texto largo)
   const observacionesLabel = document.createElement("label");
@@ -1202,7 +1202,7 @@ inputDescripcion.disabled = true;
   bloque.appendChild(motivoSelect);
 
   bloque.appendChild(descripcionLabel);
-  bloque.appendChild(descripcionInput);
+  bloque.appendChild(descripcionTextarea);
 
   bloque.appendChild(observacionesLabel);
   bloque.appendChild(observacionesTextarea);
