@@ -483,26 +483,7 @@ body.logueado #navbarMenu {
   .tooltip button:hover {
     background: #005ecc;
   }
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("creditosBtn");
-  const tooltip = document.getElementById("tooltip");
-  const tooltipText = document.getElementById("tooltipText");
-  const creditosSpan = document.getElementById("creditosActuales");
 
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    tooltipText.innerHTML = `Créditos disponibles: <b>${creditosSpan.textContent}</b>`;
-    tooltip.style.display = tooltip.style.display === "flex" ? "none" : "flex";
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!btn.contains(e.target) && !tooltip.contains(e.target)) {
-      tooltip.style.display = "none";
-    }
-  });
-});
-</script>
 
 
   </style>
@@ -1235,11 +1216,15 @@ function parseFechaDDMMYYYY(str) {
     }
   });
 </script> 
-  <script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
   const creditosSpan = document.getElementById("creditosActuales");
-  
+  const btnCreditos = document.getElementById("creditosBtn");
+  const tooltip = document.getElementById("tooltip");
+  const tooltipText = document.getElementById("tooltipText");
+  const btnAgregar = document.getElementById("agregarCreditosBtn");
 
-  // Cargar créditos al inicio
+  // 1️⃣ Cargar créditos desde tu script de servidor
   function cargarCreditos() {
     fetch(urlScript + "?accion=creditos")
       .then(res => res.json())
@@ -1247,31 +1232,48 @@ function parseFechaDDMMYYYY(str) {
         if (data.success) {
           creditosSpan.textContent = data.creditos;
         } else {
-          creditosSpan.textContent = "Error al cargar créditos";
+          creditosSpan.textContent = "Error";
         }
-      });
+      })
+      .catch(() => creditosSpan.textContent = "Error");
   }
-// Redirigir a Mercado Pago para comprar créditos
-  function comprarCreditos(cantCreditos, precio) {
-    // Aquí debes poner el link real generado en Mercado Pago para cada paquete
-    // Ejemplo genérico:
+
+  // 2️⃣ Redirigir a Mercado Pago
+  function comprarCreditos(cantCreditos) {
     const linksPago = {
       50: "https://mpago.la/12o23uD",
       100: "https://www.mercadopago.com/checkout/100creditos",
       200: "https://www.mercadopago.com/checkout/200creditos"
     };
-    window.open(linksPago[cantCreditos], "_blank");
+    if (linksPago[cantCreditos]) {
+      window.open(linksPago[cantCreditos], "_blank");
+    }
   }
 
-  cargarCreditos();
-    
-    document.getElementById("btnMostrarCompraCreditos").addEventListener("click", () => {
-  const opciones = document.getElementById("opcionesCompra");
-  opciones.classList.toggle("oculto");
-});
-  
+  // 3️⃣ Mostrar/ocultar burbuja
+  btnCreditos.addEventListener("click", (e) => {
+    e.stopPropagation();
+    tooltipText.innerHTML = `Créditos disponibles: <b>${creditosSpan.textContent}</b>`;
+    tooltip.classList.toggle("visible");
+  });
 
+  // Cerrar si haces clic fuera
+  document.addEventListener("click", (e) => {
+    if (!btnCreditos.contains(e.target) && !tooltip.contains(e.target)) {
+      tooltip.classList.remove("visible");
+    }
+  });
+
+  // Botón dentro de la burbuja
+  btnAgregar.addEventListener("click", () => {
+    comprarCreditos(50); // ejemplo: abre pago para 50 créditos
+  });
+
+  // Ejecutar carga inicial
+  cargarCreditos();
+});
 </script>
+
   <script>
   const toggleBtn = document.getElementById('navbarToggle');
   const menu = document.getElementById('navbarMenu');
