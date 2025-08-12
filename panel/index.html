@@ -917,7 +917,7 @@ function fechaVacunaToString(fechaStr) {
       const motivos = selectMotivo
         ? Array.from(selectMotivo.selectedOptions).map(opt => opt.value).join(", ")
         : "";
-      const descripcion = bloque.querySelector('input[type="text"]')?.value || "";
+      const descripcion = bloque.querySelector('textarea')?.value || "";
       const observaciones = bloque.querySelector('textarea')?.value || "";
 
       // Guardar con claves ordenadas para backend
