@@ -48,7 +48,16 @@ html {
   font-weight: <weight>;
   font-style: normal;
 }
+#inputBusquedaGeneral {
+  background-color: #ffffcc !important; /* color por defecto */
+}
 
+#inputBusquedaGeneral:focus {
+  background-color: #fff2b3 !important; /* color cuando está enfocado */
+}
+     #inputBusquedaGeneral:not(:placeholder-shown) {
+  background-color: #d4ffd4 !important; /* por ejemplo, verde suave */
+}
     .container {
       margin: 20px auto;
       max-width: 900px;
@@ -277,7 +286,7 @@ html {
       text-align: center;
     }
     .bloque-campos {
-  border-top: 5px dotted #000000;
+  border-top: 1px dotted #000000;
   margin-top: 10px;
   padding-top: 10px;
 }
