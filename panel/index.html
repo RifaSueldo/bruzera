@@ -435,55 +435,34 @@ body.logueado #navbarMenu {
 #navbarMenu.open {
   display: flex;
 }
- #creditosDiv {
-  text-align: center;    /* Centra texto dentro */
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* Centra contenido horizontalmente */
-  gap: 10px;             /* Espacio entre elementos */
-}
-    
-/* Botón estilo icono */
-  #creditosBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 8px;
-    background: #f0f0f0;
-    transition: background 0.2s;
-  }
-  #creditosBtn:hover {
-    background: #e2e2e2;
-  }
-
-  /* Burbuja flotante */
+/* Estilo de la burbuja */
   .tooltip {
     position: absolute;
+    top: 40px;
+    right: 0;
     background: white;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
     display: none;
     flex-direction: column;
-    gap: 8px;
-    z-index: 100;
-    width: 220px;
+    gap: 10px;
+    z-index: 999;
   }
-  .tooltip button {
-    padding: 6px 10px;
-    background: #0077ff;
-    color: white;
+  .tooltip.visible {
+    display: flex;
+  }
+  .creditos-container {
+    position: relative;
+    display: inline-block;
+  }
+  .creditos-btn {
+    background: none;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    padding: 5px;
   }
-  .tooltip button:hover {
-    background: #005ecc;
-  }
-
 
 
   </style>
@@ -532,24 +511,30 @@ body.logueado #navbarMenu {
 </div>
 
 <!-- APP PRINCIPAL -->
- <div id="creditosDiv" style="display:none; margin-top:20px; position: relative;">
-  <div id="creditosBtn">
-    <!-- SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-      <path fill="currentColor" fill-rule="evenodd" d="M17.47 8.893C18.886 8.185 19 7.577 19 7.5s-.114-.685-1.53-1.393C16.173 5.459 14.242 5 12 5s-4.173.459-5.47 1.107C5.114 6.815 5 7.423 5 7.5s.114.685 1.53 1.393C7.827 9.541 9.758 10 12 10s4.173-.459 5.47-1.107M21 7.5c0 2.485-4.03 4.5-9 4.5S3 9.985 3 7.5 7.03 3 12 3s9 2.015 9 4.5m-17 4a1 1 0 0 1 1 1c0 .137.053.327.262.573.389.457 1.196.953 2.42 1.331 1.196.37 2.686.596 4.318.596s3.123-.226 4.319-.596c1.223-.378 2.03-.874 2.42-1.331.208-.246.261-.436.261-.573a1 1 0 1 1 2 0c0 .721-.3 1.354-.738 1.869-.743.873-1.967 1.517-3.352 1.946-1.412.437-3.105.685-4.91.685s-3.498-.248-4.91-.685c-1.385-.429-2.609-1.073-3.352-1.946C3.301 13.854 3 13.22 3 12.5a1 1 0 0 1 1-1M5 17a1 1 0 1 0-2 0c0 .721.3 1.354.738 1.869.743.873 1.967 1.517 3.352 1.946 1.412.437 3.105.685 4.91.685s3.498-.248 4.91-.685c1.385-.429 2.609-1.073 3.352-1.946.437-.515.738-1.148.738-1.869a1 1 0 1 0-2 0c0 .137-.053.327-.262.573-.389.457-1.196.953-2.42 1.331-1.196.37-2.686.596-4.318.596s-3.122-.226-4.319-.596c-1.223-.378-2.03-.874-2.42-1.331C5.054 17.327 5 17.137 5 17" clip-rule="evenodd"></path>
+ 
+<div class="creditos-container">
+  <!-- Botón con SVG -->
+  <button id="creditosBtn" class="creditos-btn" title="Ver créditos">
+    <!-- SVG aquí -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold">CR</text>
     </svg>
-
-    <span id="creditosActuales">Cargando...</span>
-  </div>
+  </button>
 
   <!-- Burbuja -->
   <div id="tooltip" class="tooltip">
-    <span id="tooltipText">Créditos disponibles: <b>0</b></span>
-    <button onclick="window.location.href='https://tusitio.com/agregar-creditos'">
-      Agregar créditos
-    </button>
+    <div id="tooltipText">Cargando...</div>
+    <button id="agregarCreditosBtn">Comprar créditos</button>
   </div>
-</div> 
+</div>
+
+<!-- Créditos ocultos (por si necesitas mostrar en otro lado) -->
+<div id="creditosDiv" style="display:none;">
+  <h3>Créditos disponibles: <span id="creditosActuales">Cargando...</span></h3>
+</div>
 
 
 
