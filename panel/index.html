@@ -48,18 +48,7 @@ html {
   font-weight: <weight>;
   font-style: normal;
 }
-#modalCampo {
-  font-family: font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-   #bloque-campos hr {
-  border: none;
-  height: 3px;
-  background-color: #C42685;
-  margin: 15px 0;
-}  
+
     .container {
       margin: 20px auto;
       max-width: 900px;
@@ -1096,7 +1085,7 @@ fetch(urlScript + "?fecha=2025-07-30")
 function crearBloqueConDatos(contenedor, bloque) {
   const bloqueDiv = document.createElement("div");
   bloqueDiv.className = "bloque-campos";
-  bloqueDiv.style.borderTop = "1px dotted #EDEDED";
+  bloqueDiv.style.borderTop = "3px dotted #000000";
   bloqueDiv.style.marginTop = "10px";
   bloqueDiv.style.paddingTop = "10px";
 
