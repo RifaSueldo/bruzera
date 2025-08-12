@@ -521,11 +521,30 @@ body.logueado #navbarMenu {
   .tooltip button:hover {
     background: #005ecc;
   }
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("creditosBtn");
+  const tooltip = document.getElementById("tooltip");
+  const tooltipText = document.getElementById("tooltipText");
+  const creditosSpan = document.getElementById("creditosActuales");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    tooltipText.innerHTML = `Créditos disponibles: <b>${creditosSpan.textContent}</b>`;
+    tooltip.style.display = tooltip.style.display === "flex" ? "none" : "flex";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!btn.contains(e.target) && !tooltip.contains(e.target)) {
+      tooltip.style.display = "none";
+    }
+  });
+});
+</script>
 
 
   </style>
-<meta name='google-adsense-platform-account' content='ca-host-pub-1556223355139109'/>
-<meta name='google-adsense-platform-domain' content='blogspot.com'/>
+
 </head>
 <body>
 
@@ -1342,25 +1361,5 @@ function parseFechaDDMMYYYY(str) {
 
   
 </body>
-    <script>
-  const btn = document.getElementById("creditosBtn");
-  const tooltip = document.getElementById("tooltip");
-  const tooltipText = document.getElementById("tooltipText");
-  const creditosSpan = document.getElementById("creditosActuales");
-
-  btn.addEventListener("click", () => {
-    // Actualiza texto con cantidad real
-    tooltipText.innerHTML = `Créditos disponibles: <b>${creditosSpan.textContent}</b>`;
-
-    // Alterna la burbuja
-    tooltip.style.display = tooltip.style.display === "flex" ? "none" : "flex";
-  });
-
-  // Cierra si clic afuera
-  document.addEventListener("click", (e) => {
-    if (!btn.contains(e.target) && !tooltip.contains(e.target)) {
-      tooltip.style.display = "none";
-    }
-  });
-</script>
+    
 </html>
