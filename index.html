@@ -1098,7 +1098,22 @@ contenedorTurnos.appendChild(btn);
       }
     });
   }
+ // Creamos el mensaje completo después de obtener todos los datos
+  const mensaje = encodeURIComponent(
+    `🔔 Bruzera - Nueva solicitud de turno:\n` +
+    `Nombre mascota: ${nombreMascota}\n` +
+    `Nombre Dueño: ${nombre}\n` +
+    `Turno: ${turnoSeleccionado} - ${formatFechaDDMMYYYY(diaSeleccionado)}\n` +
+    `Teléfono: ${telefono}\n` +
+    `Motivo: ${comentario || "Ninguno"}`
+  );
 
+  let phone = "5493434477577";
+  let apikey = "9663015";
+
+  fetch(`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${mensaje}&apikey=${apikey}`)
+    .then(() => console.log("Aviso enviado por WhatsApp"))
+    .catch(err => console.error("Error enviando WhatsApp", err));
   function descargarTicket() {
     const ticket = document.getElementById("ticket");
     const logo = document.getElementById("logoTicket");
