@@ -1,888 +1,436 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  
-  
   <meta charset="UTF-8" />
   <title>Dra. Lili Bruzera - Veterinaria - Turnos On Line</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.png">
-<!-- O para .ico -->
-<link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png">
+  <meta property="og:title" content="Dra. Lili Bruzera - Veterinaria - Turnos On Line" />
+  <meta property="og:description" content="Solicitá tu turno on line y descargalo con un ID para tu mascota sin cargo" />
+  <meta property="og:image" content="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" />
+  <meta property="og:url" content="https://turnosbruzera.blogspot.com/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dra. Lili Bruzera - Veterinaria - Turnos On Line" />
+  <meta name="twitter:description" content="Solicitá tu turno on line y descargalo con un ID para tu mascota sin cargo." />
+  <meta name="twitter:image" content="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" />
 
-<!-- Open Graph para redes sociales como Facebook, WhatsApp -->
-<meta property="og:title" content="Dra. Lili Bruzera - Veterinaria - Turnos On Line" />
-<meta property="og:description" content="Solicitá tu turno on line y descargalo con un ID para tu mascota sin cargo" />
-<meta property="og:image" content="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" />
-<meta property="og:url" content="https://turnosbruzera.blogspot.com/" />
-<meta property="og:type" content="website" />
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Dra. Lili Bruzera - Veterinaria - Turnos On Line" />
-<meta name="twitter:description" content="Solicitá tu turno on line y descargalo con un ID para tu mascota sin cargo." />
-<meta name="twitter:image" content="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" />
   <style>
-    html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-img,
-svg,
-video,
-canvas {
-  max-width: 100%;
-}
-
-   body {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  overflow-x: hidden;
-  background: #f8f8f8;
-  color: #362A6F;
-}
+    /* ===================== RESET & BASE ===================== */
+    :root {
+      --crema: #FAF6F0;
+      --crema-oscuro: #F0E9DF;
+      --rosa: #C42685;
+      --rosa-suave: #F5E6F0;
+      --violeta: #362A6F;
+      --violeta-suave: #EAE8F5;
+      --texto: #2A2235;
+      --texto-suave: #7A6E85;
+      --blanco: #FFFFFF;
+      --sombra: 0 18px 50px rgba(54,42,111,0.12);
+      --radio: 16px;
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; }
+    img, svg, video, canvas { max-width: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      margin: 0; padding: 0;
+      background: radial-gradient(circle at top right, rgba(196,38,133,0.11), transparent 30%), var(--crema);
+      color: var(--texto);
+      overflow-x: hidden;
+    }
     section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.calendario {
-  margin: 20px auto;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  border-radius: 10px;
-  max-width: 340px;
-  overflow: hidden;
-}
-.calendario-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  background: #C42685;
-  color: #fff;
-}
-.calendario-header button {
-  background: white;
-  border: none;
-  color: #C42685;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.calendario-header button:hover {
-  background: #f5f5f5;
-}
-.dias-semana {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background: #362A6F;
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  padding: 8px 0;
-}
-.dias {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding: 10px;
-  gap: 4px;
-}
-.dia {
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.2s, color 0.2s;
-}
-.dia:hover:not(.disabled) {
-  background: #C42685;
-  color: white;
-}
-.dia.disabled {
-  color: #ccc;
-  cursor: default;
-}
-.turnos, .formulario, #ticket {
-  margin: 20px auto;
-  max-width: 305px;
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  padding: 20px;
-}
-.turnos h3 {
-  margin-bottom: 15px;
-  color: #C42685;
-}
-.turno button {
-  background: #C42685;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
-  margin-bottom: 10px;
-  transition: background 0.3s;
-}
-.turno button:hover {
-  background: #362A6F;
-}
-.formulario h3 {
-  margin-bottom: 15px;
-  color: #C42685;
-}
-.formulario input, .formulario textarea {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-.formulario button {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  background: #362A6F;
-  color: white;
-  border: none;
-  padding: 12px;
-  width: 100%;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.3s;
-}
-.formulario button:hover {
-  background: #C42685;
-}
-#ticket {
-  display: none;
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.4s ease;
-}
-
-#ticket.visible {
-  display: block;
-  opacity: 1;
-  transform: scale(1);
-}
-
-
-.turnos > button {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  background: #C42685; /* color principal */
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  margin-bottom: 10px;
-}
-
-.turnos > button:hover:not(.disabled) {
-  background: #362A6F;
-  transform: translateY(-2px);
-}
-
-.turnos > button.disabled {
-  background: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-#ticket button {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  background: #C42685;
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 6px;
-  width: 100%;
-  margin-top: 15px;
-  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-
-#ticket button:hover {
-  background: #362A6F;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-#ticket button:active {
-  transform: scale(0.95);
-}
-#ticket img#logoTicket {
-  max-width: 150px;
-  margin-bottom: 15px;
-  display: block;
-}
-/* Botón flotante */
-#botonBuscarDni {
-  position: fixed;
-  bottom: 40px;
-  right: 10px;
-  background: #C42685;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 1000;
-  transition: transform 0.2s;
-}
-#botonBuscarDni:hover {
-  transform: scale(1.1);
-  background: #362A6F;
-}
-
-/* Modal */
-#modalBuscarDni {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(54, 42, 111, 0.9);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-}
-
-#modalBuscarDni .contenido-modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  text-align: center;
-}
-
-#modalBuscarDni input {
-  width: 50%;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-#modalBuscarDni button {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  background: #C42685;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  margin-bottom: 8px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-#resultadoBusqueda {
-  max-height: 250px;        /* Limita la altura antes de que aparezca el scroll */
-  overflow-y: auto;         /* Scroll vertical cuando exceda la altura */
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.4;
-  padding-right: 5px;       /* Espacio para el scroll */
-}
-
-/* Scroll elegante */
-#resultadoBusqueda::-webkit-scrollbar {
-  width: 8px;
-}
-
-#resultadoBusqueda::-webkit-scrollbar-track {
-  background: #f1f1f1;       /* Fondo del scroll */
-  border-radius: 4px;
-}
-
-#resultadoBusqueda::-webkit-scrollbar-thumb {
-  background-color: #C42685; /* Color del scroll */
-  border-radius: 4px;
-}
-
-#resultadoBusqueda::-webkit-scrollbar-thumb:hover {
-  background: #362A6F;       /* Hover más oscuro */
-}
-/* Navbar principal */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(54, 42, 111, 0.9);
-  color: white;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
-}
-
-.navbar-logo img {
-  width: 60px;
-  opacity: 0;
-  transform: translateX(100px);
-  animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 0.2) forwards,
-             saltitoSutil 6s ease-in-out 1.2s infinite; /* ciclo total de 6s */
-}
-
-@keyframes slideInRight {
-  0% {
-    transform: translateX(100px);
-    opacity: 0;
-  }
-  80% {
-    transform: translateX(-10px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes saltitoSutil {
-  0%, 80%, 100% { transform: translateY(0); } /* Pausa mayor parte del ciclo */
-  85% { transform: translateY(-4px); }  /* Pequeño pique */
-  90% { transform: translateY(0); }
-}
-
-.navbar-menu {
-  display: flex;
-  gap: 20px;
-  transition: max-height 0.3s ease-out;
-}
-
-.navbar-menu .nav-link {
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.navbar-menu .nav-link:hover {
-  background-color: #C42685;
-}
-
-/* Botón hamburguesa */
-.navbar-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-/* Estado de X */
-.navbar-toggle.active i {
-  transform: rotate(90deg);
-}
-.navbar-toggle.active i::before {
-  content: "\f00d"; /* Ícono X (Font Awesome) */
-}
-
-/* Modo móvil */
-@media (max-width: 768px) {
-  .navbar-menu {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 85px;
-    right: 2px;
-    background: rgba(54, 42, 111, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    overflow: hidden;
-    max-height: 0;
-  }
-
-  .navbar-menu.active {
-    max-height: 300px; /* altura suficiente para mostrar todos los links */
-    transition: max-height 0.4s ease-in-out;
-  }
-
-  .navbar-toggle {
-    display: block;
-  }
-
-  .navbar-menu .nav-link {
-    padding: 10px;
-    text-align: center;
-  }
-}
-#busquedaContainer {
-  position: fixed;
-  bottom: 50px;
-  right: 85px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 1000;
-}
-
-#textoBurbuja {
-  position: absolute; /* 🔥 Esto lo saca del flujo */
-  right: -10px; /* Ajustar para ubicar junto al botón */
-  bottom: 6px;
-  background: #000;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transform: translateX(200px); /* Empieza fuera de pantalla */
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.6s ease, opacity 0.4s ease;
-  user-select: none;
-}
-
-#textoBurbuja.visible {
-  transform: translateX(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-
-/* Botón fijo */
-#botonBuscarDni {
-  background: #C42685;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  transition: transform 0.2s;
-}
-
-    
-  /* Contenedor general centrado */
-  .carrusel-container {
-    position: relative;
-    max-width: 700px;
-    margin: 20px auto;
-    overflow: hidden;
-  }
-
-  /* Carrusel */
-  .carrusel {
-    display: flex;
-    transition: transform 0.3s ease;
-  }
-
-  /* Item general */
-  .carrusel .item {
-    flex: 0 0 auto;
-    padding: 8px;
-    display: flex;
-    justify-content: center;
-  }
-
-  /* Imagen en PC */
-  .carrusel .item img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  /* Flechas */
-  .flecha {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.6);
-    color: white;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    z-index: 2;
-  }
-  .flecha.izquierda { left: 10px; }
-  .flecha.derecha { right: 10px; }
-
-  /* ✅ Ajustes en móviles */
-  @media (max-width: 768px) {
-    .carrusel-container {
-      max-width: 320px;
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     }
-    .carrusel .item {
-      min-width: 100%; /* UNA sola imagen visible */
-      padding: 0;
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(250,246,240,0.92);
+      border-bottom: 1px solid rgba(196,38,133,0.08);
+      padding: 10px 20px;
+      position: sticky; top: 0; z-index: 999;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      backdrop-filter: blur(6px);
     }
-    .carrusel .item img {
-      width: 75%;
-      max-width: 320px;
-      height: auto;
-      aspect-ratio: 1/1;
+    .navbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--violeta); }
+    .navbar-logo img {
+      width: 54px;
+      animation: slideInRight 1.2s cubic-bezier(0.25,1,0.5,0.2) forwards,
+                 saltitoSutil 6s ease-in-out 1.2s infinite;
+      opacity: 0;
     }
-    .flecha { display: none; } /* Sin flechas en móviles */
-  }
-    #loaderOverlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255,255,255,0.8);
-    display: none; /* Oculto por defecto */
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 2000;
-    font-family: 'Montserrat', sans-serif;
-  }
+    .navbar-logo span { display: flex; flex-direction: column; line-height: 1.1; }
+    .navbar-logo strong { font-family: 'Playfair Display', serif; font-size: 1rem; }
+    .navbar-logo small { color: var(--texto-suave); font-size: .75rem; }
+    @keyframes slideInRight {
+      0%   { transform: translateX(80px); opacity: 0; }
+      80%  { transform: translateX(-6px); opacity: 1; }
+      100% { transform: translateX(0);    opacity: 1; }
+    }
+    @keyframes saltitoSutil {
+      0%,80%,100% { transform: translateY(0); }
+      85%          { transform: translateY(-4px); }
+      90%          { transform: translateY(0); }
+    }
+    .navbar-menu { display: flex; gap: 16px; }
+    .navbar-menu .nav-link {
+      color: var(--texto-suave); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+      padding: 6px 10px; border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .navbar-menu .nav-link:hover { background: var(--rosa); color: var(--blanco); }
+    .nav-link-pill { background: var(--rosa); color: var(--blanco) !important; padding-inline: 16px !important; }
+    .navbar-toggle {
+      display: none; background: none; border: none;
+      color: var(--violeta); font-size: 22px; cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .navbar-menu {
+        flex-direction: column; position: absolute;
+        top: 72px; right: 12px; left: 12px;
+        background: rgba(250,246,240,0.98);
+        border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        overflow: hidden; max-height: 0;
+        transition: max-height 0.4s ease-in-out;
+      }
+      .navbar-menu.active { max-height: 300px; }
+      .navbar-toggle { display: block; }
+      .navbar-menu .nav-link { padding: 12px; text-align: center; color: var(--violeta); }
+    }
 
-  .loader {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #362A6F;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px;
-  }
+    /* ===================== HERO ===================== */
+    .booking-hero {
+      width: min(100%, 1120px);
+      margin: 42px auto 16px;
+      padding: 38px 24px;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 300px;
+      gap: 24px; align-items: stretch;
+    }
+    .app-badge {
+      display: inline-flex; color: var(--rosa); background: var(--rosa-suave);
+      border-radius: 999px; padding: 7px 15px;
+      font-weight: 700; font-size: .78rem; letter-spacing: .04em;
+      text-transform: uppercase; margin-bottom: 18px;
+    }
+    .booking-hero h1 {
+      font-family: 'Playfair Display', serif; color: var(--violeta);
+      font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.1; margin: 0 0 14px;
+    }
+    .booking-hero p { color: var(--texto-suave); line-height: 1.7; max-width: 600px; }
+    .booking-summary {
+      background: var(--blanco); border: 1px solid rgba(196,38,133,0.1);
+      border-radius: 24px; padding: 24px;
+      box-shadow: var(--sombra); display: grid; gap: 8px; align-content: center;
+    }
+    .booking-summary strong { color: var(--violeta); font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+    .booking-summary span { color: var(--texto-suave); }
+    .booking-summary a { color: var(--rosa); font-weight: 700; text-decoration: none; }
+    @media (max-width: 820px) {
+      .booking-hero { grid-template-columns: 1fr; padding-inline: 16px; margin-top: 20px; }
+    }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-    
-    .btn-redireccion {
-  background-color: #C42685;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease;
-}
+    /* ===================== SHELL ===================== */
+    .booking-shell {
+      width: min(100%, 1120px);
+      margin: 0 auto 70px; padding: 0 24px;
+      display: grid;
+      grid-template-columns: minmax(320px,420px) minmax(0,1fr);
+      gap: 24px; align-items: start;
+    }
+    @media (max-width: 820px) {
+      .booking-shell { grid-template-columns: 1fr; padding-inline: 16px; }
+    }
+    .booking-panel {
+      background: rgba(255,255,255,0.64); padding: 14px;
+      border-radius: 28px; border: 1px solid rgba(196,38,133,0.09);
+      box-shadow: var(--sombra); min-width: 0;
+    }
 
-.btn-redireccion:hover {
-  background-color: #a01e6a;
-}
-   /* Contenedor del banner */
-  .banner {
-    position: fixed; /* fijo para cubrir pantalla */
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    z-index: 9999;
-    animation: zoomFade 6s ease forwards;
-  }
+    /* ===================== CALENDARIO ===================== */
+    .calendario {
+      background: var(--blanco); border-radius: 20px;
+      overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.06);
+    }
+    .calendario-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--violeta), var(--rosa));
+      color: #fff; border-radius: 20px 20px 0 0;
+    }
+    .calendario-header button {
+      background: white; border: none; color: var(--rosa);
+      font-size: 16px; font-weight: bold; padding: 6px 10px;
+      border-radius: 6px; cursor: pointer;
+    }
+    .mes-textos { flex-grow: 1; text-align: center; }
+    .mes-textos h2 { margin: 0; font-size: 1.3em; }
+    .texto-secundario { margin: 2px 0 0; font-size: .75em; color: rgba(255,255,255,0.8); font-style: italic; }
+    .dias-semana {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      background: var(--violeta); color: #fff;
+      font-weight: bold; text-align: center; padding: 8px 0; font-size: .8rem;
+    }
+    .dias { display: grid; grid-template-columns: repeat(7,1fr); padding: 10px; gap: 4px; }
+    .dia {
+      padding: 9px; text-align: center; cursor: pointer;
+      border-radius: 8px; font-size: .9rem;
+      background: rgba(54,42,111,0.04);
+      transition: background 0.2s, color 0.2s;
+    }
+    .dia:hover:not(.disabled) { background: var(--rosa); color: white; }
+    .dia.disabled { color: #ccc; cursor: default; background: transparent; }
+    .dia.seleccionado { background: var(--violeta); color: white; font-weight: bold; }
 
-  /* Imagen base para PC */
-  .banner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+    /* ===================== PASO: TELÉFONO ===================== */
+    .paso-tel {
+      background: var(--blanco); border-radius: 20px; padding: 22px;
+      border: 1px solid rgba(196,38,133,0.09); box-shadow: var(--sombra);
+      margin-top: 0;
+    }
+    .paso-tel h3 { color: var(--rosa); margin: 0 0 6px; font-size: 1.1rem; }
+    .paso-tel p  { color: var(--texto-suave); font-size: .88rem; margin: 0 0 14px; }
+    .tel-input-row { display: flex; gap: 8px; }
+    .tel-input-row input {
+      flex: 1; padding: 11px 14px; border: 1.5px solid rgba(54,42,111,0.18);
+      border-radius: 999px; font-size: 15px; font-family: inherit;
+      outline: none; transition: border 0.2s;
+    }
+    .tel-input-row input:focus { border-color: var(--rosa); }
+    .tel-input-row button {
+      background: var(--rosa); color: white; border: none;
+      border-radius: 999px; padding: 11px 20px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tel-input-row button:hover { background: var(--violeta); }
 
-  /* Imagen para móvil, oculta por defecto */
-  .banner img.mobile {
-    display: none;
-  }
+    /* ===================== LISTA DE MASCOTAS ===================== */
+    .mascotas-lista { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .mascota-card {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--violeta-suave); border-radius: 14px; padding: 12px 14px;
+      border: 2px solid transparent; cursor: pointer;
+      transition: border 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .mascota-card.seleccionada {
+      border-color: var(--rosa); background: var(--rosa-suave);
+    }
+    .mascota-card .mascota-icon {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--violeta); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .mascota-card.seleccionada .mascota-icon { background: var(--rosa); }
+    .mascota-card .mascota-info { flex: 1; }
+    .mascota-card .mascota-info strong { display: block; color: var(--violeta); font-size: .95rem; }
+    .mascota-card .mascota-info small { color: var(--texto-suave); font-size: .8rem; }
+    .mascota-card .check { color: var(--rosa); font-size: 18px; opacity: 0; transition: opacity 0.2s; }
+    .mascota-card.seleccionada .check { opacity: 1; }
 
-  /* Animación zoom y fade out */
-  @keyframes zoomFade {
-  0% {
-    transform: scale(1);
-    opacity: 1;           /* Antes estaba 0.8 */
-    visibility: visible;
-  }
-  83.33% {
-    transform: scale(1.1);
-    opacity: 1;
-    visibility: visible;
-  }
-  100% {
-    transform: scale(1.1);
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-  /* Media Query para móviles */
-  @media (max-width: 768px) {
-    .banner img.desktop {
+    /* Nueva mascota card */
+    .nueva-mascota-card {
+      border: 2px dashed rgba(196,38,133,0.35); border-radius: 14px;
+      padding: 12px 14px; display: flex; align-items: center; gap: 12px;
+      cursor: pointer; background: transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nueva-mascota-card:hover { background: var(--rosa-suave); border-color: var(--rosa); }
+    .nueva-mascota-card span { color: var(--rosa); font-weight: 700; font-size: .92rem; }
+    .nueva-mascota-card i { color: var(--rosa); font-size: 20px; width: 38px; text-align: center; }
+
+    /* Formulario mini para nueva mascota inline */
+    .nueva-mascota-form {
+      background: var(--violeta-suave); border-radius: 14px; padding: 14px;
+      display: none; flex-direction: column; gap: 8px; margin-top: 2px;
+    }
+    .nueva-mascota-form.visible { display: flex; }
+    .nueva-mascota-form input {
+      padding: 10px 14px; border: 1.5px solid rgba(54,42,111,0.18);
+      border-radius: 999px; font-size: 14px; font-family: inherit; outline: none;
+    }
+    .nueva-mascota-form input:focus { border-color: var(--rosa); }
+    .nueva-mascota-form .btn-agregar-mascota {
+      background: var(--violeta); color: white; border: none;
+      border-radius: 999px; padding: 10px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .nueva-mascota-form .btn-agregar-mascota:hover { background: var(--rosa); }
+
+    /* ===================== FORMULARIO DUEÑO ===================== */
+    .formulario-duenio {
+      background: var(--blanco); border-radius: 20px; padding: 22px;
+      border: 1px solid rgba(196,38,133,0.09); box-shadow: var(--sombra);
       display: none;
     }
-    .banner img.mobile {
-      display: block;
+    .formulario-duenio h3 { color: var(--rosa); margin: 0 0 14px; }
+    .formulario-duenio input,
+    .formulario-duenio textarea {
+      width: 100%; padding: 11px 14px; margin-bottom: 10px;
+      border: 1.5px solid rgba(54,42,111,0.18); border-radius: 12px;
+      font-size: 14px; font-family: inherit; outline: none;
+      transition: border 0.2s;
     }
-  }
-    
-    .calendario-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
+    .formulario-duenio input:focus,
+    .formulario-duenio textarea:focus { border-color: var(--rosa); }
 
-.mes-textos {
-  flex-grow: 1;
-  text-align: center;
-}
+    /* ===================== BOTÓN CONFIRMAR ===================== */
+    .btn-confirmar {
+      width: 100%; padding: 14px; border: none; border-radius: 999px;
+      background: linear-gradient(135deg, var(--rosa), #a01e6a);
+      color: white; font-size: 17px; font-weight: 700;
+      cursor: pointer; margin-top: 6px;
+      box-shadow: 0 6px 15px rgba(196,38,133,0.35);
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    }
+    .btn-confirmar:hover { background: linear-gradient(135deg, var(--violeta), #2a2254); transform: translateY(-2px); }
+    .btn-confirmar:active { transform: translateY(1px); }
 
-.mes-textos h2 {
-  margin: 0;
-  font-size: 1.5em;
-}
+    /* ===================== TURNOS ===================== */
+    #turnosDisponibles {
+      background: var(--blanco); border-radius: 20px; padding: 20px;
+      border: 1px solid rgba(196,38,133,0.09); box-shadow: var(--sombra);
+    }
+    #turnosDisponibles h3 { color: var(--rosa); margin: 0 0 14px; }
+    #contenedorTurnos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .turno-button {
+      background: linear-gradient(135deg, var(--rosa), #a01e6a);
+      color: white; border: none; padding: 12px 10px;
+      border-radius: 999px; cursor: pointer; font-size: 15px; font-weight: 700;
+      box-shadow: 0 4px 12px rgba(196,38,133,0.3);
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    }
+    .turno-button:hover { background: linear-gradient(135deg, var(--violeta), #2a2254); transform: translateY(-2px); }
+    .turno-button.disabled { background: #ccc; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
 
-.texto-principal {
-  margin: 2px 0 0;
-  font-size: 0.9em;
-  font-weight: 600;
-  color: #362A6F; /* azul que venimos usando */
-}
+    /* ===================== TICKET ===================== */
+    #ticket {
+      background: var(--blanco); border-radius: 20px; padding: 22px;
+      border: 1px solid rgba(196,38,133,0.09); box-shadow: var(--sombra);
+      display: none; opacity: 0; transform: scale(0.96);
+      transition: all 0.4s ease;
+    }
+    #ticket.visible { display: block; opacity: 1; transform: scale(1); }
+    #ticket h3 { color: var(--violeta); font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 14px; }
+    #ticket p { margin: 6px 0; font-size: .92rem; }
+    #ticket strong { color: var(--violeta); }
+    .ticket-mascota-bloque {
+      background: var(--violeta-suave); border-radius: 12px; padding: 12px 14px; margin: 10px 0;
+    }
+    .ticket-mascota-bloque p { margin: 4px 0; }
+    #ticket button {
+      width: 100%; padding: 13px; border: none; border-radius: 999px;
+      background: var(--rosa); color: white;
+      font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 14px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    #ticket button:hover { background: var(--violeta); transform: scale(1.03); }
 
-.texto-secundario {
-  margin: 0;
-  font-size: 0.75em;
-  color: #fff; /* magenta que venimos usando */
-  font-style: italic;
-}
-.turno-button {
-  background: linear-gradient(135deg, #C42685 0%, #a01e6a 100%);
-  color: white;
-  border: none;
-  padding: 14px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 17px;
-  font-weight: 700;
-  box-shadow: 0 6px 15px rgba(196, 38, 133, 0.4);
-  margin-bottom: 12px;
-  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  user-select: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-}
+    /* ===================== LOADER ===================== */
+    #loaderOverlay {
+      position: fixed; inset: 0;
+      background: rgba(255,255,255,0.85);
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; z-index: 3000;
+    }
+    .loader {
+      border: 5px solid #f3f3f3; border-top: 5px solid var(--violeta);
+      border-radius: 50%; width: 52px; height: 52px;
+      animation: spin 1s linear infinite; margin-bottom: 10px;
+    }
+    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
 
-.turno-button:hover:not(.disabled) {
-  background: linear-gradient(135deg, #362A6F 0%, #2a2254 100%);
-  box-shadow: 0 8px 20px rgba(54, 42, 111, 0.6);
-  transform: translateY(-3px);
-}
-
-.turno-button:active:not(.disabled) {
-  transform: translateY(1px);
-  box-shadow: 0 4px 10px rgba(54, 42, 111, 0.8);
-}
-
-.turno-button.disabled {
-  background: #ccc;
-  color: #888;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-#modalBuscarDni img {
-  display: block;
-  margin: 0 auto 15px auto; /* Centrada y con margen abajo */
-  max-width: 250px; /* o el tamaño que prefieras */
-}
+    /* ===================== BOTÓN FLOTANTE / MODAL DNI ===================== */
+    #busquedaContainer {
+      position: fixed; bottom: 26px; right: 24px;
+      display: flex; align-items: center; gap: 8px; z-index: 1000;
+    }
+    #textoBurbuja {
+      position: absolute; right: 70px; bottom: 8px;
+      background: #222; color: white; padding: 8px 14px;
+      border-radius: 20px; font-size: 13px; white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transform: translateX(60px); opacity: 0; pointer-events: none;
+      transition: transform 0.6s ease, opacity 0.4s ease;
+    }
+    #textoBurbuja.visible { transform: translateX(0); opacity: 1; pointer-events: auto; }
+    #botonBuscarDni {
+      background: var(--rosa); color: #fff; border: none;
+      border-radius: 50%; width: 58px; height: 58px;
+      font-size: 20px; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(196,38,133,0.35);
+      transition: transform 0.2s, background 0.2s;
+    }
+    #botonBuscarDni:hover { transform: scale(1.1); background: var(--violeta); }
+    #modalBuscarDni {
+      display: none; position: fixed; inset: 0;
+      background: rgba(54,42,111,0.88); z-index: 2000;
+      justify-content: center; align-items: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+    #modalBuscarDni .contenido-modal {
+      background: #fff; padding: 24px; border-radius: 20px; width: 310px; text-align: center;
+    }
+    #modalBuscarDni img { display: block; margin: 0 auto 14px; max-width: 220px; }
+    #modalBuscarDni input {
+      width: 100%; padding: 11px 14px; font-size: 1.1rem;
+      border-radius: 999px; border: 1.5px solid rgba(54,42,111,0.18);
+      text-align: center; text-transform: uppercase;
+      margin-bottom: 12px; font-family: inherit;
+    }
+    #modalBuscarDni button {
+      background: var(--rosa); color: #fff; border: none;
+      padding: 11px; width: 100%; margin-bottom: 8px;
+      cursor: pointer; border-radius: 999px; font-size: 15px; font-weight: 700;
+    }
+    #modalBuscarDni button:last-of-type { background: var(--violeta); }
+    #resultadoBusqueda {
+      max-height: 220px; overflow-y: auto;
+      word-wrap: break-word; line-height: 1.5; text-align: left;
+    }
     .whatsapp-vertical {
-    position: fixed;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
-    transform-origin: right center;
-    background-color: #362A6F;
-    color: white;
-    font-size: 12px;
-    font-family: Arial, sans-serif;
-    padding: 5px 10px;
-    border-radius: 5px 5px 0 0;
-    text-decoration: none;
-    z-index: 9999;
-}
-
-:root {
-  --crema: #FAF6F0;
-  --crema-oscuro: #F0E9DF;
-  --rosa: #C42685;
-  --rosa-suave: #F5E6F0;
-  --violeta: #362A6F;
-  --violeta-suave: #EAE8F5;
-  --texto: #2A2235;
-  --texto-suave: #7A6E85;
-  --blanco: #FFFFFF;
-  --sombra: 0 18px 50px rgba(54,42,111,0.12);
-}
-body {
-  background: radial-gradient(circle at top right, rgba(196,38,133,0.11), transparent 30%), var(--crema);
-  color: var(--texto);
-}
-.app-navbar {
-  position: sticky;
-  top: 0;
-  background: rgba(250,246,240,0.92);
-  border-bottom: 1px solid rgba(196,38,133,0.08);
-  color: var(--texto);
-}
-.brand-link { color: inherit; text-decoration: none; gap: 12px; min-width: 0; }
-.brand-link span { display: flex; flex-direction: column; line-height: 1.1; color: var(--violeta); }
-.brand-link strong { font-family: 'Playfair Display', serif; font-size: 1.05rem; }
-.brand-link small { color: var(--texto-suave); font-size: .76rem; }
-.navbar-menu .nav-link { color: var(--texto-suave); border-radius: 999px; }
-.navbar-menu .nav-link:hover { color: var(--blanco); }
-.nav-link-pill { background: var(--rosa); color: var(--blanco) !important; padding-inline: 16px !important; }
-.booking-hero {
-  width: min(100%, 1120px);
-  max-width: 1120px;
-  margin: 42px auto 16px;
-  padding: 38px 24px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 24px;
-  align-items: stretch;
-}
-.app-badge {
-  display: inline-flex;
-  color: var(--rosa);
-  background: var(--rosa-suave);
-  border-radius: 999px;
-  padding: 7px 15px;
-  font-weight: 700;
-  font-size: .78rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  margin-bottom: 18px;
-}
-.booking-hero h1 {
-  font-family: 'Playfair Display', serif;
-  color: var(--violeta);
-  font-size: clamp(2rem, 5vw, 3.6rem);
-  line-height: 1.08;
-  margin: 0 0 16px;
-}
-.booking-hero p { color: var(--texto-suave); line-height: 1.7; max-width: 650px; }
-.booking-summary {
-  background: var(--blanco);
-  border: 1px solid rgba(196,38,133,0.1);
-  border-radius: 26px;
-  padding: 24px;
-  box-shadow: var(--sombra);
-  display: grid;
-  gap: 10px;
-  align-content: center;
-}
-.booking-summary strong { color: var(--violeta); font-family: 'Playfair Display', serif; font-size: 1.35rem; }
-.booking-summary span { color: var(--texto-suave); }
-.booking-summary a { color: var(--rosa); font-weight: 700; text-decoration: none; }
-.booking-shell {
-  width: min(100%, 1120px);
-  max-width: 1120px;
-  margin: 0 auto 70px;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
-}
-.booking-panel, .calendario, .turnos, .formulario, #ticket, #dniStep {
-  max-width: none;
-  border-radius: 28px;
-  border: 1px solid rgba(196,38,133,0.09);
-  box-shadow: var(--sombra);
-}
-.booking-panel { background: rgba(255,255,255,0.64); padding: 14px; min-width: 0; }
-.calendario, .turnos, .formulario, #ticket { width: 100%; max-width: 100%; margin: 0; }
-#dniStep { background: var(--blanco); padding: 22px; margin: 18px 0 !important; }
-.calendario-header { border-radius: 20px 20px 0 0; background: linear-gradient(135deg, var(--violeta), var(--rosa)); }
-.dias-semana { background: var(--violeta); }
-.dia { background: rgba(54,42,111,0.04); }
-.formulario input, .formulario textarea, #dniStep input { border: 1px solid rgba(54,42,111,0.16); border-radius: 12px; }
-.turno-button, .formulario button, #ticket button, #modalBuscarDni button { border-radius: 999px; }
-#busquedaContainer { bottom: 26px; right: 24px; }
-#botonBuscarDni { box-shadow: 0 12px 30px rgba(196,38,133,0.28); }
-@media (max-width: 820px) {
-  .booking-hero, .booking-shell { grid-template-columns: minmax(0, 1fr); padding-inline: 16px; }
-  .booking-hero { margin-top: 20px; }
-  .navbar { padding-inline: 12px; }
-  .brand-link span { max-width: calc(100vw - 120px); }
-  .navbar-menu { background: rgba(250,246,240,0.98); top: 72px; right: 12px; left: 12px; min-width: 0; width: auto; }
-  .navbar-menu .nav-link { color: var(--violeta); }
-  .navbar-menu .nav-link:hover { color: var(--blanco); }
-}
-
+      position: fixed; right: 5px; top: 50%;
+      transform: translateY(-50%) rotate(-90deg); transform-origin: right center;
+      background: var(--violeta); color: white; font-size: 12px;
+      padding: 5px 10px; border-radius: 5px 5px 0 0;
+      text-decoration: none; z-index: 9999;
+    }
+    #mensajeTelError { color: var(--rosa); font-size: .85rem; margin-top: 8px; display: none; }
+    .divider-o {
+      text-align: center; color: var(--texto-suave);
+      font-size: .85rem; margin: 10px 0; position: relative;
+    }
+    .divider-o::before, .divider-o::after {
+      content: ""; position: absolute; top: 50%; width: 40%; height: 1px;
+      background: rgba(54,42,111,0.15);
+    }
+    .divider-o::before { left: 0; }
+    .divider-o::after  { right: 0; }
+    .resumen-turno-seleccionado {
+      background: var(--violeta-suave); border-radius: 12px; padding: 10px 14px;
+      font-size: .88rem; color: var(--violeta); margin-bottom: 14px;
+    }
+    .resumen-turno-seleccionado strong { color: var(--rosa); }
   </style>
-
 </head>
 <body>
 
-<header class="navbar app-navbar">
-  <a class="navbar-logo brand-link" href="index.html" aria-label="Volver al inicio">
+<!-- ========== NAVBAR ========== -->
+<header class="navbar">
+  <a class="navbar-logo" href="index.html" aria-label="Volver al inicio">
     <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo Dra. Lili Bruzera" />
     <span><strong>Dra. Lili Bruzera</strong><small>Turnos online</small></span>
   </a>
-  <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="Abrir menú" aria-controls="navbarMenu" aria-expanded="false">
+  <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="Abrir menú" aria-expanded="false">
     <i class="fas fa-bars"></i>
   </button>
   <nav class="navbar-menu" id="navbarMenu">
@@ -893,11 +441,13 @@ body {
     <a href="panel/" class="nav-link nav-link-pill">Ingreso veterinario</a>
   </nav>
 </header>
-<section class="booking-hero inicio" id="inicio">
+
+<!-- ========== HERO ========== -->
+<section class="booking-hero visible" id="inicio">
   <div>
     <span class="app-badge">Agenda online integrada</span>
     <h1>Reservá el turno de tu mascota sin salir del sitio.</h1>
-    <p>Elegí disponibilidad, reutilizá el ID de paciente si ya existe y recibí un comprobante descargable. La reserva sigue conectada al Apps Script y a Google Sheets actuales.</p>
+    <p>Elegí disponibilidad, registrá una o varias mascotas en un solo turno y recibí un comprobante descargable.</p>
   </div>
   <div class="booking-summary" aria-label="Información de atención">
     <strong>Atención clínica</strong>
@@ -906,660 +456,632 @@ body {
     <a href="index.html#contacto">Ver contacto</a>
   </div>
 </section>
-  <a href="https://wa.me/543434477577?text=Hola%2C%20tengo%20una%20veterinaria%20y%20quiero%20informaci%C3%B3n%21" 
-   class="whatsapp-vertical" 
-   target="_blank">
-   TurnoX
-</a>
-  <!-- Loader -->
+
+<a href="https://wa.me/543434477577?text=Hola%2C%20tengo%20una%20veterinaria%20y%20quiero%20informaci%C3%B3n%21"
+   class="whatsapp-vertical" target="_blank">TurnoX</a>
+
+<!-- ========== LOADER ========== -->
 <div id="loaderOverlay">
   <div class="loader"></div>
-  <p>Cargando...</p>
+  <p id="loaderMsg">Cargando...</p>
 </div>
 
- 
-
+<!-- ========== MAIN ========== -->
 <main class="booking-shell" id="turnos">
-<section class="booking-panel booking-calendar">
-<div class="calendario">
-  <p class="texto-principal" style="text-align:center; margin:5px;">Buscá los turnos disponibles</p>
-  <div class="calendario-header">
-    <button onclick="cambiarMes(-1)">←</button>
-    <div class="mes-textos">
-      <h2 id="mesActual"></h2>
-      
-      <p class="texto-secundario">Selecciona un día</p>
+
+  <!-- COLUMNA IZQUIERDA: Calendario -->
+  <section class="booking-panel">
+    <p style="text-align:center;margin:4px 0 10px;color:var(--texto-suave);font-size:.88rem;">Buscá los turnos disponibles</p>
+    <div class="calendario">
+      <div class="calendario-header">
+        <button onclick="cambiarMes(-1)" aria-label="Mes anterior">←</button>
+        <div class="mes-textos">
+          <h2 id="mesActual"></h2>
+          <p class="texto-secundario">Seleccioná un día</p>
+        </div>
+        <button onclick="cambiarMes(1)" aria-label="Mes siguiente">→</button>
+      </div>
+      <div class="dias-semana">
+        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div>
+        <div>Jue</div><div>Vie</div><div>Sáb</div>
+      </div>
+      <div class="dias" id="dias"></div>
     </div>
-    <button onclick="cambiarMes(1)">→</button>
-  </div>
-  <div class="dias-semana">
-    <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
-  </div>
-  <div class="dias" id="dias"></div>
-</div>
-</section>
-<section class="booking-panel booking-details">
-<div class="turnos" id="turnosDisponibles"></div>
-<div id="dniStep" style="display:none; text-align:center; margin:20px;">
-  <h3>¿Tu mascota ya tiene un ID?</h3>
-  <input type="text" id="dniIngreso" placeholder="ID de tu mascota" maxlength="6" style="padding:8px; font-size:16px; margin:10px 0;">
-  <br>
-  <button onclick="verificarDni()" style="background:#362A6F; color:white; padding:10px 15px; border:none; border-radius:6px; cursor:pointer;">Cargar Datos con ID</button>
-  <p style="margin:15px 0;">o</p>
-  <button onclick="mostrarFormularioNuevo()" style="background:#C42685; color:white; padding:10px; border:none; border-radius:6px; cursor:pointer;">No tiene ID mi mascota</button>
-  <p id="dniError" style="color:red; display:none; margin-top:10px;">No se encontró ninguna mascota con ese ID.</p>
-</div>
+  </section>
 
-<div class="formulario" id="formularioReserva" style="display:none;">
-  <h3>Reservar turno</h3>
-  <input type="text" id="nombre" placeholder="Tu nombre" required />
-  <input type="text" id="nombreMascota" placeholder="Nombre de la mascota" required />
-  <input type="text" id="tipoMascota" placeholder="Tipo de mascota (perro, gato, etc.)" required />
-  <input type="email" id="email" placeholder="Tu correo" required />
-  <input type="tel" id="telefono" placeholder="Tu teléfono" required />
-  <input type="text" id="dniMascota" placeholder="Aquí generaremos un ID. Dejalo vacío" />
-  <textarea id="comentario" placeholder="Motivo del Turno opcional"></textarea>
-  <button onclick="enviarReserva()">Confirmar y enviar</button>
-</div>
+  <!-- COLUMNA DERECHA: Turnos + Flujo -->
+  <section class="booking-panel">
 
-<div id="ticket">
-  <img id="logoTicket" src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo" style="max-width: 150px; display: block; margin: 0 auto 15px;">
-  <h3 style="Font-size: 24px;">Reservaste turno</h3>
-  <p><strong>Nombre:</strong> <span id="tNombre"></span></p>
-  <p><strong>Nombre de la Mascota:</strong> <span id="tNombreMascota"></span></p>
-  <p><strong>Tipo:</strong> <span id="tTipoMascota"></span></p>
-  <p><strong>Email:</strong> <span id="tEmail"></span></p>
-  <p><strong>Teléfono:</strong> <span id="tTelefono"></span></p>
-  <p><strong>ID Mascota:</strong> <span id="tDniMascota"></span></p>
-  <p><strong>Fecha:</strong> <span id="tFecha"></span></p>
-  <p><strong>Turno:</strong> <span id="tTurno"></span></p>
-  <p><strong>Comentario:</strong> <span id="tComentario"></span></p>
-  <button onclick="descargarTicket()">Descargar Ticket</button>
-</div>
-</section>
+    <!-- PASO 0: Turnos disponibles -->
+    <div id="turnosDisponibles"></div>
+
+    <!-- PASO 1: Ingreso de teléfono -->
+    <div class="paso-tel" id="pasoTelefono" style="display:none; margin-top:14px;">
+      <div class="resumen-turno-seleccionado" id="resumenTurno"></div>
+      <h3>¿Ya reservaste antes?</h3>
+      <p>Ingresá tu teléfono (sin 0 y sin 15) para cargar tus mascotas automáticamente.</p>
+      <div class="tel-input-row">
+        <input type="tel" id="inputTelefono" placeholder="Ej: 3435303848" maxlength="10" inputmode="numeric" />
+        <button onclick="buscarPorTelefono()">Buscar</button>
+      </div>
+      <p id="mensajeTelError"></p>
+      <div class="divider-o">o</div>
+      <button class="btn-confirmar" style="margin-top:0;" onclick="mostrarFormularioPrimerVez()">
+        Primera vez &nbsp;→
+      </button>
+    </div>
+
+    <!-- PASO 2A: Mascotas encontradas -->
+    <div class="paso-tel" id="pasoMascotas" style="display:none; margin-top:14px;">
+      <div class="resumen-turno-seleccionado" id="resumenTurno2"></div>
+      <h3>Tus mascotas</h3>
+      <p>Seleccioná una o varias. Todas quedarán en el mismo turno.</p>
+      <div class="mascotas-lista" id="listaMascotas"></div>
+
+      <!-- Agregar nueva mascota -->
+      <div class="nueva-mascota-card" id="btnAgregarMascota" onclick="toggleNuevaMascota()" style="margin-top:10px;">
+        <i class="fas fa-plus-circle"></i>
+        <span>Agregar otra mascota</span>
+      </div>
+      <div class="nueva-mascota-form" id="formNuevaMascota">
+        <input type="text" id="nuevaMascotaNombre" placeholder="Nombre de la mascota" />
+        <input type="text" id="nuevaMascotaTipo"   placeholder="Tipo (perro, gato, etc.)" />
+        <button class="btn-agregar-mascota" onclick="agregarMascotaALista()">+ Agregar a la lista</button>
+      </div>
+
+      <div class="divider-o" style="margin-top:14px;"></div>
+      <button class="btn-confirmar" onclick="confirmarMascotas()">
+        Confirmar selección &nbsp;→
+      </button>
+    </div>
+
+    <!-- PASO 2B: Formulario primera vez (dueño + mascota) -->
+    <div class="formulario-duenio" id="formularioPrimerVez" style="margin-top:14px;">
+      <h3>Tus datos</h3>
+      <input type="text"  id="pv_nombre"        placeholder="Tu nombre completo" />
+      <input type="tel"   id="pv_telefono"       placeholder="Teléfono (sin 0 y sin 15)" maxlength="10" />
+      <input type="email" id="pv_email"          placeholder="Tu correo electrónico" />
+      <h3 style="margin-top:10px;">Tu mascota</h3>
+      <input type="text" id="pv_nombreMascota"  placeholder="Nombre de la mascota" />
+      <input type="text" id="pv_tipoMascota"    placeholder="Tipo (perro, gato, etc.)" />
+      <!-- Mascotas adicionales -->
+      <div id="pv_mascotasExtra"></div>
+      <div class="nueva-mascota-card" onclick="agregarMascotaExtra()" style="margin-bottom:12px;">
+        <i class="fas fa-plus-circle"></i>
+        <span>Agregar otra mascota</span>
+      </div>
+      <textarea id="pv_comentario" placeholder="Motivo del turno (opcional)" rows="2"></textarea>
+      <button class="btn-confirmar" onclick="enviarReservaPrimerVez()">Confirmar turno</button>
+    </div>
+
+    <!-- PASO 3: Confirmar datos (dueño ya conocido + mascotas) -->
+    <div class="formulario-duenio" id="formularioConfirmacion" style="margin-top:14px;">
+      <h3>Confirmá tu turno</h3>
+      <p id="infoResumenDuenio" style="color:var(--texto-suave);font-size:.88rem;margin-bottom:12px;"></p>
+      <textarea id="fc_comentario" placeholder="Motivo del turno (opcional)" rows="2"></textarea>
+      <button class="btn-confirmar" onclick="enviarReservaConocido()">Confirmar turno</button>
+    </div>
+
+    <!-- TICKET -->
+    <div id="ticket" style="margin-top:14px;">
+      <img id="logoTicket" src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo" style="max-width:130px;display:block;margin:0 auto 14px;">
+      <h3>¡Turno reservado!</h3>
+      <p><strong>Nombre:</strong> <span id="tNombre"></span></p>
+      <p><strong>Teléfono:</strong> <span id="tTelefono"></span></p>
+      <p><strong>Email:</strong> <span id="tEmail"></span></p>
+      <p><strong>Fecha:</strong> <span id="tFecha"></span></p>
+      <p><strong>Turno:</strong> <span id="tTurno"></span></p>
+      <div id="tMascotasBloque"></div>
+      <p><strong>Comentario:</strong> <span id="tComentario"></span></p>
+      <button onclick="descargarTicket()"><i class="fas fa-download"></i> &nbsp;Descargar Ticket</button>
+    </div>
+
+  </section>
 </main>
-<!-- Botón flotante para buscar por DNI -->
+
+<!-- ========== BOTÓN FLOTANTE + MODAL ========== -->
 <div id="busquedaContainer">
-  <span id="textoBurbuja">Buscas una mascota extraviada?</span>
-  <button id="botonBuscarDni" title="Buscar DNI Mascota">
-    <i class="fas fa-search"></i>
-  </button>
+  <span id="textoBurbuja">¿Buscás una mascota extraviada?</span>
+  <button id="botonBuscarDni" title="Buscar mascota por ID"><i class="fas fa-search"></i></button>
 </div>
-
-
-<!-- Modal de búsqueda por DNI -->
 <div id="modalBuscarDni">
   <div class="contenido-modal">
-    <a href="https://ibb.co/3YzqJ1mQ"><img src="https://i.ibb.co/cXLHmJhV/Medalla-Bruzera.png" alt="Medalla-Bruzera" border="0"></a>
+    <a href="https://ibb.co/3YzqJ1mQ"><img src="https://i.ibb.co/cXLHmJhV/Medalla-Bruzera.png" alt="Medalla Bruzera"></a>
     <h3>Buscar Mascota</h3>
-    <input type="text" id="inputDniBusqueda" placeholder="Ej: ABC123" maxlength="6" style="
-      text-align: center;
-      font-size: 1.2rem;
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 15px;
-      font-family: 'Montserrat', sans-serif;
-    "/>
+    <input type="text" id="inputDniBusqueda" placeholder="Ej: ABC123" maxlength="6" />
     <button onclick="buscarDni()">Buscar</button>
     <button onclick="cerrarModalDni()">Cerrar</button>
     <div id="resultadoBusqueda"></div>
   </div>
 </div>
-<!-- ===== CONTACTO ===== 
-  <section id="contacto" style="padding:40px; text-align:center;">
-    <h2>Contacto</h2>
-    <p>Email: contacto@veterinaria.com</p>
-    <p>Tel: +54 11 5555-5555</p>
-  </section>-->
+
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <script>
-  const diasElemento = document.getElementById("dias");
-  const mesActualElemento = document.getElementById("mesActual");
-  const turnosElemento = document.getElementById("turnosDisponibles");
-  const formularioElemento = document.getElementById("formularioReserva");
-  const urlScript = "https://script.google.com/macros/s/AKfycbwA_lwWMazJkNsZLctLld_O4tf4RFTSaOpxpx4LMJdOpwOgygwchokuea0QEY1mlzeQvQ/exec";
+// ============================================================
+// CONFIG
+// ============================================================
+const urlScript = "https://script.google.com/macros/s/AKfycbwA_lwWMazJkNsZLctLld_O4tf4RFTSaOpxpx4LMJdOpwOgygwchokuea0QEY1mlzeQvQ/exec";
 
-  let fecha = new Date();
-  let diaSeleccionado = null;
-  let turnoSeleccionado = null;
-  let turnosOcupados = [];
+const turnosPorDia = {
+  "lunes":    ["17:30","18:00","18:30","19:00","19:30","20:00"],
+  "martes":   ["17:30","18:00","18:30","19:00","19:30","20:00"],
+  "miércoles":["17:30","18:00","18:30","19:00","19:30","20:00"],
+  "jueves":   ["17:30","18:00","18:30","19:00","19:30","20:00"],
+  "viernes":  ["17:30","18:00","18:30","19:00","19:30","20:00"],
+  "sábado":   ["10:00","10:30","11:00","11:30","12:00"],
+  "domingo":  []
+};
+const nombresDias = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 
-  const turnosPorDia = {
-    "lunes": ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00"],
-  "martes": ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00"],
-  "miércoles": ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00"],
-  "jueves": ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00"],
-  "viernes": ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00"],
-    "sábado": ["10:00", "10:30", "11:00", "11:30", "12:00"],
-    "domingo": [] // Sin turnos
+// Estado global
+let fechaCalendario = new Date();
+let diaSeleccionado = null;
+let turnoSeleccionado = null;
+let turnosOcupados   = [];
+
+// Datos dueño conocido
+let duenioActual = null;       // { nombre, telefono, email }
+let mascotasEncontradas = [];  // [{ dniMascota, nombreMascota, tipoMascota, ... }]
+let mascotasNuevasAgregadas = []; // nuevas mascotas añadidas a la lista dinámica
+let mascotasSeleccionadas = new Set(); // dniMascota seleccionados
+
+// ============================================================
+// UTILIDADES
+// ============================================================
+function fmt(f) {
+  return `${String(f.getDate()).padStart(2,'0')}/${String(f.getMonth()+1).padStart(2,'0')}/${f.getFullYear()}`;
+}
+function mostrarLoader(msg = "Cargando...") {
+  document.getElementById("loaderOverlay").style.display = "flex";
+  document.getElementById("loaderMsg").textContent = msg;
+}
+function ocultarLoader() {
+  document.getElementById("loaderOverlay").style.display = "none";
+}
+function ocultarTodosLosPasos() {
+  ["pasoTelefono","pasoMascotas","formularioPrimerVez","formularioConfirmacion","ticket"].forEach(id => {
+    const el = document.getElementById(id);
+    if (id === "ticket") { el.classList.remove("visible"); el.style.display = "none"; }
+    else el.style.display = "none";
+  });
+}
+function iconoMascota(tipo) {
+  const t = (tipo || "").toLowerCase();
+  if (t.includes("perro") || t.includes("dog"))  return "🐶";
+  if (t.includes("gato") || t.includes("cat"))   return "🐱";
+  if (t.includes("conejo"))                       return "🐰";
+  if (t.includes("pajaro") || t.includes("ave")) return "🐦";
+  return "🐾";
+}
+function generarDni() {
+  const L = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", N = "0123456789";
+  return L[Math.floor(Math.random()*26)]+L[Math.floor(Math.random()*26)]+L[Math.floor(Math.random()*26)]
+        +N[Math.floor(Math.random()*10)]+N[Math.floor(Math.random()*10)]+N[Math.floor(Math.random()*10)];
+}
+function resumenTurnoTexto() {
+  return `<strong>${fmt(diaSeleccionado)}</strong> &nbsp;·&nbsp; <strong>${turnoSeleccionado}</strong>`;
+}
+
+// ============================================================
+// CALENDARIO
+// ============================================================
+function renderizarCalendario() {
+  const diasEl = document.getElementById("dias");
+  const mesEl  = document.getElementById("mesActual");
+  diasEl.innerHTML = "";
+  const año = fechaCalendario.getFullYear(), mes = fechaCalendario.getMonth();
+  const primerDia = new Date(año, mes, 1);
+  const diasMes   = new Date(año, mes+1, 0).getDate();
+  mesEl.textContent = fechaCalendario.toLocaleDateString("es-ES", {month:"long", year:"numeric"});
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  for (let i = 0; i < primerDia.getDay(); i++) diasEl.innerHTML += `<div class="dia disabled"></div>`;
+  for (let i = 1; i <= diasMes; i++) {
+    const d = new Date(año, mes, i);
+    const cls = d < hoy ? "dia disabled" : "dia";
+    diasEl.innerHTML += `<div class="${cls}" data-d="${i}" data-m="${mes}" data-y="${año}">${i}</div>`;
+  }
+  diasEl.querySelectorAll('.dia:not(.disabled)').forEach(el => {
+    el.addEventListener('click', () => seleccionarDia(+el.dataset.y, +el.dataset.m, +el.dataset.d, el));
+  });
+}
+function cambiarMes(dir) { fechaCalendario.setMonth(fechaCalendario.getMonth()+dir); renderizarCalendario(); }
+
+function seleccionarDia(y, m, d, elDia) {
+  document.querySelectorAll('.dia.seleccionado').forEach(e => e.classList.remove('seleccionado'));
+  elDia.classList.add('seleccionado');
+  diaSeleccionado = new Date(y, m, d);
+  turnoSeleccionado = null;
+  ocultarTodosLosPasos();
+
+  const cont = document.getElementById("turnosDisponibles");
+  cont.innerHTML = `
+    <h3>Turnos · ${fmt(diaSeleccionado)}</h3>
+    <p id="mensajeTurnos" style="color:var(--texto-suave);font-style:italic;font-size:.88rem;">Buscando disponibilidad...</p>
+    <div id="contenedorTurnos"></div>`;
+
+  fetch(urlScript)
+    .then(r => r.json())
+    .then(data => {
+      turnosOcupados = (data.turnosOcupados || []).map(t => {
+        const fd = new Date(t.fecha), ft = new Date(t.turno);
+        return {
+          fecha: `${String(fd.getDate()).padStart(2,'0')}/${String(fd.getMonth()+1).padStart(2,'0')}/${fd.getFullYear()}`,
+          turno: `${String(ft.getHours()).padStart(2,'0')}:${String(ft.getMinutes()).padStart(2,'0')}`
+        };
+      });
+      renderizarTurnos();
+    })
+    .catch(() => {
+      document.getElementById("mensajeTurnos").textContent = "Error al cargar turnos.";
+    });
+}
+
+function renderizarTurnos() {
+  const fechaTxt = fmt(diaSeleccionado);
+  const nombreDia = nombresDias[diaSeleccionado.getDay()];
+  const disponibles = turnosPorDia[nombreDia] || [];
+  const contenedor  = document.getElementById("contenedorTurnos");
+  const mensaje     = document.getElementById("mensajeTurnos");
+  contenedor.innerHTML = "";
+  if (mensaje) mensaje.textContent = "";
+  let count = 0;
+  disponibles.forEach(t => {
+    const ocupado = turnosOcupados.some(o => o.fecha === fechaTxt && o.turno === t);
+    if (!ocupado) {
+      count++;
+      const btn = document.createElement("button");
+      btn.className = "turno-button";
+      btn.textContent = t;
+      btn.onclick = () => seleccionarTurno(t);
+      contenedor.appendChild(btn);
+    }
+  });
+  if (count === 0) contenedor.innerHTML = "<p style='color:var(--texto-suave)'><em>Sin turnos disponibles para este día.</em></p>";
+}
+
+function seleccionarTurno(turno) {
+  turnoSeleccionado = turno;
+  ocultarTodosLosPasos();
+  // Mostrar paso teléfono
+  const paso = document.getElementById("pasoTelefono");
+  document.getElementById("resumenTurno").innerHTML = resumenTurnoTexto();
+  document.getElementById("mensajeTelError").style.display = "none";
+  document.getElementById("inputTelefono").value = "";
+  paso.style.display = "block";
+  paso.scrollIntoView({ behavior: "smooth" });
+}
+
+// ============================================================
+// PASO 1: BÚSQUEDA POR TELÉFONO
+// ============================================================
+function buscarPorTelefono() {
+  const tel = document.getElementById("inputTelefono").value.trim();
+  const errEl = document.getElementById("mensajeTelError");
+  errEl.style.display = "none";
+  if (tel.length < 8) { errEl.textContent = "Ingresá un teléfono válido (mínimo 8 dígitos)."; errEl.style.display = "block"; return; }
+
+  mostrarLoader("Buscando tus mascotas...");
+  fetch(urlScript + "?telefono=" + encodeURIComponent(tel))
+    .then(r => r.json())
+    .then(data => {
+      ocultarLoader();
+      if (data.success && data.mascotas && data.mascotas.length > 0) {
+        duenioActual = {
+          nombre:   data.mascotas[0].nombre,
+          telefono: data.mascotas[0].telefono,
+          email:    data.mascotas[0].email
+        };
+        mascotasEncontradas = data.mascotas;
+        mascotasNuevasAgregadas = [];
+        mascotasSeleccionadas = new Set();
+        mostrarPasoMascotas();
+      } else {
+        errEl.textContent = "No encontramos registros para ese teléfono.";
+        errEl.style.display = "block";
+      }
+    })
+    .catch(() => { ocultarLoader(); alert("Error al buscar. Intentá de nuevo."); });
+}
+
+// ============================================================
+// PASO 2A: MASCOTAS ENCONTRADAS
+// ============================================================
+function mostrarPasoMascotas() {
+  ocultarTodosLosPasos();
+  document.getElementById("resumenTurno2").innerHTML = resumenTurnoTexto();
+  const lista = document.getElementById("listaMascotas");
+  lista.innerHTML = "";
+  document.getElementById("formNuevaMascota").classList.remove("visible");
+
+  const renderLista = () => {
+    lista.innerHTML = "";
+    const todas = [...mascotasEncontradas, ...mascotasNuevasAgregadas];
+    todas.forEach((m, i) => {
+      const card = document.createElement("div");
+      card.className = "mascota-card" + (mascotasSeleccionadas.has(m.dniMascota || `nueva_${i}`) ? " seleccionada" : "");
+      card.dataset.id = m.dniMascota || `nueva_${i}`;
+      card.innerHTML = `
+        <div class="mascota-icon">${iconoMascota(m.tipoMascota)}</div>
+        <div class="mascota-info">
+          <strong>${m.nombreMascota}</strong>
+          <small>${m.tipoMascota}${m.dniMascota ? ' · ID: '+m.dniMascota : ' · Nueva'}</small>
+        </div>
+        <i class="fas fa-check-circle check"></i>`;
+      card.addEventListener("click", () => {
+        const id = card.dataset.id;
+        if (mascotasSeleccionadas.has(id)) mascotasSeleccionadas.delete(id);
+        else mascotasSeleccionadas.add(id);
+        renderLista();
+      });
+      lista.appendChild(card);
+    });
   };
 
-  function obtenerTurnosDisponibles(fecha) {
-    const opcionesDias = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-    const nombreDia = opcionesDias[fecha.getDay()];
-    return turnosPorDia[nombreDia] || [];
+  renderLista();
+  // Guardar función para rerender desde agregarMascotaALista
+  window._renderListaMascotas = renderLista;
+  document.getElementById("pasoMascotas").style.display = "block";
+  document.getElementById("pasoMascotas").scrollIntoView({ behavior: "smooth" });
+}
+
+function toggleNuevaMascota() {
+  const form = document.getElementById("formNuevaMascota");
+  form.classList.toggle("visible");
+  if (form.classList.contains("visible")) document.getElementById("nuevaMascotaNombre").focus();
+}
+
+function agregarMascotaALista() {
+  const nombre = document.getElementById("nuevaMascotaNombre").value.trim();
+  const tipo   = document.getElementById("nuevaMascotaTipo").value.trim();
+  if (!nombre || !tipo) { alert("Completá nombre y tipo de la mascota"); return; }
+  const id = `nueva_${Date.now()}`;
+  mascotasNuevasAgregadas.push({ dniMascota: id, nombreMascota: nombre, tipoMascota: tipo, esNueva: true });
+  mascotasSeleccionadas.add(id);
+  document.getElementById("nuevaMascotaNombre").value = "";
+  document.getElementById("nuevaMascotaTipo").value = "";
+  document.getElementById("formNuevaMascota").classList.remove("visible");
+  if (window._renderListaMascotas) window._renderListaMascotas();
+}
+
+function confirmarMascotas() {
+  if (mascotasSeleccionadas.size === 0) { alert("Seleccioná al menos una mascota."); return; }
+  ocultarTodosLosPasos();
+  const todas = [...mascotasEncontradas, ...mascotasNuevasAgregadas];
+  const sel = todas.filter(m => mascotasSeleccionadas.has(m.dniMascota));
+  const nombresLista = sel.map(m => `<strong>${m.nombreMascota}</strong> (${m.tipoMascota})`).join(", ");
+  document.getElementById("infoResumenDuenio").innerHTML =
+    `${duenioActual.nombre} · ${duenioActual.telefono}<br>Mascotas: ${nombresLista}<br>Turno: ${resumenTurnoTexto()}`;
+  document.getElementById("formularioConfirmacion").style.display = "block";
+  document.getElementById("formularioConfirmacion").scrollIntoView({ behavior:"smooth" });
+}
+
+// ============================================================
+// PASO 2B: PRIMERA VEZ
+// ============================================================
+function mostrarFormularioPrimerVez() {
+  ocultarTodosLosPasos();
+  // Pre-cargar teléfono si ya lo escribió
+  const tel = document.getElementById("inputTelefono").value.trim();
+  if (tel) document.getElementById("pv_telefono").value = tel;
+  document.getElementById("pv_mascotasExtra").innerHTML = "";
+  document.getElementById("formularioPrimerVez").style.display = "block";
+  document.getElementById("formularioPrimerVez").scrollIntoView({ behavior:"smooth" });
+}
+
+let contadorMascotasExtra = 0;
+function agregarMascotaExtra() {
+  contadorMascotasExtra++;
+  const div = document.createElement("div");
+  div.style.cssText = "display:flex;gap:8px;margin-bottom:10px;align-items:center;";
+  div.innerHTML = `
+    <input type="text" placeholder="Nombre mascota ${contadorMascotasExtra+1}" style="flex:1;padding:11px 14px;border:1.5px solid rgba(54,42,111,0.18);border-radius:12px;font-family:inherit;font-size:14px;" />
+    <input type="text" placeholder="Tipo" style="flex:1;padding:11px 14px;border:1.5px solid rgba(54,42,111,0.18);border-radius:12px;font-family:inherit;font-size:14px;" />
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#ccc;font-size:20px;cursor:pointer;">✕</button>`;
+  document.getElementById("pv_mascotasExtra").appendChild(div);
+}
+
+function enviarReservaPrimerVez() {
+  const nombre       = document.getElementById("pv_nombre").value.trim();
+  const telefono     = document.getElementById("pv_telefono").value.trim();
+  const email        = document.getElementById("pv_email").value.trim();
+  const nomMascota   = document.getElementById("pv_nombreMascota").value.trim();
+  const tipoMascota  = document.getElementById("pv_tipoMascota").value.trim();
+  const comentario   = document.getElementById("pv_comentario").value.trim();
+
+  if (!nombre || !telefono || !email || !nomMascota || !tipoMascota) {
+    alert("Completá todos los campos obligatorios."); return;
   }
 
-  // Inicializa los turnos para la fecha actual
-  let turnosDisponibles = obtenerTurnosDisponibles(fecha);
+  // Mascota principal + extras
+  const mascotas = [{ nombreMascota: nomMascota, tipoMascota, dniMascota: "" }];
+  document.getElementById("pv_mascotasExtra").querySelectorAll("div").forEach(row => {
+    const inputs = row.querySelectorAll("input");
+    const n = inputs[0]?.value.trim(), t = inputs[1]?.value.trim();
+    if (n && t) mascotas.push({ nombreMascota: n, tipoMascota: t, dniMascota: "" });
+  });
 
-  function formatFechaDDMMYYYY(f){
-    const d = f.getDate().toString().padStart(2,'0');
-    const m = (f.getMonth()+1).toString().padStart(2,'0');
-    return `${d}/${m}/${f.getFullYear()}`;
-  }
+  const reservas = mascotas.map(m => ({
+    nombre, telefono, email,
+    nombreMascota: m.nombreMascota,
+    tipoMascota:   m.tipoMascota,
+    dniMascota:    m.dniMascota || generarDni(),
+    fecha:  fmt(diaSeleccionado),
+    turno:  turnoSeleccionado,
+    comentario
+  }));
 
-  function isoAFechaDDMMYYYY(iso){ 
-    const d = new Date(iso);
-    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-  }
+  enviarReservas(reservas, nombre, telefono, email, comentario);
+}
 
-  function isoATurnoHHmm(iso){
-    const d = new Date(iso);
-    return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-  }
+// ============================================================
+// CONFIRMAR DUEÑO CONOCIDO
+// ============================================================
+function enviarReservaConocido() {
+  const comentario = document.getElementById("fc_comentario").value.trim();
+  const todas = [...mascotasEncontradas, ...mascotasNuevasAgregadas];
+  const seleccionadas = todas.filter(m => mascotasSeleccionadas.has(m.dniMascota));
 
-  function renderizarCalendario(){
-    diasElemento.innerHTML = "";
-    const año = fecha.getFullYear(), mes = fecha.getMonth();
-    const primerDia = new Date(año, mes, 1);
-    const ultimoDia = new Date(año, mes + 1, 0);
-    mesActualElemento.textContent = fecha.toLocaleDateString("es-ES", {month:"long", year:"numeric"});
-    const inicioSemana = primerDia.getDay();
-    const diasMes = ultimoDia.getDate();
+  const reservas = seleccionadas.map(m => ({
+    nombre:        duenioActual.nombre,
+    telefono:      duenioActual.telefono,
+    email:         duenioActual.email,
+    nombreMascota: m.nombreMascota,
+    tipoMascota:   m.tipoMascota,
+    dniMascota:    m.esNueva ? generarDni() : m.dniMascota,
+    fecha:         fmt(diaSeleccionado),
+    turno:         turnoSeleccionado,
+    comentario
+  }));
 
-    for(let i=0; i < inicioSemana; i++){
-      diasElemento.innerHTML += `<div class="dia disabled"></div>`;
-    }
+  enviarReservas(reservas, duenioActual.nombre, duenioActual.telefono, duenioActual.email, comentario);
+}
 
-    const hoy = new Date(); hoy.setHours(0,0,0,0);
-    for(let i=1; i <= diasMes; i++){
-      const dia = new Date(año, mes, i);
-      const clase = dia < hoy ? "dia disabled" : "dia";
-      diasElemento.innerHTML += `<div class="${clase}" data-dia="${i}" data-mes="${mes}" data-año="${año}">${i}</div>`;
-    }
+// ============================================================
+// ENVÍO AL SCRIPT
+// ============================================================
+function enviarReservas(reservas, nombre, telefono, email, comentario) {
+  mostrarLoader("Enviando reserva...");
 
-    document.querySelectorAll('.dia:not(.disabled)').forEach(el => {
-      el.addEventListener('click', () => {
-        seleccionarDia(+el.dataset.año, +el.dataset.mes, +el.dataset.dia);
-      });
-    });
-  }
-
-  function cambiarMes(dir){
-    fecha.setMonth(fecha.getMonth() + dir);
-    renderizarCalendario();
-  }
-
-  function fetchTurnosOcupados(){
-    return fetch(urlScript)
-      .then(r => r.json())
-      .then(data => {
-        turnosOcupados = (data.turnosOcupados || []).map(t => ({
-          fecha: isoAFechaDDMMYYYY(t.fecha),
-          turno: isoATurnoHHmm(t.turno)
-        }));
-      })
-      .catch(() => {
-        turnosOcupados = [];
-      });
-  }
-
-  function seleccionarDia(año, mes, dia) {
-    diaSeleccionado = new Date(año, mes, dia);
-    turnoSeleccionado = null;
-
-    turnosElemento.innerHTML = `
-      <h3>Turnos para ${formatFechaDDMMYYYY(diaSeleccionado)}</h3>
-      <p id="mensajeTurnos" style="font-style: italic; color: #555; margin-top:10px;">Buscando turnos para esta fecha...</p>
-      <div id="contenedorTurnos" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top: 15px;"></div>
-    `;
-
-    formularioElemento.style.display = "none";
-    document.getElementById("ticket").classList.remove("visible");
-
-    fetchTurnosOcupados()
-      .then(() => {
-        // Actualiza turnosDisponibles para el día seleccionado
-        turnosDisponibles = obtenerTurnosDisponibles(diaSeleccionado);
-        renderizarTurnos();
-      })
-      .catch(() => {
-        const mensaje = document.getElementById("mensajeTurnos");
-        if (mensaje) mensaje.textContent = "Error al cargar los turnos.";
-      });
-  }
-
-  function renderizarTurnos() {
-    const fechaTexto = formatFechaDDMMYYYY(diaSeleccionado);
-    const mensaje = document.getElementById("mensajeTurnos");
-    const contenedorTurnos = document.getElementById("contenedorTurnos");
-
-    if (mensaje) mensaje.textContent = "Cargando turnos disponibles...";
-    if (contenedorTurnos) contenedorTurnos.innerHTML = "";
-
-    setTimeout(() => {
-      let count = 0;
-      turnosDisponibles.forEach(turno => {
-        const ocupado = turnosOcupados.some(t => t.fecha === fechaTexto && t.turno === turno);
-        if (!ocupado) {
-          count++;
-          const btn = document.createElement("button");
-btn.textContent = `Reservar ${turno}`;
-btn.classList.add("turno-button");  // <-- aquí agregamos clase para estilos CSS
-btn.onclick = () => mostrarFormulario(turno);
-contenedorTurnos.appendChild(btn);
-        }
-      });
-
-      if (count === 0) {
-        if (contenedorTurnos) contenedorTurnos.innerHTML = "<p><em>No hay turnos disponibles.</em></p>";
-      }
-
-      if (mensaje) mensaje.textContent = "";
-
-      turnosElemento.scrollIntoView({ behavior: "smooth" });
-    }, 600);
-  }
-
-  function mostrarFormulario(turno) {
-    turnoSeleccionado = turno;
-    formularioElemento.style.display = "none";
-    document.getElementById("dniStep").style.display = "block";
-    document.getElementById("dniStep").scrollIntoView({ behavior: "smooth" });
-  }
-
-  function mostrarFormularioNuevo() {
-    document.getElementById("dniStep").style.display = "none";
-    formularioElemento.style.display = "block";
-    formularioElemento.scrollIntoView({ behavior: "smooth" });
-  }
-
-  function generarDniMascota(){
-    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const nums = "0123456789";
-    return letras[Math.floor(Math.random() * 26)] + letras[Math.floor(Math.random() * 26)] + letras[Math.floor(Math.random() * 26)] +
-      nums[Math.floor(Math.random() * 10)] + nums[Math.floor(Math.random() * 10)] + nums[Math.floor(Math.random() * 10)];
-  }
-
-  function enviarReserva(){
-    mostrarLoader("Enviando reserva...");  // MOSTRAR loader al iniciar envío
-    const nombre = nombreInput.value.trim();
-    const nombreMascota = nombreMascotaInput.value.trim();
-    const tipoMascota = tipoMascotaInput.value.trim();
-    const email = emailInput.value.trim();
-    const telefono = telefonoInput.value.trim();
-    let dniMascota = dniMascotaInput.value.trim();
-    const comentario = comentarioInput.value.trim();
-
-    if (!nombre || !email || !telefono || !turnoSeleccionado || !diaSeleccionado) {
-      alert("Completá todos los datos");
-      ocultarLoader(); // Ocultar loader si falta algún dato
-      return;
-    }
-     // Creamos el mensaje completo después de obtener todos los datos
-  const mensaje = encodeURIComponent(
-    `🔔 Bruzera - Nueva solicitud de turno:\n` +
-    `Nombre mascota: ${nombreMascota}\n` +
-    `Nombre Dueño: ${nombre}\n` +
-    `Turno: ${turnoSeleccionado} - ${formatFechaDDMMYYYY(diaSeleccionado)}\n` +
-    `Teléfono: ${telefono}\n` +
-    `Motivo: ${comentario || "Ninguno"}`
+  // Notificación WhatsApp
+  const nombresM = reservas.map(r => r.nombreMascota).join(", ");
+  const msg = encodeURIComponent(
+    `🔔 Bruzera - Nueva reserva:\nDueño: ${nombre}\nMascota(s): ${nombresM}\nTurno: ${turnoSeleccionado} · ${fmt(diaSeleccionado)}\nTel: ${telefono}\nMotivo: ${comentario||"Ninguno"}`
   );
+  fetch(`https://api.callmebot.com/whatsapp.php?phone=5493434477577&text=${msg}&apikey=9663015`).catch(() => {});
 
-  let phone = "5493434477577";
-  let apikey = "9663015";
+  fetch(urlScript, {
+    method: "POST",
+    body: new URLSearchParams({ datos: JSON.stringify(reservas) })
+  })
+  .then(r => r.json())
+  .then(res => {
+    ocultarLoader();
+    if (res.success) {
+      // Mostrar ticket
+      document.getElementById("tNombre").textContent   = nombre;
+      document.getElementById("tTelefono").textContent = telefono;
+      document.getElementById("tEmail").textContent    = email;
+      document.getElementById("tFecha").textContent    = fmt(diaSeleccionado);
+      document.getElementById("tTurno").textContent    = turnoSeleccionado;
+      document.getElementById("tComentario").textContent = comentario || "—";
 
-  fetch(`https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${mensaje}&apikey=${apikey}`)
-    .then(() => console.log("Aviso enviado por WhatsApp"))
-    .catch(err => console.error("Error enviando WhatsApp", err));
-    
-    if (!dniMascota) {
-      dniMascota = generarDniMascota();
-      dniMascotaInput.value = dniMascota;
-    }
+      const bloque = document.getElementById("tMascotasBloque");
+      bloque.innerHTML = res.mascotas.map(m => `
+        <div class="ticket-mascota-bloque">
+          <p><strong>${iconoMascota(m.tipoMascota)} ${m.nombreMascota}</strong></p>
+          <p style="font-size:.82rem;color:var(--texto-suave)">ID: ${m.dniMascota}</p>
+        </div>`).join("");
 
-    const datos = {
-      nombre,
-      nombreMascota,
-      tipoMascota,
-      email,
-      telefono,
-      dniMascota,
-      fecha: formatFechaDDMMYYYY(diaSeleccionado),
-      turno: turnoSeleccionado,
-      comentario
-    };
-
-    fetch(urlScript, {
-      method: "POST",
-      body: new URLSearchParams({ datos: JSON.stringify(datos) })
-    })
-    .then(r => r.json())
-    .then(res => {
-      ocultarLoader();  // OCULTAR loader justo antes de mostrar ticket o alerta
-      if (res.success) {
-        // Mostrar ticket con datos
-        tNombre.textContent = nombre;
-        tNombreMascota.textContent = nombreMascota;
-        tTipoMascota.textContent = tipoMascota;
-        tEmail.textContent = email;
-        tTelefono.textContent = telefono;
-        tDniMascota.textContent = dniMascota;
-        tFecha.textContent = formatFechaDDMMYYYY(diaSeleccionado);
-        tTurno.textContent = turnoSeleccionado;
-        tComentario.textContent = comentario;
-
-        turnosElemento.innerHTML = "";
-        formularioElemento.style.display = "none";
-        document.getElementById("ticket").classList.add("visible");
-        document.getElementById("ticket").scrollIntoView({ behavior: "smooth" });
-
-        alert("Reserva enviada exitosamente");
-      } else {
-        alert("Error al reservar turno, consulte con su veterinario");
-      }
-    });
-  }
-
-  function descargarTicket() {
-    const ticket = document.getElementById("ticket");
-    const logo = document.getElementById("logoTicket");
-
-    mostrarLoader("Generando ticket...");
-
-    if (logo.complete) {
-      capturarTicket(ticket);
+      ocultarTodosLosPasos();
+      document.getElementById("ticket").style.display = "block";
+      setTimeout(() => document.getElementById("ticket").classList.add("visible"), 10);
+      document.getElementById("ticket").scrollIntoView({ behavior:"smooth" });
+      alert("¡Turno reservado exitosamente!");
     } else {
-      logo.onload = () => capturarTicket(ticket);
+      alert(res.error || "Error al reservar. Consultá a tu veterinario.");
     }
-  }
+  })
+  .catch(() => { ocultarLoader(); alert("Error de conexión. Intentá de nuevo."); });
+}
 
-  function capturarTicket(ticket) {
-    html2canvas(ticket, { useCORS: true, scale: 2 })
-      .then(canvas => {
-        mostrarLoader("Descargando ticket...");
+// ============================================================
+// DESCARGAR TICKET
+// ============================================================
+function descargarTicket() {
+  const ticket = document.getElementById("ticket");
+  const logo   = document.getElementById("logoTicket");
+  mostrarLoader("Generando ticket...");
+  const capturar = () => html2canvas(ticket, { useCORS: true, scale: 2 })
+    .then(canvas => {
+      const link = document.createElement("a");
+      link.download = "turno_mascota.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      setTimeout(ocultarLoader, 1500);
+    })
+    .catch(() => { ocultarLoader(); alert("Error al generar el ticket."); });
+  logo.complete ? capturar() : (logo.onload = capturar);
+}
 
-        const link = document.createElement("a");
-        link.download = "turno_mascota.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-
-        setTimeout(() => ocultarLoader(), 1500);
-      })
-      .catch(() => {
-        ocultarLoader();
-        alert("Error al generar el ticket.");
-      });
-  }
-
-  // Inputs directos (asumiendo que existen en el DOM)
-  const nombreInput = document.getElementById("nombre");
-  const nombreMascotaInput = document.getElementById("nombreMascota");
-  const tipoMascotaInput = document.getElementById("tipoMascota");
-  const emailInput = document.getElementById("email");
-  const telefonoInput = document.getElementById("telefono");
-  const dniMascotaInput = document.getElementById("dniMascota");
-  const comentarioInput = document.getElementById("comentario");
-
-  // Elementos ticket para mostrar datos (asumiendo que existen)
-  const tNombre = document.getElementById("tNombre");
-  const tNombreMascota = document.getElementById("tNombreMascota");
-  const tTipoMascota = document.getElementById("tTipoMascota");
-  const tEmail = document.getElementById("tEmail");
-  const tTelefono = document.getElementById("tTelefono");
-  const tDniMascota = document.getElementById("tDniMascota");
-  const tFecha = document.getElementById("tFecha");
-  const tTurno = document.getElementById("tTurno");
-  const tComentario = document.getElementById("tComentario");
-
-  // Funciones para mostrar y ocultar loader (debes implementarlas en tu código)
-  function mostrarLoader(mensaje) {
-    // Implementa mostrar un loader con mensaje
-    console.log("Loader:", mensaje);
-  }
-  function ocultarLoader() {
-    // Implementa ocultar loader
-    console.log("Loader ocultado");
-  }
-
-  document.addEventListener("DOMContentLoaded", renderizarCalendario);
-</script>
-
-  <script>
-  // Mostrar modal
+// ============================================================
+// MODAL BUSCAR POR ID
+// ============================================================
 document.getElementById("botonBuscarDni").addEventListener("click", () => {
   document.getElementById("modalBuscarDni").style.display = "flex";
 });
-
-// Cerrar modal
 function cerrarModalDni() {
   document.getElementById("modalBuscarDni").style.display = "none";
   document.getElementById("resultadoBusqueda").innerHTML = "";
   document.getElementById("inputDniBusqueda").value = "";
 }
-
 function buscarDni() {
-  const dniInput = document.getElementById("inputDniBusqueda");
-  const resultadoDiv = document.getElementById("resultadoBusqueda");
-  const dni = dniInput.value.trim().toUpperCase();
-
-  if (!dni) {
-    alert("Ingresá un ID válido");
-    return;
-  }
-
-  // Mostrar mensaje de búsqueda
-  resultadoDiv.style.color = "#362A6F";
-  resultadoDiv.innerHTML = "<em>Buscando mascota...</em>";
-
-  mostrarLoader(); // Si usás loader, sino podés sacar esta línea
-
+  const dni = document.getElementById("inputDniBusqueda").value.trim().toUpperCase();
+  const res = document.getElementById("resultadoBusqueda");
+  if (!dni) { alert("Ingresá un ID válido"); return; }
+  res.innerHTML = "<em style='color:var(--violeta)'>Buscando...</em>";
+  mostrarLoader();
   fetch(urlScript + "?dni=" + dni)
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
       ocultarLoader();
-
       if (data.success && data.reserva) {
         const r = data.reserva;
-        resultadoDiv.style.color = "#362A6F";
-        resultadoDiv.innerHTML = `
+        res.innerHTML = `
           <p><strong>Nombre:</strong> ${r.nombre}</p>
           <p><strong>Mascota:</strong> ${r.nombreMascota} (${r.tipoMascota})</p>
           <p><strong>Email:</strong> ${r.email}</p>
           <p><strong>Teléfono:</strong> ${r.telefono}</p>
-          <p><strong>ID Mascota:</strong> ${r.dniMascota}</p>
-        `;
+          <p><strong>ID:</strong> ${r.dniMascota}</p>`;
       } else {
-        resultadoDiv.style.color = "red";
-        resultadoDiv.innerHTML = `<p>No se encontró ninguna reserva con ese ID.</p>`;
+        res.innerHTML = `<p style='color:red'>No se encontró ninguna mascota con ese ID.</p>`;
       }
     })
-    .catch(() => {
-      ocultarLoader();
-      alert("Error al buscar en la base de datos.");
-      resultadoDiv.innerHTML = "";
-    });
-}
-</script>
-  
-
-<script>
-  const navbarToggle = document.getElementById("navbarToggle");
-  const navbarMenu = document.getElementById("navbarMenu");
-
-  function cerrarMenuMobile() {
-    navbarToggle.classList.remove("active");
-    navbarMenu.classList.remove("active");
-    navbarToggle.setAttribute("aria-expanded", "false");
-  }
-
-  if (navbarToggle && navbarMenu) {
-    navbarToggle.addEventListener("click", () => {
-      const estaAbierto = navbarMenu.classList.toggle("active");
-      navbarToggle.classList.toggle("active", estaAbierto);
-      navbarToggle.setAttribute("aria-expanded", estaAbierto ? "true" : "false");
-    });
-
-    navbarMenu.querySelectorAll(".nav-link").forEach((link) => {
-      link.addEventListener("click", cerrarMenuMobile);
-    });
-  }
-</script>
-
-<script>
- 
-  // ✅ Evento especial para "Turnos"
-  const linkTurnos = document.querySelector('a[href="#turnos"]');
-  if (linkTurnos) linkTurnos.addEventListener('click', (e) => {
-    e.preventDefault(); // Evitar salto brusco
-
-    // Limpiar elementos visibles
-    turnosElemento.innerHTML = "";
-    formularioElemento.style.display = "none";
-    document.getElementById("ticket").classList.remove("visible");
-
-    // Renderizar calendario inicial
-    renderizarCalendario();
-
-    // Scroll suave al calendario
-    document.querySelector('.calendario').scrollIntoView({ behavior: 'smooth' });
-  });
-</script>
-<script>
-  const sections = document.querySelectorAll("section, .inicio, .galeria, .turnos, contacto");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.2 }); // Se activa cuando 20% es visible
-
-  sections.forEach(sec => observer.observe(sec));
-</script>
-  <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const texto = document.getElementById('textoBurbuja');
-    // Aparece a los 2 segundos
-    setTimeout(() => {
-      texto.classList.add('visible');
-      // Desaparece 3 segundos después (5s total)
-      setTimeout(() => {
-        texto.classList.remove('visible');
-      }, 6000);
-    }, 2000);
-  });
-</script>
-<script>
-  const carrusel = document.querySelector('.carrusel');
-  const flechaIzq = document.querySelector('.flecha.izquierda');
-  const flechaDer = document.querySelector('.flecha.derecha');
-  const items = document.querySelectorAll('.carrusel .item');
-  
-  let desplazamiento = 0;
-
-  function calcularAnchoItem() {
-    return carrusel.parentElement.offsetWidth; // Se mueve una "pantalla" completa
-  }
-
-  flechaDer.addEventListener('click', () => {
-    desplazamiento -= calcularAnchoItem();
-    const maxScroll = -(carrusel.scrollWidth - carrusel.parentElement.offsetWidth);
-    if (desplazamiento < maxScroll) desplazamiento = maxScroll;
-    carrusel.style.transform = `translateX(${desplazamiento}px)`;
-  });
-
-  flechaIzq.addEventListener('click', () => {
-    desplazamiento += calcularAnchoItem();
-    if (desplazamiento > 0) desplazamiento = 0;
-    carrusel.style.transform = `translateX(${desplazamiento}px)`;
-  });
-
-  // ✅ Swipe táctil en móvil
-  let startX = 0;
-  carrusel.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-  carrusel.addEventListener('touchend', e => {
-    const endX = e.changedTouches[0].clientX;
-    const anchoPantalla = calcularAnchoItem();
-    if (endX < startX - 50) desplazamiento -= anchoPantalla;
-    if (endX > startX + 50) desplazamiento += anchoPantalla;
-
-    const maxScroll = -(carrusel.scrollWidth - carrusel.parentElement.offsetWidth);
-    if (desplazamiento < maxScroll) desplazamiento = maxScroll;
-    if (desplazamiento > 0) desplazamiento = 0;
-
-    carrusel.style.transform = `translateX(${desplazamiento}px)`;
-  });
-</script>
-  <script>
-  function verificarDni() {
-  const dni = document.getElementById("dniIngreso").value.trim().toUpperCase();
-  const error = document.getElementById("dniError");
-  error.style.display = "none";
-
-  if (!dni) {
-    alert("Ingresá un ID válido");
-    return;
-  }
-
-  mostrarLoader("Verificando ID...");
-
-  fetch(urlScript + "?dni=" + dni)
-    .then(res => res.json())
-    .then(data => {
-      ocultarLoader();
-      if (data.success && data.reserva) {
-        // Autocompletar formulario
-        const r = data.reserva;
-        nombreInput.value = r.nombre || "";
-        nombreMascotaInput.value = r.nombreMascota || "";
-        tipoMascotaInput.value = r.tipoMascota || "";
-        emailInput.value = r.email || "";
-        telefonoInput.value = r.telefono || "";
-        dniMascotaInput.value = r.dniMascota || "";
-
-        document.getElementById("dniStep").style.display = "none";
-        formularioElemento.style.display = "block";
-        formularioElemento.scrollIntoView({ behavior: "smooth" });
-      } else {
-        error.style.display = "block";
-      }
-    })
-    .catch(() => {
-      ocultarLoader();
-      alert("Error al buscar el ID en la base de datos.");
-    });
+    .catch(() => { ocultarLoader(); alert("Error al buscar."); });
 }
 
+// ============================================================
+// NAVBAR TOGGLE
+// ============================================================
+const navbarToggle = document.getElementById("navbarToggle");
+const navbarMenu   = document.getElementById("navbarMenu");
+navbarToggle.addEventListener("click", () => {
+  const open = navbarMenu.classList.toggle("active");
+  navbarToggle.setAttribute("aria-expanded", open);
+});
+navbarMenu.querySelectorAll(".nav-link").forEach(l => l.addEventListener("click", () => {
+  navbarMenu.classList.remove("active");
+  navbarToggle.setAttribute("aria-expanded","false");
+}));
+
+// Link "Turnos" en navbar: reset y scroll
+document.querySelector('a[href="#turnos"]')?.addEventListener('click', e => {
+  e.preventDefault();
+  ocultarTodosLosPasos();
+  document.getElementById("turnosDisponibles").innerHTML = "";
+  renderizarCalendario();
+  document.querySelector('.calendario').scrollIntoView({ behavior:'smooth' });
+});
+
+// ============================================================
+// BURBUJA FLOTANTE
+// ============================================================
+const burbuja = document.getElementById("textoBurbuja");
+setTimeout(() => { burbuja.classList.add("visible"); }, 2000);
+setTimeout(() => { burbuja.classList.remove("visible"); }, 8000);
+
+// ============================================================
+// INTERSECTION OBSERVER
+// ============================================================
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll("section").forEach(s => observer.observe(s));
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener("DOMContentLoaded", renderizarCalendario);
 </script>
-  <script>
-  function mostrarLoader(mensaje = "Cargando...") {
-    document.getElementById("loaderOverlay").style.display = "flex";
-    document.querySelector("#loaderOverlay p").textContent = mensaje;
-  }
-
-  function ocultarLoader() {
-    document.getElementById("loaderOverlay").style.display = "none";
-  }
-</script>
-<script>
-  const burbuja = document.getElementById("textoBurbuja");
-
-  // Mostrar burbuja
-  setTimeout(() => {
-    burbuja.classList.add("visible");
-  }, 15000);
-
-  // Ocultar burbuja y quitar interacción
-  setTimeout(() => {
-    burbuja.classList.remove("visible");
-  }, 20000);
-</script>
-
 </body>
 </html>
