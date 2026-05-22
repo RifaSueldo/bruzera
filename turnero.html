@@ -703,13 +703,8 @@ function seleccionarDia(y, m, d, elDia) {
   fetch(urlScript)
     .then(r => r.json())
     .then(data => {
-      turnosOcupados = (data.turnosOcupados || []).map(t => {
-        const fd = new Date(t.fecha), ft = new Date(t.turno);
-        return {
-          fecha: `${String(fd.getDate()).padStart(2,'0')}/${String(fd.getMonth()+1).padStart(2,'0')}/${fd.getFullYear()}`,
-          turno: `${String(ft.getHours()).padStart(2,'0')}:${String(ft.getMinutes()).padStart(2,'0')}`
-        };
-      });
+      // El servidor ya devuelve fecha ('dd/MM/yyyy') y turno ('HH:mm') como strings
+      turnosOcupados = data.turnosOcupados || [];
       renderizarTurnos();
     })
     .catch(() => {
@@ -756,7 +751,7 @@ function seleccionarTurno(turno) {
 // PASO 1: BÚSQUEDA POR TELÉFONO
 // ============================================================
 function buscarPorTelefono() {
-  const tel = document.getElementById("inputTelefono").value.trim();
+  const tel = document.getElementById("inputTelefono").value.trim().replace(/\D/g, ""); // solo dígitos, igual que el servidor
   const errEl = document.getElementById("mensajeTelError");
   errEl.style.display = "none";
   if (tel.length < 8) { errEl.textContent = "Ingresá un teléfono válido (mínimo 8 dígitos)."; errEl.style.display = "block"; return; }
@@ -862,7 +857,7 @@ function confirmarMascotas() {
 function mostrarFormularioPrimerVez() {
   ocultarTodosLosPasos();
   // Pre-cargar teléfono si ya lo escribió
-  const tel = document.getElementById("inputTelefono").value.trim();
+  const tel = document.getElementById("inputTelefono").value.trim().replace(/\D/g, ""); // solo dígitos, igual que el servidor
   if (tel) document.getElementById("pv_telefono").value = tel;
   document.getElementById("pv_mascotasExtra").innerHTML = "";
   document.getElementById("formularioPrimerVez").style.display = "block";
@@ -944,11 +939,7 @@ function enviarReservas(reservas, nombre, telefono, email, comentario) {
   mostrarLoader("Enviando reserva...");
 
   // Notificación WhatsApp
-  const nombresM = reservas.map(r => r.nombreMascota).join(", ");
-  const msg = encodeURIComponent(
-    `🔔 Bruzera - Nueva reserva:\nDueño: ${nombre}\nMascota(s): ${nombresM}\nTurno: ${turnoSeleccionado} · ${fmt(diaSeleccionado)}\nTel: ${telefono}\nMotivo: ${comentario||"Ninguno"}`
-  );
-  fetch(`https://api.callmebot.com/whatsapp.php?phone=5493434477577&text=${msg}&apikey=9663015`).catch(() => {});
+    // WhatsApp notificado server-side (sin CORS)
 
   fetch(urlScript, {
     method: "POST",
