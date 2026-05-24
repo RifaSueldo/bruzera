@@ -1,1512 +1,1011 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" href="favicon.png">
-<!-- O para .ico -->
-
-   <link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" type="image/png">
-  <title>Panel veterinario — Dra. Lili Bruzera</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel — Dra. Lili Bruzera</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" type="image/png">
   <style>
-html {
-  scroll-behavior: smooth;
-}
-    /* ======== ESTILOS GENERALES ======== */
+    /* ── TOKENS ── */
+    :root {
+      --rosa:    #C42685;
+      --rosa-s:  #F5E6F0;
+      --vio:     #362A6F;
+      --vio-s:   #EAE8F5;
+      --crema:   #FAF6F0;
+      --txt:     #2A2235;
+      --txt-s:   #7A6E85;
+      --blanco:  #FFFFFF;
+      --borde:   rgba(54,42,111,.1);
+      --sombra:  0 12px 36px rgba(54,42,111,.10);
+      --nav-h:   62px;
+      --tab-h:   52px;
+      --r:       18px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      font-size: 14px;
+      background: var(--crema);
+      color: var(--txt);
+      min-height: 100svh;
+      overflow-x: hidden;
     }
 
-    header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(54, 42, 111, 0.9);
-  color: white;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
-}
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(250,246,240,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde);
+    }
+    .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-brand img { width:34px; border-radius:6px; }
+    .nav-brand-text { font-family:'Playfair Display',serif; font-size:.9rem; color:var(--vio); line-height:1.15; }
+    .nav-brand-text small { display:block; font-family:'DM Sans',sans-serif; font-size:.68rem; color:var(--txt-s); font-weight:300; }
+    .nav-right { display:flex; align-items:center; gap:10px; }
+    .credits-pill {
+      display:flex; align-items:center; gap:6px;
+      background: var(--vio-s); color:var(--vio);
+      border:none; border-radius:999px;
+      padding:6px 14px; font-size:.8rem; font-weight:600;
+      cursor:pointer; transition:background .2s;
+    }
+    .credits-pill:hover { background: var(--rosa-s); color:var(--rosa); }
+    .btn-logout {
+      background:var(--rosa); color:var(--blanco);
+      border:none; border-radius:999px;
+      padding:7px 16px; font-size:.8rem; font-weight:600;
+      cursor:pointer; transition:background .2s;
+    }
+    .btn-logout:hover { background:var(--vio); }
+    .btn-site {
+      background:transparent; color:var(--txt-s);
+      border:1.5px solid var(--borde); border-radius:999px;
+      padding:6px 14px; font-size:.8rem; font-weight:500;
+      text-decoration:none; transition:all .2s;
+    }
+    .btn-site:hover { border-color:var(--rosa); color:var(--rosa); }
 
-#fechaTurno {
-  font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-#inputBusquedaGeneral {
-  background-color: #fff !important; /* color por defecto */
-}
+    /* ── LOGIN ── */
+    .login-wrap {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background: radial-gradient(circle at 70% 30%, rgba(196,38,133,.08), transparent 60%), var(--crema);
+      z-index:200;
+    }
+    .login-card {
+      background:var(--blanco);
+      border:1px solid var(--borde);
+      border-radius:28px;
+      box-shadow: var(--sombra);
+      padding:40px 36px;
+      width:min(360px, 92vw);
+      text-align:center;
+    }
+    .login-card img { width:60px; margin-bottom:18px; border-radius:10px; }
+    .login-card h2 { font-family:'Playfair Display',serif; color:var(--vio); font-size:1.5rem; margin-bottom:6px; }
+    .login-card p { color:var(--txt-s); font-size:.85rem; margin-bottom:22px; }
+    .login-field {
+      width:100%; padding:12px 16px; margin-bottom:12px;
+      border:1.5px solid rgba(54,42,111,.15); border-radius:12px;
+      font-size:.9rem; font-family:inherit; background:#fafafa;
+      transition:border .2s; outline:none; text-align:left;
+    }
+    .login-field:focus { border-color:var(--rosa); background:var(--blanco); }
+    .login-btn {
+      width:100%; padding:13px; background:var(--rosa); color:var(--blanco);
+      border:none; border-radius:999px; font-size:.95rem; font-weight:600;
+      cursor:pointer; transition:background .2s, transform .15s;
+      margin-top:4px;
+    }
+    .login-btn:hover { background:var(--vio); transform:translateY(-1px); }
+    .login-error { color:var(--rosa); font-size:.82rem; margin-top:10px; display:none; }
 
-#inputBusquedaGeneral:focus {
-  background-color: #EDEDED !important; /* color cuando está enfocado */
-}
-     #inputBusquedaGeneral:not(:placeholder-shown) {
-  background-color: #EDEDED !important; /* por ejemplo, verde suave */
-}
-    .container {
-      margin: 20px auto;
-      max-width: 900px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    /* ── APP SHELL ── */
+    .app { display:none; padding-top:var(--nav-h); min-height:100svh; }
+
+    /* ── TABS ── */
+    .tabs-bar {
+      position:sticky; top:var(--nav-h); z-index:90;
+      display:flex; gap:0;
+      background:rgba(250,246,240,.94);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--borde);
+      padding:0 20px;
+      height: var(--tab-h);
+    }
+    .tab-btn {
+      display:flex; align-items:center; gap:7px;
+      padding:0 18px; border:none; background:transparent;
+      font-family:inherit; font-size:.85rem; font-weight:600;
+      color:var(--txt-s); cursor:pointer;
+      border-bottom:2.5px solid transparent;
+      transition:color .2s, border-color .2s;
+      white-space:nowrap;
+    }
+    .tab-btn svg { width:16px; height:16px; }
+    .tab-btn.active { color:var(--rosa); border-bottom-color:var(--rosa); }
+    .tab-btn .badge {
+      background:var(--rosa); color:var(--blanco);
+      border-radius:999px; font-size:.68rem; font-weight:700;
+      padding:1px 7px; min-width:18px; text-align:center;
     }
 
-    /* ======== LOGIN MODERNO CENTRADO ======== */
-    #loginDiv {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 350px;
-      width: 90%;
-      background: #fff;
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      z-index: 1000;
+    .tab-panel { display:none; padding:24px 20px 60px; max-width:1000px; margin:0 auto; }
+    .tab-panel.active { display:block; }
+
+    /* ── HOY ── */
+    .hoy-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .hoy-header h2 { font-family:'Playfair Display',serif; color:var(--vio); font-size:1.4rem; }
+    .hoy-date { color:var(--txt-s); font-size:.82rem; }
+    .hoy-empty { text-align:center; padding:48px 0; color:var(--txt-s); font-size:.9rem; }
+
+    .turno-card {
+      display:flex; align-items:center; gap:14px;
+      background:var(--blanco); border:1px solid var(--borde);
+      border-radius:var(--r); padding:14px 18px; margin-bottom:10px;
+      transition:box-shadow .2s, transform .2s;
+      cursor:pointer;
+    }
+    .turno-card:hover { box-shadow:var(--sombra); transform:translateY(-1px); }
+    .turno-hora {
+      background:var(--vio); color:var(--blanco);
+      border-radius:10px; padding:8px 12px;
+      font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
+      min-width:58px; text-align:center; flex-shrink:0;
+    }
+    .turno-info { flex:1; min-width:0; }
+    .turno-info strong { display:block; color:var(--vio); font-size:.92rem; }
+    .turno-info span { color:var(--txt-s); font-size:.8rem; }
+    .turno-id {
+      background:var(--vio-s); color:var(--vio);
+      border-radius:999px; padding:4px 10px;
+      font-size:.72rem; font-weight:700; flex-shrink:0;
     }
 
-    #loginDiv h2 {
-      margin-bottom: 15px;
-      color: #C42685;
-      font-size: 20px;
+    /* ── PACIENTES ── */
+    .search-bar-wrap { position:relative; margin-bottom:16px; }
+    .search-bar-wrap svg {
+      position:absolute; left:14px; top:50%; transform:translateY(-50%);
+      width:16px; height:16px; color:var(--txt-s); pointer-events:none;
     }
+    .search-input {
+      width:100%; padding:12px 16px 12px 40px;
+      border:1.5px solid var(--borde); border-radius:999px;
+      font-size:.9rem; font-family:inherit; background:var(--blanco);
+      outline:none; transition:border .2s;
+    }
+    .search-input:focus { border-color:var(--rosa); }
 
-    #loginDiv input[type="text"],
-    #loginDiv input[type="password"] {
-      width: 80%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #EDEDED;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #fdfdfd;
-      transition: border 0.2s;
-      font-family: 'DM Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+    .pac-actions { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+    .btn-sm {
+      padding:8px 16px; border:none; border-radius:999px;
+      font-size:.8rem; font-weight:600; cursor:pointer;
+      transition:background .2s, transform .15s;
     }
+    .btn-primary { background:var(--rosa); color:var(--blanco); }
+    .btn-primary:hover { background:var(--vio); transform:translateY(-1px); }
+    .btn-secondary { background:var(--vio-s); color:var(--vio); }
+    .btn-secondary:hover { background:var(--vio); color:var(--blanco); }
 
-    #loginDiv input:focus {
-      border-color: #C42685;
-      outline: none;
+    /* Lista pacientes */
+    .pac-list { display:flex; flex-direction:column; gap:8px; }
+    .pac-row {
+      display:flex; align-items:center; gap:12px;
+      background:var(--blanco); border:1px solid var(--borde);
+      border-radius:var(--r); padding:12px 16px;
+      cursor:pointer; transition:all .2s;
     }
+    .pac-row:hover { box-shadow:var(--sombra); border-color:rgba(196,38,133,.2); }
+    .pac-avatar {
+      width:38px; height:38px; border-radius:50%;
+      background:var(--rosa-s); color:var(--rosa);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; flex-shrink:0;
+    }
+    .pac-row-info { flex:1; min-width:0; }
+    .pac-row-info strong { display:block; font-size:.9rem; color:var(--vio); }
+    .pac-row-info span { font-size:.78rem; color:var(--txt-s); }
+    .pac-row-id { background:var(--vio-s); color:var(--vio); border-radius:999px; padding:3px 10px; font-size:.72rem; font-weight:700; }
 
-    #loginDiv button {
-      width: 100%;
-      background: #C42685;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      font-size: 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 10px;
+    /* ── FICHA (modal) ── */
+    .ficha-backdrop {
+      position:fixed; inset:0; background:rgba(30,20,60,.45);
+      z-index:300; display:none; align-items:flex-end;
+      animation:fadeIn .2s ease;
     }
+    .ficha-backdrop.open { display:flex; }
+    @media (min-width:600px) { .ficha-backdrop { align-items:center; justify-content:center; } }
 
-    #loginDiv button:hover {
-      background: #a71d6d;
+    .ficha-sheet {
+      background:var(--blanco);
+      width:100%; max-width:620px;
+      border-radius:28px 28px 0 0;
+      max-height:92svh; overflow-y:auto;
+      padding:24px 22px 36px;
+      animation:slideUp .28s cubic-bezier(.22,1,.36,1);
     }
-
-    #errorLogin {
-      color: red;
-      font-size: 14px;
-      margin-top: 6px;
-      display: none;
+    @media (min-width:600px) {
+      .ficha-sheet { border-radius:28px; max-height:88svh; }
     }
-
-    /* ======== INPUTS Y BOTONES ======== */
-    input[type="text"], input[type="email"], textarea, select, input[type="date"] {
-      width: 80%;
-      padding: 8px;
-      margin: 4px 0 10px;
-      border: 1px solid #EDEDED;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #fff;
-      transition: border-color 0.2s;
-      text-align: center;
+    @keyframes slideUp {
+      from { transform:translateY(60px); opacity:0; }
+      to   { transform:translateY(0);    opacity:1; }
     }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: #C42685;
-      outline: none;
-    }
-
-    button {
-      background: #C42685;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      margin: 6px 2px;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #a71d6d;
-    }
-
-    /* ======== RESULTADOS (FICHA MÉDICA) ======== */
-    /* Centrar resultados y reducir espacio */
-    .resultado {
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      background-color: white;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-
-    .resultado.alternado {
-      background-color: #f0f0f0;
-    }
-
-    .resultado label {
-      font-size: 14px;
-      margin-bottom: 1px;
-      display: block;
-      font-weight: bold;
-    }
-
-    .resultado input,
-    .resultado textarea,
-    .resultado select {
-      font-size: 14px;
-      padding: 6px;
-      margin-bottom: 6px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .resultado textarea {
-      min-height: 40px;
-    }
-
-    .resultado .acciones {
-      margin-top: 6px;
-    }
-
-    .resultado button {
-      padding: 6px 10px;
-      font-size: 14px;
-    }
-
-    /* Extra campos dinámicos */
-    .campo-extra {
-      margin-bottom: 10px;
-      position: relative;
-    }
-    .campo-extra button {
-      position: absolute;
-      top: 30px;
-      right: 0;
-      background: #e74c3c;
-      padding: 2px 8px;
-      font-size: 14px;
-      border-radius: 4px;
-      margin-left: 5px;
-    }
-
-    /* ======== OTROS ======== */
-    #cargando {
-      display: none;
-      margin-top: 8px;
-      font-size: 14px;
-      color: #666;
-      text-align: center;
-    }
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity:0; } to { opacity:1; }
     }
 
-    /* Responsive móvil */
-    @media (max-width: 768px) {
-      .resultado-grid {
-        grid-template-columns: 1fr;
-      }
+    .ficha-handle { width:40px; height:4px; background:var(--borde); border-radius:4px; margin:0 auto 18px; }
+    @media (min-width:600px) { .ficha-handle { display:none; } }
+
+    .ficha-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; }
+    .ficha-top-info h3 { font-family:'Playfair Display',serif; color:var(--vio); font-size:1.3rem; }
+    .ficha-top-info span { color:var(--txt-s); font-size:.82rem; }
+    .ficha-close {
+      background:var(--vio-s); border:none; border-radius:50%;
+      width:32px; height:32px; cursor:pointer; display:flex;
+      align-items:center; justify-content:center; color:var(--vio);
+      flex-shrink:0; transition:background .2s;
+    }
+    .ficha-close:hover { background:var(--rosa-s); color:var(--rosa); }
+    .ficha-close svg { width:14px; height:14px; }
+
+    /* Datos base en grid */
+    .ficha-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+    @media (max-width:420px) { .ficha-grid { grid-template-columns:1fr; } }
+
+    .ficha-field label { display:block; font-size:.72rem; font-weight:600; color:var(--txt-s); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+    .ficha-field input, .ficha-field textarea, .ficha-field select {
+      width:100%; padding:9px 12px;
+      border:1.5px solid var(--borde); border-radius:10px;
+      font-size:.88rem; font-family:inherit; background:var(--blanco);
+      color:var(--txt); outline:none; resize:vertical;
+      transition:border .2s; -webkit-appearance:none;
+    }
+    .ficha-field input:disabled, .ficha-field textarea:disabled, .ficha-field select:disabled {
+      background:#fafafa; color:var(--txt); border-color:transparent;
+    }
+    .ficha-field input:focus, .ficha-field textarea:focus { border-color:var(--rosa); }
+    .ficha-field.full { grid-column:1/-1; }
+
+    .ficha-edit-bar { display:flex; gap:8px; margin-bottom:20px; }
+
+    /* Historial */
+    .historial-title {
+      font-family:'Playfair Display',serif; color:var(--vio);
+      font-size:1rem; margin-bottom:12px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .btn-add-visit {
+      display:flex; align-items:center; gap:5px;
+      background:var(--rosa); color:var(--blanco);
+      border:none; border-radius:999px;
+      padding:7px 14px; font-size:.78rem; font-weight:600;
+      cursor:pointer; transition:background .2s;
+    }
+    .btn-add-visit:hover { background:var(--vio); }
+    .btn-add-visit svg { width:13px; height:13px; }
+
+    .visita-card {
+      background:linear-gradient(160deg, var(--blanco), var(--rosa-s) 300%);
+      border:1px solid rgba(196,38,133,.12);
+      border-radius:14px; padding:14px; margin-bottom:10px;
+    }
+    .visita-head { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .visita-fecha { font-size:.75rem; font-weight:700; color:var(--rosa); }
+    .visita-motivo {
+      background:var(--rosa-s); color:var(--rosa);
+      border-radius:999px; padding:2px 10px; font-size:.72rem; font-weight:700;
+    }
+    .visita-card p { font-size:.82rem; color:var(--txt-s); line-height:1.55; margin-bottom:4px; }
+    .visita-card p strong { color:var(--txt); }
+    .visita-empty { text-align:center; color:var(--txt-s); font-size:.85rem; padding:16px 0; }
+
+    /* Formulario nueva visita */
+    .nueva-visita-form {
+      background:var(--vio-s); border-radius:16px; padding:16px;
+      margin-bottom:14px; display:none;
+    }
+    .nueva-visita-form.open { display:block; }
+    .motivo-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+    .chip-toggle {
+      padding:6px 14px; border-radius:999px;
+      border:1.5px solid var(--borde); background:var(--blanco);
+      font-size:.78rem; font-weight:600; color:var(--txt-s);
+      cursor:pointer; transition:all .15s; user-select:none;
+    }
+    .chip-toggle.sel { background:var(--rosa); color:var(--blanco); border-color:var(--rosa); }
+    .nv-field { margin-bottom:10px; }
+    .nv-field label { display:block; font-size:.72rem; font-weight:600; color:var(--txt-s); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+    .nv-field input, .nv-field textarea {
+      width:100%; padding:9px 12px;
+      border:1.5px solid var(--borde); border-radius:10px;
+      font-size:.85rem; font-family:inherit; background:var(--blanco);
+      outline:none; resize:vertical; transition:border .2s;
+    }
+    .nv-field input:focus, .nv-field textarea:focus { border-color:var(--rosa); }
+    .nv-actions { display:flex; gap:8px; }
+    .btn-save { background:var(--rosa); color:var(--blanco); border:none; border-radius:999px; padding:10px 20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:background .2s; }
+    .btn-save:hover { background:var(--vio); }
+    .btn-cancel-sm { background:var(--blanco); color:var(--txt-s); border:1.5px solid var(--borde); border-radius:999px; padding:9px 16px; font-size:.82rem; font-weight:500; cursor:pointer; }
+
+    /* ── VACUNAS ── */
+    .vac-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .vac-header h2 { font-family:'Playfair Display',serif; color:var(--vio); font-size:1.4rem; }
+    .vac-cols { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:600px) { .vac-cols { grid-template-columns:1fr; } }
+
+    .vac-group { background:var(--blanco); border:1px solid var(--borde); border-radius:var(--r); overflow:hidden; }
+    .vac-group-head {
+      padding:12px 16px; font-size:.78rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:.06em;
+      display:flex; align-items:center; gap:8px;
+    }
+    .vac-group-head.semana { background:var(--rosa-s); color:var(--rosa); }
+    .vac-group-head.mes    { background:var(--vio-s);  color:var(--vio); }
+    .vac-group-head .dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
+
+    .vac-row {
+      display:flex; align-items:center; gap:10px;
+      padding:11px 16px; border-bottom:1px solid var(--borde);
+    }
+    .vac-row:last-child { border-bottom:none; }
+    .vac-row-info { flex:1; min-width:0; }
+    .vac-row-info strong { display:block; font-size:.85rem; color:var(--vio); }
+    .vac-row-info span { font-size:.75rem; color:var(--txt-s); }
+    .vac-fecha { font-size:.75rem; font-weight:700; color:var(--txt-s); flex-shrink:0; }
+    .btn-wa {
+      display:flex; align-items:center; gap:5px;
+      background:#25D366; color:var(--blanco);
+      border:none; border-radius:999px;
+      padding:6px 12px; font-size:.72rem; font-weight:700;
+      text-decoration:none; flex-shrink:0; transition:background .2s;
+    }
+    .btn-wa:hover { background:#1da851; }
+    .btn-wa svg { width:13px; height:13px; }
+    .vac-empty { padding:20px; text-align:center; color:var(--txt-s); font-size:.82rem; }
+
+    /* ── LOADER ── */
+    .loader-overlay {
+      position:fixed; inset:0; background:rgba(250,246,240,.8);
+      z-index:400; display:none; align-items:center; justify-content:center; flex-direction:column; gap:12px;
+    }
+    .loader-overlay.on { display:flex; }
+    .spinner { width:36px; height:36px; border:3px solid var(--borde); border-top-color:var(--rosa); border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loader-txt { font-size:.82rem; color:var(--txt-s); }
+
+    /* ── CREDITS POPOVER ── */
+    .credits-popover {
+      position:fixed; top:calc(var(--nav-h) + 8px); right:16px;
+      background:var(--blanco); border:1px solid var(--borde);
+      border-radius:16px; box-shadow:var(--sombra);
+      padding:18px; width:220px; z-index:150;
+      display:none; flex-direction:column; gap:10px;
+    }
+    .credits-popover.open { display:flex; }
+    .credits-popover strong { color:var(--vio); font-size:1.1rem; font-family:'Playfair Display',serif; }
+    .credits-popover p { font-size:.78rem; color:var(--txt-s); }
+    .btn-wa-credits {
+      background:#25D366; color:var(--blanco); border:none; border-radius:999px;
+      padding:9px; font-size:.8rem; font-weight:700; cursor:pointer;
+      text-align:center; text-decoration:none; display:block;
     }
 
-    /* Modal nuevo campo */
-    #modalCampo {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background:#fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 2000;
-      width: 300px;
-    }
-    #modalCampo label {
-      font-weight: bold;
-      margin-top: 10px;
-      display: block;
-    }
-    #modalCampo input[type=text], #modalCampo select {
-      margin-top: 5px;
-    }
-
-    /* NUEVO: Contenedor para búsqueda por fecha */
-    #busquedaFecha {
-      margin-top: 20px;
-      padding: 15px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(196, 38, 133, 0.2);
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-    }
-    .bloque-campos {
-  border-top: 1px dotted #000000;
-  margin-top: 10px;
-  padding-top: 10px;
-}
- 
-    .btn-redireccion {
-  display: inline-block;
-  background-color: #C42685;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.3s ease;
-}
-
-.btn-redireccion:hover {
-  background-color: #a01e6a;
-}
-
-  .mensaje-bienvenida {
-  background-color: #362A6F;  
-  color: white;
-  font-weight: 600;
-  padding: 12px 20px;
-  
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  text-align: left;
-  box-shadow: 0 2px 6px rgba(196, 38, 133, 0.4);
-  user-select: none;
-}
-
-/* Navbar principal */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(54, 42, 111, 0.9);
-  color: white;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
-}
-
-/* Logo con animación */
-.navbar-logo img {
-  width: 60px;
-  opacity: 0;
-  transform: translateX(100px);
-  animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 0.2) forwards,
-             saltitoSutil 6s ease-in-out 1.2s infinite;
-}
-
-@keyframes slideInRight {
-  0% {
-    transform: translateX(100px);
-    opacity: 0;
-  }
-  80% {
-    transform: translateX(-10px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes saltitoSutil {
-  0%, 80%, 100% { transform: translateY(0); }
-  85% { transform: translateY(-4px); }
-  90% { transform: translateY(0); }
-}
-
-/* Menú de navegación */
-.navbar-menu {
-  display: flex;
-  gap: 20px;
-  transition: max-height 0.3s ease-out;
-}
-
-/* Enlaces del menú */
-.navbar-menu .nav-link {
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-.navbar-menu .nav-link:hover {
-  background-color: #C42685;
-}
-
-/* Botón hamburguesa - oculto por defecto */
-.navbar-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-/* Estado activo - ícono X */
-.navbar-toggle.active i {
-  transform: rotate(90deg);
-}
-.navbar-toggle.active i::before {
-  content: "\f00d"; /* Ícono X (Font Awesome) */
-}
-
-/* Modo móvil */
-@media (max-width: 768px) {
-  .navbar-menu {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 85px;
-    right: 2px;
-    background: rgba(54, 42, 111, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    overflow: hidden;
-    max-height: 0;
-  }
-  .navbar-menu.active {
-    max-height: 300px;
-    transition: max-height 0.4s ease-in-out;
-  }
-  .navbar-toggle {
-    display: block;
-  }
-  .navbar-menu .nav-link {
-    padding: 10px;
-    text-align: center;
-  }
-}
-
-/* Por defecto ocultar botón y menú */
-#navbarToggle,
-#navbarMenu {
-  display: none;
-}
-
-/* Mostrar botón hamburguesa sólo en móvil y cuando está logueado */
-@media (max-width: 768px) {
-  body.logueado #navbarToggle {
-    display: flex;
-  }
-}
-
-/* En PC oculto aunque esté logueado */
-@media (min-width: 769px) {
-  body.logueado #navbarToggle {
-    display: none !important;
-  }
-}
-
-body.logueado #navbarMenu {
-  display: flex;
-  /* Para PC y móviles */
-}
-
-/* Control para mostrar menú cuando está abierto */
-#navbarMenu.open {
-  display: flex;
-}
-
-  
-  
-/* Centrar todo en pantalla */
-.creditos-container {
-  /*position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);*/
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
- 
-}
-
-/* Botón */
-#creditosBtn {
-  background: #EDEDED;
-  color: #999;
-  border: none;
-  padding: 0px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-
-   display: inline-flex;           /* Para que estén en fila, lado a lado */
-  align-items: center;            /* Centra verticalmente */
-  gap: 6px;                      /* Espacio entre el icono y el número */
-  
-
-}
-
-/* Burbuja */
-.tooltip {
-  background: white;
-  border: 1px solid #EDEDED;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  text-align: center;
-}
-.tooltip.visible {
-  display: flex;
-}
-.busqueda-container {
-  text-align: center;
-}
-
-.botones-busqueda {
-  display: flex;
-  justify-content: center;
-  gap: 8px; /* espacio entre botones */
-  margin-top: 8px;
-  flex-wrap: wrap; /* si no entran, pasan a otra línea */
-}
-
-.botones-busqueda button {
-  min-width: 120px;
-  height: 40px;
-  font-size: 14px;
-}
-
-
-:root {
-  --crema: #FAF6F0;
-  --crema-oscuro: #F0E9DF;
-  --rosa: #C42685;
-  --rosa-suave: #F5E6F0;
-  --violeta: #362A6F;
-  --violeta-suave: #EAE8F5;
-  --texto: #2A2235;
-  --texto-suave: #7A6E85;
-  --blanco: #FFFFFF;
-  --sombra: 0 18px 50px rgba(54,42,111,0.12);
-}
-body {
-  background: radial-gradient(circle at top right, rgba(196,38,133,.11), transparent 30%), var(--crema);
-  color: var(--texto);
-}
-.app-navbar {
-  background: rgba(250,246,240,.92);
-  border-bottom: 1px solid rgba(196,38,133,.08);
-}
-.brand-link { color: inherit; text-decoration: none; display:flex; align-items:center; gap:12px; }
-.brand-link span { display:flex; flex-direction:column; color:var(--violeta); line-height:1.1; text-align:left; }
-.brand-link strong, .panel-hero h1, .search-copy h2 { font-family:'Playfair Display', serif; }
-.brand-link small { color:var(--texto-suave); font-size:.76rem; }
-.navbar-menu .nav-link { color: var(--texto-suave); border-radius:999px; }
-.navbar-menu .nav-link:hover { color: var(--blanco); }
-.btn-redireccion, .logout-btn, button { border-radius:999px; }
-.logout-btn { background: var(--violeta) !important; color: var(--blanco) !important; }
-.panel-hero {
-  max-width: 1120px;
-  margin: 34px auto 18px;
-  padding: 34px 24px;
-  display:grid;
-  grid-template-columns: minmax(0,1fr) 360px;
-  gap:24px;
-  align-items:stretch;
-  text-align:left;
-}
-.app-badge, .section-eyebrow {
-  display:inline-flex;
-  color:var(--rosa);
-  background:var(--rosa-suave);
-  border-radius:999px;
-  padding:7px 15px;
-  font-weight:700;
-  font-size:.78rem;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  margin-bottom:14px;
-}
-.panel-hero h1 { color:var(--violeta); font-size:clamp(2rem,4vw,3.4rem); line-height:1.08; margin:0 0 14px; }
-.panel-hero p { color:var(--texto-suave); line-height:1.7; max-width:680px; }
-.panel-kpis { display:grid; gap:12px; }
-.panel-kpis article, .search-card, .resultado, #busquedaFecha, .container, #loginDiv {
-  background:rgba(255,255,255,.92);
-  border:1px solid rgba(196,38,133,.09);
-  border-radius:26px;
-  box-shadow:var(--sombra);
-}
-.panel-kpis article { padding:18px; display:grid; gap:4px; }
-.panel-kpis strong { color:var(--violeta); font-size:1.6rem; font-family:'Playfair Display',serif; }
-.panel-kpis span { color:var(--texto-suave); }
-.panel-workspace { max-width:1120px; }
-.search-card { padding:26px; margin-bottom:18px; }
-.search-copy h2 { color:var(--violeta); font-size:1.8rem; margin:0 0 8px; }
-.search-copy p { color:var(--texto-suave); max-width:660px; margin:0 auto 18px; line-height:1.6; }
-input[type="text"], input[type="email"], textarea, select, input[type="date"] { border-radius:12px; border-color:rgba(54,42,111,.15); font-family:'DM Sans',sans-serif; }
-.resultado { padding:20px; }
-.resultado-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px; }
-.clinical-timeline { margin-top:18px; display:grid; gap:12px; }
-.timeline-card { border:1px solid rgba(54,42,111,.1); border-radius:18px; padding:14px; background:linear-gradient(180deg,#fff,rgba(245,230,240,.35)); }
-.timeline-card h4 { margin:0 0 8px; color:var(--violeta); }
-.reminder-pill { display:inline-flex; align-items:center; gap:8px; background:var(--rosa-suave); color:var(--rosa); padding:8px 12px; border-radius:999px; font-weight:700; margin:8px 0 14px; }
-@media (max-width:768px){
-  .panel-hero { grid-template-columns:1fr; padding:24px 16px; }
-  .desktop-actions { display:none; }
-  .resultado-grid { grid-template-columns:1fr; }
-  .navbar-menu { background:rgba(250,246,240,.98); top:72px; min-width:220px; }
-  .navbar-menu .nav-link { color:var(--violeta); }
-}
-
+    /* utils */
+    .mt8  { margin-top:8px; }
+    .hidden { display:none !important; }
   </style>
-
 </head>
 <body>
 
-<header class="app-navbar">
-  <a class="navbar-logo brand-link" href="../index.html" aria-label="Volver al inicio">
-    <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo Dra. Lili Bruzera" />
-    <span><strong>Dra. Lili Bruzera</strong><small>Panel veterinario</small></span>
-  </a>
-  <div class="navbar-action desktop-actions">
-    <a class="btn-redireccion" href="../turnero.html">Ver turnero</a>
+<!-- LOADER -->
+<div class="loader-overlay" id="loader">
+  <div class="spinner"></div>
+  <span class="loader-txt" id="loaderTxt">Cargando...</span>
+</div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo"/>
+    <h2>Panel veterinario</h2>
+    <p>Ingresá con tu usuario y clave</p>
+    <input class="login-field" type="text"     id="loginUser" placeholder="Usuario" autocomplete="username"/>
+    <input class="login-field" type="password" id="loginPass" placeholder="Clave"   autocomplete="current-password"/>
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <p class="login-error" id="loginErr"></p>
   </div>
-  <button class="navbar-toggle" id="navbarToggle" aria-label="Abrir menú">
-    <i class="fas fa-bars"></i>
-  </button>
-  <nav class="navbar-menu" id="navbarMenu">
-    <a href="#pacientes" class="nav-link">Pacientes</a>
-    <a href="#turnos" class="nav-link">Turnos</a>
-    <a href="../recordatorios/" class="nav-link">Recordatorios</a>
-    <a href="../index.html" class="nav-link">Web pública</a>
-    <button onclick="logout()" class="logout-btn">Cerrar sesión</button>
-  </nav>
+</div>
+
+<!-- NAV -->
+<header class="nav" id="appNav" style="display:none">
+  <a class="nav-brand" href="../index.html">
+    <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo"/>
+    <div class="nav-brand-text">Dra. Lili Bruzera <small>Panel veterinario</small></div>
+  </a>
+  <div class="nav-right">
+    <button class="credits-pill" id="creditsBtn" onclick="toggleCredits()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span id="creditsVal">—</span> créditos
+    </button>
+    <a class="btn-site" href="../turnero.html">Turnero</a>
+    <button class="btn-logout" onclick="doLogout()">Salir</button>
+  </div>
 </header>
 
-  
-<div id="loginDiv">
- 
-  
-  <div class="container">
-    <p>Ingresá usuario y clave para continuar:</p>
-    <input type="text" id="usuario" placeholder="Usuario" />
-    <input type="password" id="clave" style="text-align: center;" placeholder="Clave" />
-    <button onclick="login()">Ingresar</button>
-    <p id="errorLogin" style="color:red; display:none;">Usuario o clave incorrecta</p>
-  </div>
+<!-- CREDITS POPOVER -->
+<div class="credits-popover" id="creditsPopover">
+  <strong id="creditsValBig">—</strong>
+  <p>créditos disponibles</p>
+  <a class="btn-wa-credits" id="creditsWaBtn" href="#" target="_blank">Agregar por WhatsApp</a>
 </div>
 
+<!-- APP -->
+<div class="app" id="appShell">
 
-
-<div id="appDiv" style="text-align: center; display:none;">
-  <!-- APP PRINCIPAL -->
-  <section class="panel-hero">
-    <div>
-      <span class="app-badge">Área profesional</span>
-      <h1>Panel clínico de pacientes, turnos y recordatorios.</h1>
-      <p>Acceso unificado a fichas médicas, búsqueda por nombre o ID, agenda diaria y vacunas próximas, manteniendo los endpoints actuales de Apps Script.</p>
-    </div>
-    <div class="panel-kpis" aria-label="Resumen del panel">
-      <article><strong id="kpiPacientes">—</strong><span>Resultados cargados</span></article>
-      <article><strong id="kpiRecordatorios">—</strong><span>Vacunas próximas</span></article>
-      <article><strong id="kpiTurnosHoy">Hoy</strong><span>Agenda del día</span></article>
-    </div>
-  </section>
-<div id="mensajeBienvenida" class="mensaje-bienvenida" style="display:none;"></div>
-  <div class="container panel-workspace" id="pacientes">
-<div class="creditos-container">
-  <!-- Botón con SVG -->
-  <button id="creditosBtn" class="creditos-btn" title="Ver créditos">
-    <!-- SVG aquí -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <path fill="currentColor" fill-rule="evenodd" d="M17.47 8.893C18.886 8.185 19 7.577 19 7.5s-.114-.685-1.53-1.393C16.173 5.459 14.242 5 12 5s-4.173.459-5.47 1.107C5.114 6.815 5 7.423 5 7.5s.114.685 1.53 1.393C7.827 9.541 9.758 10 12 10s4.173-.459 5.47-1.107M21 7.5c0 2.485-4.03 4.5-9 4.5S3 9.985 3 7.5 7.03 3 12 3s9 2.015 9 4.5m-17 4a1 1 0 0 1 1 1c0 .137.053.327.262.573.389.457 1.196.953 2.42 1.331 1.196.37 2.686.596 4.318.596s3.123-.226 4.319-.596c1.223-.378 2.03-.874 2.42-1.331.208-.246.261-.436.261-.573a1 1 0 1 1 2 0c0 .721-.3 1.354-.738 1.869-.743.873-1.967 1.517-3.352 1.946-1.412.437-3.105.685-4.91.685s-3.498-.248-4.91-.685c-1.385-.429-2.609-1.073-3.352-1.946C3.301 13.854 3 13.22 3 12.5a1 1 0 0 1 1-1M5 17a1 1 0 1 0-2 0c0 .721.3 1.354.738 1.869.743.873 1.967 1.517 3.352 1.946 1.412.437 3.105.685 4.91.685s3.498-.248 4.91-.685c1.385-.429 2.609-1.073 3.352-1.946.437-.515.738-1.148.738-1.869a1 1 0 1 0-2 0c0 .137-.053.327-.262.573-.389.457-1.196.953-2.42 1.331-1.196.37-2.686.596-4.318.596s-3.122-.226-4.319-.596c-1.223-.378-2.03-.874-2.42-1.331C5.054 17.327 5 17.137 5 17" clip-rule="evenodd"></path>
-    </svg>
-<!--Créditos ocultos (por si necesitas mostrar en otro lado)-->
-<div id="creditosDiv" style="display:none;">
-  <h3><span id="creditosActuales">Cargando...</span></h3>
-</div>
-  </button>
-
-  <!-- Burbuja -->
-  <div id="tooltip" class="tooltip">
-    <div id="tooltipText">Cargando...</div>
-    <button id="agregarCreditosBtn">Agregar créditos</button>
-  </div>
-</div>
-   <!-- BUSQUEDA GENERAL -->
-<div class="busqueda-container search-card">
-  <div class="search-copy">
-    <span class="section-eyebrow">Búsqueda de pacientes</span>
-    <h2>Encontrá rápido una mascota o abrí su ficha médica.</h2>
-    <p>Buscá por nombre para identificar el ID. Con el ID abrís el historial clínico editable y los recordatorios de vacunas.</p>
-  </div>
-
-  <input type="text" id="inputBusquedaGeneral" style="text-align: center;" placeholder="Ej: Fido o ABC123 para Ficha Médica" />
-
-  <div class="botones-busqueda">
-    <button onclick="buscarGeneral()" style="text-align: center;">
-      <i class="fas fa-search"></i> Buscar por nombre
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="hoy" onclick="switchTab('hoy')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Hoy <span class="badge" id="badgeHoy">0</span>
     </button>
-    <button onclick="verHistorial()" style="text-align: center;">
-      <i class="fas fa-clock-rotate-left"></i> Abrir ficha médica
+    <button class="tab-btn" data-tab="pacientes" onclick="switchTab('pacientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Pacientes
+    </button>
+    <button class="tab-btn" data-tab="vacunas" onclick="switchTab('vacunas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/></svg>
+      Vacunas <span class="badge" id="badgeVac">0</span>
     </button>
   </div>
-</div>
 
-<div id="cargando" style="text-align: center;">
-  <i class="fas fa-spinner fa-spin"></i> Cargando, por favor esperá...
-</div>
-
-<div id="resultadoGeneral"></div>
-
-    <!-- NUEVO: BUSCADOR POR FECHA -->
-    <section id="turnos">
-    <div id="busquedaFecha">
-      <label for="fechaTurno"><strong>TURNOS:</strong></label>
-      <input type="date" id="fechaTurno" />
-      <button onclick="buscarPorFecha()"><i class="fas fa-calendar-check"></i> Buscar turnos</button>
-      <div id="cargandoFecha" style="display:none; margin-top:8px; color:#666;"> Buscando turnos...</div>
-      <div id="resultadoFecha" style="margin-top: 15px;"></div>
+  <!-- TAB HOY -->
+  <div class="tab-panel active" id="tab-hoy">
+    <div class="hoy-header">
+      <h2>Turnos de hoy</h2>
+      <span class="hoy-date" id="hoyFecha"></span>
     </div>
-</section>
+    <div id="hoyList"><div class="hoy-empty">Cargando turnos…</div></div>
+  </div>
+
+  <!-- TAB PACIENTES -->
+  <div class="tab-panel" id="tab-pacientes">
+    <div class="search-bar-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Buscar por nombre o ID…" oninput="onSearchInput()" autocomplete="off"/>
+    </div>
+    <div class="pac-actions">
+      <button class="btn-sm btn-secondary" onclick="cargarTodos()">Ver todos</button>
+    </div>
+    <div class="pac-list" id="pacList"><p style="color:var(--txt-s);font-size:.85rem;text-align:center;padding:32px 0">Buscá un paciente o tocá "Ver todos"</p></div>
+  </div>
+
+  <!-- TAB VACUNAS -->
+  <div class="tab-panel" id="tab-vacunas">
+    <div class="vac-header">
+      <h2>Recordatorios</h2>
+      <button class="btn-sm btn-secondary" onclick="cargarVacunas()">↻ Actualizar</button>
+    </div>
+    <div class="vac-cols">
+      <div class="vac-group">
+        <div class="vac-group-head semana"><span class="dot"></span> Esta semana (7 días)</div>
+        <div id="vacSemana"><div class="vac-empty">Cargando…</div></div>
+      </div>
+      <div class="vac-group">
+        <div class="vac-group-head mes"><span class="dot"></span> Este mes (30 días)</div>
+        <div id="vacMes"><div class="vac-empty">Cargando…</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- MODAL NUEVO CAMPO -->
-<div id="modalCampo">
-  <h4>Agregar nuevo campo</h4>
-  
-  <label for="tipoCampo">Tipo de campo:</label>
-  <select id="tipoCampo">
-    <option value="texto">Texto corto</option>
-    <option value="textarea">Texto largo</option>
-    <option value="fecha">Fecha (dd/mm/aaaa)</option>
-    <option value="opciones">Múltiples opciones</option>
-  </select>
+<!-- FICHA MODAL -->
+<div class="ficha-backdrop" id="fichaBackdrop" onclick="onBackdropClick(event)">
+  <div class="ficha-sheet" id="fichaSheet">
+    <div class="ficha-handle"></div>
 
-  <div id="opcionesExtra" style="display:none; margin-top:8px;">
-    <label for="listaOpciones">Opciones (separadas por coma):</label>
-    <input type="text" id="listaOpciones" placeholder="Ej: Vacuna, Desparasitante, Otro" />
-  </div>
+    <div class="ficha-top">
+      <div class="ficha-top-info">
+        <h3 id="fichaTitle">—</h3>
+        <span id="fichaSubtitle"></span>
+      </div>
+      <button class="ficha-close" onclick="closeFicha()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
 
-  <label for="nombreCampo">Nombre del campo:</label>
-  <input type="text" id="nombreCampo" placeholder="Ej: Vacuna aplicada" />
+    <!-- Datos base -->
+    <div class="ficha-edit-bar">
+      <button class="btn-sm btn-secondary" id="btnEditFicha" onclick="toggleEditFicha()">✏️ Editar datos</button>
+    </div>
 
-  <div style="margin-top:10px; text-align:right;">
-    <button onclick="confirmarNuevoCampo()">Agregar</button>
-    <button onclick="cerrarModalCampo()" style="background:#EDEDED;">Cancelar</button>
+    <div class="ficha-grid" id="fichaGrid">
+      <!-- se renderizan los campos -->
+    </div>
+
+    <!-- Historial -->
+    <div class="historial-title">
+      Historial médico
+      <button class="btn-add-visit" onclick="toggleNuevaVisita()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva consulta
+      </button>
+    </div>
+
+    <!-- Form nueva visita -->
+    <div class="nueva-visita-form" id="nuevaVisitaForm">
+      <div class="motivo-chips" id="motivoChips">
+        <span class="chip-toggle" onclick="toggleChip(this)">Consulta</span>
+        <span class="chip-toggle" onclick="toggleChip(this)">Vacuna</span>
+        <span class="chip-toggle" onclick="toggleChip(this)">Antiparasitario</span>
+        <span class="chip-toggle" onclick="toggleChip(this)">Tratamiento</span>
+        <span class="chip-toggle" onclick="toggleChip(this)">Cirugía</span>
+      </div>
+      <div class="nv-field">
+        <label>Descripción</label>
+        <textarea id="nvDesc" rows="2" placeholder="¿Qué se trató?"></textarea>
+      </div>
+      <div class="nv-field">
+        <label>Observaciones</label>
+        <textarea id="nvObs" rows="2" placeholder="Notas adicionales…"></textarea>
+      </div>
+      <div class="nv-field">
+        <label>Próxima vacuna</label>
+        <input type="date" id="nvProxVac"/>
+      </div>
+      <div class="nv-actions">
+        <button class="btn-save" onclick="guardarVisita()">Guardar</button>
+        <button class="btn-cancel-sm" onclick="toggleNuevaVisita()">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="historialList"></div>
   </div>
 </div>
 
 <script>
-  const bloquesVisiblesPorRegistro = {};
-const urlScript = "https://script.google.com/macros/s/AKfycbwA_lwWMazJkNsZLctLld_O4tf4RFTSaOpxpx4LMJdOpwOgygwchokuea0QEY1mlzeQvQ/exec";
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwcJkXOFnTDyCBoxqMs36KOYCBue5T3mbSqRWEz8YiYscstbhgDkHZ_lV5mtqWYt7B0/exec";
 
-// LOGIN (validación desde backend)
-function login() {
-  const usuario = document.getElementById("usuario").value.trim();
-  const clave = document.getElementById("clave").value.trim();
+// ═══════════════════════════════════════
+// LOADER
+// ═══════════════════════════════════════
+function showLoader(msg="Cargando…"){ document.getElementById("loader").classList.add("on"); document.getElementById("loaderTxt").textContent=msg; }
+function hideLoader(){ document.getElementById("loader").classList.remove("on"); }
 
-  fetch(urlScript, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `accion=login&usuario=${encodeURIComponent(usuario)}&clave=${encodeURIComponent(clave)}`
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      sessionStorage.setItem("logueado", "true");
-      sessionStorage.setItem("usuario", usuario); // Guardar usuario
-      document.body.classList.add("logueado"); // 👈 Hacemos visible el botón flotante
-      mostrarApp(true);
-      mostrarMensajeBienvenida(usuario);
+// ═══════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════
+async function doLogin(){
+  const u=document.getElementById("loginUser").value.trim();
+  const p=document.getElementById("loginPass").value.trim();
+  const err=document.getElementById("loginErr");
+  err.style.display="none";
+  showLoader("Verificando…");
+  try{
+    const res=await fetch(URL_SCRIPT,{method:"POST",body:new URLSearchParams({accion:"login",usuario:u,clave:p})});
+    const d=await res.json();
+    hideLoader();
+    if(d.success){
+      sessionStorage.setItem("logueado","1");
+      sessionStorage.setItem("usuario",u);
+      mostrarApp();
     } else {
-      document.getElementById("errorLogin").style.display = "block";
-      document.getElementById("errorLogin").textContent = data.error || "Usuario o clave incorrecta";
+      err.textContent=d.error||"Usuario o clave incorrecta";
+      err.style.display="block";
     }
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById("errorLogin").style.display = "block";
-    document.getElementById("errorLogin").textContent = "Error en la conexión";
-  });
+  } catch(e){ hideLoader(); err.textContent="Error de conexión"; err.style.display="block"; }
 }
+document.addEventListener("keydown",e=>{ if(e.key==="Enter"&&document.getElementById("loginWrap").style.display!=="none") doLogin(); });
 
-function mostrarMensajeBienvenida(usuario) {
-  const contenedor = document.getElementById("mensajeBienvenida");
-  contenedor.textContent = `¡Hola, ${usuario}!`;
-  contenedor.style.display = "block";
-}
-
-function logout() {
+function doLogout(){
   sessionStorage.removeItem("logueado");
-  mostrarApp(false);
+  sessionStorage.removeItem("usuario");
+  document.getElementById("appNav").style.display="none";
+  document.getElementById("appShell").style.display="none";
+  document.getElementById("loginWrap").style.display="flex";
 }
 
-  
-
-function mostrarApp(show) {
-  document.getElementById("loginDiv").style.display = show ? "none" : "block";
-  document.getElementById("appDiv").style.display = show ? "block" : "none";
-  // Mostrar u ocultar créditos según login
-  document.getElementById("creditosDiv").style.display = show ? "block" : "none";
-  if (!show) document.getElementById("resultadoGeneral").innerHTML = "";
+function mostrarApp(){
+  document.getElementById("loginWrap").style.display="none";
+  document.getElementById("appNav").style.display="flex";
+  document.getElementById("appShell").style.display="block";
+  const u=sessionStorage.getItem("usuario")||"";
+  // actualizar WA link
+  const msg=encodeURIComponent(`Hola, soy ${u} y quiero agregar créditos.`);
+  document.getElementById("creditsWaBtn").href=`https://wa.me/5493435020970?text=${msg}`;
+  cargarHoy();
+  cargarCreditos();
+  cargarVacunas();
 }
 
-window.onload = () => {
-  const logueado = sessionStorage.getItem("logueado") === "true";
-  mostrarApp(logueado);
-  if (logueado) {
-    const usuario = sessionStorage.getItem("usuario") || "";
-    mostrarMensajeBienvenida(usuario);
-    const hoy = new Date().toISOString().split("T")[0];
-    document.getElementById("fechaTurno").value = hoy;
-    buscarPorFecha();
-  }
-};
+window.addEventListener("load",()=>{
+  if(sessionStorage.getItem("logueado")==="1") mostrarApp();
+});
 
- 
-function fechaVacunaToString(fechaStr) {
-  // Formatear fecha para mostrar en lista (DD/MM/YYYY)
-  function parseFechaDDMMYYYY(str) {
-    if (!str) return null;
-    const partes = str.split("/");
-    if (partes.length !== 3) return null;
-    const [dia, mes, anio] = partes.map(Number);
-    return new Date(anio, mes - 1, dia);
-  }
-  let fecha = parseFechaDDMMYYYY(fechaStr);
-  if (!fecha) fecha = new Date(fechaStr);
-  if (!fecha || isNaN(fecha.getTime())) return fechaStr;
-  return fecha.toLocaleDateString("es-AR");
-}
-
-
-function fechaParaOrden(fechaStr) {
-  if (!fechaStr) return null;
-  if (typeof fechaStr === "string" && fechaStr.includes("/")) {
-    const [dia, mes, anio] = fechaStr.split("/").map(Number);
-    return new Date(anio, mes - 1, dia);
-  }
-  const fecha = new Date(fechaStr);
-  return isNaN(fecha.getTime()) ? null : fecha;
-}
-
-function actualizarResumenPanel(lista = []) {
-  const kpiPacientes = document.getElementById("kpiPacientes");
-  const kpiRecordatorios = document.getElementById("kpiRecordatorios");
-  if (!kpiPacientes || !kpiRecordatorios) return;
-  kpiPacientes.textContent = lista.length || "—";
-  const hoy = new Date();
-  const proximas = lista.filter((r) => {
-    const fecha = fechaParaOrden(r.proxima_vacuna);
-    if (!fecha) return false;
-    const diff = Math.ceil((fecha - hoy) / (1000 * 60 * 60 * 24));
-    return diff >= 0 && diff <= 30;
-  }).length;
-  kpiRecordatorios.textContent = proximas || "0";
-}
-
-function obtenerBloquesExtras(extras) {
-  if (!extras) return [];
-  const bloques = {};
-  Object.entries(extras).forEach(([clave, valor]) => {
-    const partes = clave.split("_");
-    if (partes.length !== 2) return;
-    const [campo, num] = partes;
-    if (!bloques[num]) bloques[num] = {};
-    bloques[num][campo] = valor;
-  });
-  return Object.values(bloques).filter((bloque) => Object.values(bloque).some((v) => String(v || "").trim() !== ""));
-}
-
-function renderResumenClinico(r) {
-  const proxima = fechaVacunaToString(r.proxima_vacuna || "");
-  const extras = obtenerBloquesExtras(r.extras).slice(-4).reverse();
-  const timeline = extras.length
-    ? extras.map((bloque) => `
-      <div class="timeline-card">
-        <h4>${fechaVacunaToString(bloque.Fecha || "Sin fecha")}</h4>
-        <p><strong>Motivo:</strong> ${bloque.Motivo || "Sin motivo"}</p>
-        <p><strong>Descripción:</strong> ${bloque.Descripción || "Sin descripción"}</p>
-        <p><strong>Observaciones:</strong> ${bloque.Observaciones || "Sin observaciones"}</p>
-      </div>`).join("")
-    : `<p style="color:#7A6E85;">Todavía no hay eventos médicos cargados para esta ficha.</p>`;
-  return `
-    <div class="reminder-pill"><i class="fas fa-bell"></i> Próxima vacuna: ${proxima || "sin fecha registrada"}</div>
-    <div class="clinical-timeline" aria-label="Historial médico reciente">
-      <h3>Historial médico reciente</h3>
-      ${timeline}
-    </div>`;
-}
-
-  // BUSQUEDA GENERAL
-  function buscarGeneral() {
-    const query = document.getElementById("inputBusquedaGeneral").value.trim().toLowerCase();
-    if (!query) return alert("Ingresá un dato para buscar.");
-    ejecutarBusqueda("?buscar=" + encodeURIComponent(query), "Resultados encontrados:");
-  }
-
-  function verHistorial() {
-    const dni = document.getElementById("inputBusquedaGeneral").value.trim().toUpperCase();
-    if (!dni) return alert("Ingresá un ID válido.");
-    ejecutarBusqueda("?historial=" + dni, `Ficha Médica ID: ${dni}`);
-  }
-
-  function ejecutarBusqueda(parametro, titulo) {
-  const resultadoDiv = document.getElementById("resultadoGeneral");
-  const cargando = document.getElementById("cargando");
-  resultadoDiv.innerHTML = "";
-  cargando.style.display = "block";
-
-  fetch(urlScript + parametro)
-    .then(res => res.json())
-    .then(data => {
-      cargando.style.display = "none";
-      if (data.success && data.resultados.length > 0) {
-        const esBusquedaGeneral = parametro.startsWith("?buscar=");
-        actualizarResumenPanel(data.resultados);
-        mostrarResultados(data.resultados, titulo, esBusquedaGeneral);
-      } else {
-        actualizarResumenPanel([]);
-        resultadoDiv.innerHTML = "<p style='color:#C42685;'>No se encontraron datos.</p>";
-      }
-    })
-    .catch(() => {
-      cargando.style.display = "none";
-      alert("Error al buscar en la base de datos.");
-    });
-}
-
-
-  function mostrarResultados(lista, titulo, esBusquedaGeneral = false) {
-  const resultadoDiv = document.getElementById("resultadoGeneral");
-  let html = `<h3>${titulo}</h3>`;
-
-  lista.forEach((r, index) => {
-    const claseFondo = index % 2 === 0 ? "" : "alternado";
-
-    if (esBusquedaGeneral) {
-      // Solo campos básicos para búsqueda general
-      html += `
-        <div class="resultado ${claseFondo}" id="registro-${index}">
-          <label>Nombre Humano:</label>
-          <input type="text" value="${r.nombre}" disabled>
-
-          <label>Nombre Mascota:</label>
-          <input type="text" value="${r.nombreMascota}" disabled>
-
-          <label>ID Mascota:</label>
-          <input type="text" value="${r.dniMascota}" disabled>
-        </div>
-      `;
-    } else {
-      // Mostrar todos los campos completos para historial o búsqueda detallada
-      html += `
-        <div class="resultado ${claseFondo}" id="registro-${index}">
-          <label>Paciente desde:</label>
-          <input type="text" value="${r.fecha}" disabled>
-          
-          <label>ID Mascota:</label>
-          <input type="text" id="dni-${index}" value="${r.dniMascota}" disabled>
-          
-          <label>Nombre Humano:</label>
-          <input type="text" id="nombre-${index}" value="${r.nombre}" disabled>
-          
-          <label>Nombre Mascota:</label>
-          <input type="text" id="mascota-${index}" value="${r.nombreMascota}" disabled>
-          
-          <label>Especie:</label>
-          <input type="text" id="tipo-${index}" value="${r.tipoMascota}" disabled>
-          
-          <label>Email:</label>
-          <input type="email" id="email-${index}" value="${r.email}" disabled>
-          
-          <label>Teléfono:</label>
-          <input type="text" id="tel-${index}" value="${r.telefono}" disabled>
-
-          <label>Fecha de Nac:</label>
-<input type="text" id="fehcaDeNac-${index}" 
-  value="${r.fehcaDeNac ? new Date(r.fehcaDeNac).toLocaleDateString('es-AR') : ''}" 
-  disabled>
-
-          
-          <label>Peso:</label>
-          <input type="text" id="peso-${index}" value="${r.peso || ''}" disabled>
-          
-          <label>Veterinario que lo atiende:</label>
-          <textarea id="historial-${index}" disabled>${r.veterinario || ''}</textarea>
-          
-          <label>Próxima vacuna:</label>
-<input type="text" id="proximaVacuna-${index}" 
-  value="${r.proxima_vacuna ? new Date(r.proxima_vacuna).toLocaleDateString('es-AR') : ''}" 
-  disabled>
-
-          ${renderResumenClinico(r)}
-
-          <div id="extraCampos-${index}"></div>
-
-          <button type="button" onclick="agregarBloqueCampos(${index})" style="margin-top: 5px;">
-            <i class="fas fa-plus"></i> Agregar Datos Médicos
-          </button>
-
-          <button id="btnEditar-${index}" onclick="habilitarEdicion(${index})" style="margin-top: 10px;">
-            <i class="fas fa-edit"></i> Editar
-          </button>
-        </div>
-      `;
+// ═══════════════════════════════════════
+// CREDITS
+// ═══════════════════════════════════════
+async function cargarCreditos(){
+  try{
+    const r=await fetch(URL_SCRIPT+"?accion=creditos");
+    const d=await r.json();
+    if(d.success){
+      document.getElementById("creditsVal").textContent=d.creditos;
+      document.getElementById("creditsValBig").textContent=d.creditos;
     }
-  });
+  } catch(e){}
+}
+function toggleCredits(){
+  document.getElementById("creditsPopover").classList.toggle("open");
+}
+document.addEventListener("click",e=>{
+  const pop=document.getElementById("creditsPopover");
+  if(!pop.contains(e.target)&&!document.getElementById("creditsBtn").contains(e.target))
+    pop.classList.remove("open");
+});
 
-  resultadoDiv.innerHTML = html;
-
-  // Renderizar los bloques extras solo en búsqueda detallada
-  if (!esBusquedaGeneral) {
-    lista.forEach((r, index) => {
-      renderizarBloquesExtras(index, r.extras);
-    });
-  }
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+function switchTab(name){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
 }
 
+// ═══════════════════════════════════════
+// UTILIDADES FECHA
+// ═══════════════════════════════════════
+function leerFechaStr(v){
+  if(!v) return "";
+  if(v instanceof Date) return fmtDDMMYYYY(v);
+  const s=String(v).trim();
+  if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
+  try{ const d=new Date(s); if(!isNaN(d)) return fmtDDMMYYYY(d); } catch(e){}
+  return s;
+}
+function leerHoraStr(v){
+  if(!v) return "";
+  if(v instanceof Date) return fmtHHmm(v);
+  const s=String(v).trim();
+  if(/^\d{2}:\d{2}/.test(s)) return s.substring(0,5);
+  return s;
+}
+function fmtDDMMYYYY(d){ return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; }
+function fmtHHmm(d){ return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
 
-  // HABILITAR EDICIÓN
-  function habilitarEdicion(index) {
-  // Campos fijos
-  const campos = [
-    `nombre-${index}`, `mascota-${index}`, `tipo-${index}`, `email-${index}`, `tel-${index}`,
-    `fehcaDeNac-${index}`, `peso-${index}`, `historial-${index}`, `proximaVacuna-${index}`
+function parseFecha(s){
+  if(!s) return null;
+  if(s instanceof Date) return s;
+  const str=String(s).trim();
+  if(str.includes("/")){const p=str.split("/");return new Date(+p[2],+p[1]-1,+p[0]);}
+  if(str.includes("T")||str.includes("-")){const d=new Date(str);return isNaN(d)?null:d;}
+  return null;
+}
+
+function iconoMascota(tipo){
+  const t=(tipo||"").toLowerCase();
+  if(t.includes("perro")||t.includes("dog")) return "🐶";
+  if(t.includes("gato")||t.includes("cat"))  return "🐱";
+  if(t.includes("conejo")) return "🐰";
+  return "🐾";
+}
+
+// ═══════════════════════════════════════
+// TAB HOY
+// ═══════════════════════════════════════
+async function cargarHoy(){
+  const hoy=new Date();
+  document.getElementById("hoyFecha").textContent=hoy.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+  const iso=hoy.toISOString().split("T")[0];
+  try{
+    const r=await fetch(URL_SCRIPT+"?fecha="+iso);
+    const d=await r.json();
+    const lista=d.resultados||[];
+    document.getElementById("badgeHoy").textContent=lista.length;
+    const el=document.getElementById("hoyList");
+    if(!lista.length){el.innerHTML='<div class="hoy-empty">No hay turnos para hoy</div>';return;}
+    el.innerHTML=lista.map(t=>`
+      <div class="turno-card" onclick="abrirFichaDesdeTurno('${t.dniMascota}','${t.nombreMascota}','${t.tipoMascota}')">
+        <div class="turno-hora">${leerHoraStr(t.turno)}</div>
+        <div class="turno-info">
+          <strong>${iconoMascota(t.tipoMascota)} ${t.nombreMascota}</strong>
+          <span>${t.nombre} · ${t.telefono}</span>
+        </div>
+        <span class="turno-id">${t.dniMascota}</span>
+      </div>`).join("");
+  } catch(e){ document.getElementById("hoyList").innerHTML='<div class="hoy-empty">Error al cargar turnos</div>'; }
+}
+
+// ═══════════════════════════════════════
+// TAB PACIENTES
+// ═══════════════════════════════════════
+let searchTimeout=null;
+function onSearchInput(){
+  clearTimeout(searchTimeout);
+  const q=document.getElementById("searchInput").value.trim();
+  if(!q){ document.getElementById("pacList").innerHTML='<p style="color:var(--txt-s);font-size:.85rem;text-align:center;padding:32px 0">Buscá un paciente o tocá "Ver todos"</p>'; return; }
+  if(q.length<2) return;
+  searchTimeout=setTimeout(()=>buscarPacientes(q),400);
+}
+
+async function buscarPacientes(q){
+  showLoader("Buscando…");
+  try{
+    const r=await fetch(URL_SCRIPT+"?buscar="+encodeURIComponent(q));
+    const d=await r.json();
+    hideLoader();
+    renderPacList(d.resultados||[]);
+  } catch(e){ hideLoader(); }
+}
+
+async function cargarTodos(){
+  showLoader("Cargando pacientes…");
+  try{
+    const r=await fetch(URL_SCRIPT+"?buscar=todos");
+    const d=await r.json();
+    hideLoader();
+    // deduplicar por dniMascota
+    const vistos=new Set();
+    const lista=(d.resultados||[]).filter(p=>{
+      if(vistos.has(p.dniMascota)) return false;
+      vistos.add(p.dniMascota); return true;
+    });
+    renderPacList(lista);
+  } catch(e){ hideLoader(); }
+}
+
+function renderPacList(lista){
+  const el=document.getElementById("pacList");
+  if(!lista.length){el.innerHTML='<p style="color:var(--txt-s);font-size:.85rem;text-align:center;padding:32px 0">Sin resultados</p>';return;}
+  el.innerHTML=lista.map(p=>`
+    <div class="pac-row" onclick="abrirFicha('${p.dniMascota}')">
+      <div class="pac-avatar">${iconoMascota(p.tipoMascota)}</div>
+      <div class="pac-row-info">
+        <strong>${p.nombreMascota}</strong>
+        <span>${p.nombre} · ${p.telefono}</span>
+      </div>
+      <span class="pac-row-id">${p.dniMascota}</span>
+    </div>`).join("");
+}
+
+// ═══════════════════════════════════════
+// FICHA MODAL
+// ═══════════════════════════════════════
+let fichaActual=null;
+let fichaEditando=false;
+
+async function abrirFicha(dni){
+  showLoader("Abriendo ficha…");
+  try{
+    const r=await fetch(URL_SCRIPT+"?historial="+dni);
+    const d=await r.json();
+    hideLoader();
+    if(d.success&&d.resultados&&d.resultados.length){
+      fichaActual=d.resultados[0];
+      fichaEditando=false;
+      renderFicha();
+      document.getElementById("fichaBackdrop").classList.add("open");
+      document.body.style.overflow="hidden";
+    } else { alert("No se encontró la ficha."); }
+  } catch(e){ hideLoader(); alert("Error al cargar ficha."); }
+}
+
+function abrirFichaDesdeTurno(dni,nombre,tipo){
+  switchTab("pacientes");
+  abrirFicha(dni);
+}
+
+function closeFicha(){
+  document.getElementById("fichaBackdrop").classList.remove("open");
+  document.body.style.overflow="";
+  fichaActual=null;
+  fichaEditando=false;
+}
+function onBackdropClick(e){
+  if(e.target===document.getElementById("fichaBackdrop")) closeFicha();
+}
+
+function renderFicha(){
+  const r=fichaActual;
+  document.getElementById("fichaTitle").textContent=`${iconoMascota(r.tipoMascota)} ${r.nombreMascota}`;
+  document.getElementById("fichaSubtitle").textContent=`${r.tipoMascota} · ID: ${r.dniMascota}`;
+  document.getElementById("btnEditFicha").textContent=fichaEditando?"💾 Guardar datos":"✏️ Editar datos";
+
+  const campos=[
+    {id:"fNombre",      label:"Dueño",          val:r.nombre,       full:false},
+    {id:"fTelefono",    label:"Teléfono",        val:r.telefono,     full:false},
+    {id:"fEmail",       label:"Email",           val:r.email,        full:false},
+    {id:"fEspecie",     label:"Especie",         val:r.tipoMascota,  full:false},
+    {id:"fPeso",        label:"Peso",            val:r.peso||"",     full:false},
+    {id:"fNacimiento",  label:"Fecha nac.",      val:leerFechaStr(r.fehcaDeNac)||"", full:false, tipo:"date"},
+    {id:"fVeterinario", label:"Veterinario",     val:r.veterinario||"",  full:true, textarea:true},
+    {id:"fProxVac",     label:"Próxima vacuna",  val:leerFechaStr(r.proxima_vacuna)||"", full:false, tipo:"date"},
   ];
-  campos.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = false;
+
+  const grid=document.getElementById("fichaGrid");
+  grid.innerHTML=campos.map(c=>{
+    const fullClass=c.full?" full":"";
+    const disabled=fichaEditando?"":' disabled';
+    const input=c.textarea
+      ? `<textarea id="${c.id}"${disabled}>${c.val}</textarea>`
+      : `<input id="${c.id}" type="${c.tipo||'text'}" value="${c.val||''}"${disabled}/>`;
+    return `<div class="ficha-field${fullClass}"><label>${c.label}</label>${input}</div>`;
+  }).join("");
+
+  // Historial
+  const extras=r.extras||{};
+  const bloques=agruparExtras(extras);
+  const el=document.getElementById("historialList");
+  if(!bloques.length){ el.innerHTML='<div class="visita-empty">Sin visitas registradas aún.</div>'; return; }
+  el.innerHTML=[...bloques].reverse().map(b=>`
+    <div class="visita-card">
+      <div class="visita-head">
+        <span class="visita-fecha">${b.Fecha||"Sin fecha"}</span>
+        <span class="visita-motivo">${b.Motivo||"Visita"}</span>
+      </div>
+      <p><strong>Desc:</strong> ${b.Descripción||"—"}</p>
+      <p><strong>Obs:</strong> ${b.Observaciones||"—"}</p>
+    </div>`).join("");
+}
+
+function agruparExtras(extras){
+  const bloques={};
+  Object.entries(extras).forEach(([k,v])=>{
+    const p=k.split("_"); if(p.length!==2) return;
+    const[campo,num]=p;
+    if(!bloques[num]) bloques[num]={};
+    bloques[num][campo]=v;
   });
- // Habilitar y convertir a <input type="date"> el campo Próxima vacuna
-  const proximaVacunaInput = document.getElementById(`proximaVacuna-${index}`);
-  if (proximaVacunaInput) {
-    let fechaISO = "";
-    if (proximaVacunaInput.value) {
-      const partes = proximaVacunaInput.value.split("/");
-      if (partes.length === 3) {
-        fechaISO = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-      }
-    }
-    proximaVacunaInput.type = "date";
-    proximaVacunaInput.value = fechaISO;
-    proximaVacunaInput.disabled = false;
-  }
-    // ✅ Habilitar y convertir a <input type="date"> el campo Fecha de nacimiento
-  const fechaNacInput = document.getElementById(`fehcaDeNac-${index}`);
-  if (fechaNacInput) {
-    let fechaISO = "";
-    if (fechaNacInput.value) {
-      const partes = fechaNacInput.value.split("/"); // Formato dd/mm/yyyy
-      if (partes.length === 3) {
-        fechaISO = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-      }
-    }
-    fechaNacInput.type = "date";
-    fechaNacInput.value = fechaISO;
-    fechaNacInput.disabled = false;
-  }
-  // Campos dinámicos dentro de los bloques
-  const contenedorExtras = document.getElementById(`extraCampos-${index}`);
-  if (contenedorExtras) {
-    // Habilitar todos los inputs, selects y textareas dentro de los bloques dinámicos
-    contenedorExtras.querySelectorAll('input, select, textarea').forEach(campo => {
-      campo.disabled = false;
-    });
-  }
-
-  // Cambiar el botón para que guarde los cambios
-  const btn = document.getElementById(`btnEditar-${index}`);
-  if (btn) {
-    btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
-    btn.onclick = () => guardarCambios(index);
-  }
+  return Object.values(bloques).filter(b=>Object.values(b).some(v=>String(v||"").trim()));
 }
 
-
-  // GUARDAR CAMBIOS
- function guardarCambios(index) {
-  const datosActualizados = {
-    dniMascota: document.getElementById(`dni-${index}`).value.trim(),
-    nombre: document.getElementById(`nombre-${index}`).value.trim(),
-    nombreMascota: document.getElementById(`mascota-${index}`).value.trim(),
-    tipoMascota: document.getElementById(`tipo-${index}`).value.trim(),
-    email: document.getElementById(`email-${index}`).value.trim(),
-    telefono: document.getElementById(`tel-${index}`).value.trim(),
-    fehcaDeNac: document.getElementById(`fehcaDeNac-${index}`).value.trim(),
-    peso: document.getElementById(`peso-${index}`).value.trim(),
-    veterinario: document.getElementById(`historial-${index}`).value.trim(),
-    proxima_vacuna: document.getElementById(`proximaVacuna-${index}`).value.trim(),
-    extras: {}
-  };
-
-  const contenedorExtras = document.getElementById(`extraCampos-${index}`);
-  if (contenedorExtras) {
-    const bloques = contenedorExtras.getElementsByClassName("bloque-campos");
-
-    for (let i = 0; i < bloques.length; i++) {
-      const bloque = bloques[i];
-
-      // Obtener valores de cada campo dentro del bloque
-      const fecha = bloque.querySelector('input[type="date"]')?.value || "";
-      const selectMotivo = bloque.querySelector('select[multiple]');
-      const motivos = selectMotivo
-        ? Array.from(selectMotivo.selectedOptions).map(opt => opt.value).join(", ")
-        : "";
-      const textareas = bloque.querySelectorAll('textarea');
-      const descripcion = textareas[0]?.value || "";
-      const observaciones = textareas[1]?.value || "";
-
-      // Guardar con claves ordenadas para backend
-      datosActualizados.extras[`Fecha_${i+1}`] = fecha;
-      datosActualizados.extras[`Motivo_${i+1}`] = motivos;
-      datosActualizados.extras[`Descripción_${i+1}`] = descripcion;
-      datosActualizados.extras[`Observaciones_${i+1}`] = observaciones;
-    }
-  }
-
-  fetch(urlScript, {
-    method: "POST",
-    body: new URLSearchParams({
-      accion: "editar",
-      datos: JSON.stringify(datosActualizados),
-    }),
-  })
-    .then(res => res.json())
-    .then(resp => {
-      if (resp.success) {
-        alert("Cambios guardados correctamente.");
-        buscarGeneral();
-      } else {
-        alert("Error: " + resp.error);
-      }
-    })
-    .catch(() => alert("Error de conexión al guardar los cambios."));
-}
-
-</script>
-
-  <script>
-   function formatearHora(hora) {
-  if (!hora) return "";
-
-  let fechaObj;
-
-  // Si la hora viene como ISO (e.g. "2025-08-01T20:16:00.000Z")
-  if (typeof hora === "string" && hora.includes("T")) {
-    fechaObj = new Date(hora);
-  }
-  // Si la hora viene como "16:00:00" o "16:00"
-  else if (typeof hora === "string" && hora.includes(":")) {
-    const [h, m] = hora.split(":");
-    fechaObj = new Date();
-    fechaObj.setHours(parseInt(h, 10), parseInt(m, 10), 0, 0);
-  }
-  // Si ya es Date o timestamp
-  else if (hora instanceof Date || typeof hora === "number") {
-    fechaObj = new Date(hora);
-  }
-
-  if (!fechaObj) return hora;
-
-  // ✅ Restar 1 hora y 15 minutos manualmente
-  fechaObj.setMinutes(fechaObj.getMinutes() - 75);
-
-  return fechaObj.toLocaleTimeString("es-AR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-}
-
-    
-function buscarPorFecha() {
-  const fecha = document.getElementById("fechaTurno").value;
-  const resultadoFecha = document.getElementById("resultadoFecha");
-  const cargandoFecha = document.getElementById("cargandoFecha");
-
-  if (!fecha) {
-    alert("Por favor, seleccioná una fecha.");
+async function toggleEditFicha(){
+  if(!fichaEditando){
+    fichaEditando=true;
+    renderFicha();
     return;
   }
+  // Guardar
+  const r=fichaActual;
+  const datos={
+    dniMascota:   r.dniMascota,
+    nombre:       document.getElementById("fNombre").value.trim(),
+    nombreMascota:r.nombreMascota,
+    tipoMascota:  document.getElementById("fEspecie").value.trim(),
+    email:        document.getElementById("fEmail").value.trim(),
+    telefono:     document.getElementById("fTelefono").value.trim(),
+    peso:         document.getElementById("fPeso").value.trim(),
+    fehcaDeNac:   document.getElementById("fNacimiento").value.trim(),
+    veterinario:  document.getElementById("fVeterinario").value.trim(),
+    proxima_vacuna: document.getElementById("fProxVac").value.trim(),
+    extras: r.extras||{}
+  };
+  showLoader("Guardando…");
+  try{
+    const res=await fetch(URL_SCRIPT,{method:"POST",body:new URLSearchParams({accion:"editar",datos:JSON.stringify(datos)})});
+    const d=await res.json();
+    hideLoader();
+    if(d.success){
+      fichaActual={...fichaActual,...datos};
+      fichaEditando=false;
+      renderFicha();
+    } else { alert(d.error||"Error al guardar."); }
+  } catch(e){ hideLoader(); alert("Error de conexión."); }
+}
 
-  resultadoFecha.innerHTML = "";
-  cargandoFecha.style.display = "block";
+// ═══════════════════════════════════════
+// NUEVA VISITA
+// ═══════════════════════════════════════
+function toggleNuevaVisita(){
+  document.getElementById("nuevaVisitaForm").classList.toggle("open");
+}
+function toggleChip(el){ el.classList.toggle("sel"); }
 
-  fetch(urlScript + "?fecha=" + encodeURIComponent(fecha))
-    .then(res => res.text()) // ✅ Primero obtenemos la respuesta como texto
-    .then(text => {
-      console.log("Respuesta cruda:", text); // 🔍 Mostrar respuesta en consola
+async function guardarVisita(){
+  if(!fichaActual){ alert("No hay ficha abierta."); return; }
+  const motivos=Array.from(document.querySelectorAll("#motivoChips .chip-toggle.sel")).map(c=>c.textContent).join(", ");
+  const desc=document.getElementById("nvDesc").value.trim();
+  const obs=document.getElementById("nvObs").value.trim();
+  const proxVac=document.getElementById("nvProxVac").value.trim();
 
-      let data;
-      try {
-        data = JSON.parse(text); // Intentar parsear el JSON manualmente
-      } catch (err) {
-        console.error("Error al parsear JSON:", err);
-        alert("La respuesta del servidor no es un JSON válido.");
-        cargandoFecha.style.display = "none";
-        return;
-      }
+  const extrasActuales=fichaActual.extras||{};
+  const nums=Object.keys(extrasActuales).map(k=>parseInt(k.split("_")[1])||0);
+  const siguiente=(nums.length?Math.max(...nums):0)+1;
 
-      cargandoFecha.style.display = "none";
+  const nuevosExtras={...extrasActuales};
+  nuevosExtras[`Fecha_${siguiente}`]=new Date().toISOString().split("T")[0];
+  nuevosExtras[`Motivo_${siguiente}`]=motivos;
+  nuevosExtras[`Descripción_${siguiente}`]=desc;
+  nuevosExtras[`Observaciones_${siguiente}`]=obs;
 
-      if (data.success && data.resultados.length > 0) {
-        const kpiTurnosHoy = document.getElementById("kpiTurnosHoy");
-        if (kpiTurnosHoy) kpiTurnosHoy.textContent = data.resultados.length;
-        let [anio, mes, dia] = fecha.split("-");
-let fechaFormateada = `${dia}/${mes}/${anio}`;
-let html = `<h3>Turnos para el día ${fechaFormateada}</h3>`;
+  const datos={
+    dniMascota:     fichaActual.dniMascota,
+    nombre:         fichaActual.nombre,
+    nombreMascota:  fichaActual.nombreMascota,
+    tipoMascota:    fichaActual.tipoMascota,
+    email:          fichaActual.email,
+    telefono:       fichaActual.telefono,
+    peso:           fichaActual.peso||"",
+    fehcaDeNac:     fichaActual.fehcaDeNac||"",
+    veterinario:    fichaActual.veterinario||"",
+    proxima_vacuna: proxVac||fichaActual.proxima_vacuna||"",
+    extras:         nuevosExtras
+  };
 
-        data.resultados.forEach((turno, i) => {
-          html += `
-            <div class="resultado ${i % 2 === 0 ? "" : "alternado"}">
-              <label>Hora:</label>
-              <input type="text" value="${formatearHora(turno.turno)}" disabled />
-              <label>Nombre Humano:</label>
-              <input type="text" value="${turno.nombre}" disabled />
-              <label>Nombre Mascota:</label>
-              <input type="text" value="${turno.nombreMascota}" disabled />
-              <label>ID Mascota:</label>
-              <input type="text" value="${turno.dniMascota}" disabled />
-            </div>`;
-        });
+  showLoader("Guardando consulta…");
+  try{
+    const res=await fetch(URL_SCRIPT,{method:"POST",body:new URLSearchParams({accion:"editar",datos:JSON.stringify(datos)})});
+    const d=await res.json();
+    hideLoader();
+    if(d.success){
+      fichaActual.extras=nuevosExtras;
+      if(proxVac) fichaActual.proxima_vacuna=proxVac;
+      toggleNuevaVisita();
+      // limpiar form
+      document.querySelectorAll("#motivoChips .chip-toggle.sel").forEach(c=>c.classList.remove("sel"));
+      document.getElementById("nvDesc").value="";
+      document.getElementById("nvObs").value="";
+      document.getElementById("nvProxVac").value="";
+      renderFicha();
+    } else { alert(d.error||"Error al guardar."); }
+  } catch(e){ hideLoader(); alert("Error de conexión."); }
+}
 
-        resultadoFecha.innerHTML = html;
-      } else {
-        const kpiTurnosHoy = document.getElementById("kpiTurnosHoy");
-        if (kpiTurnosHoy) kpiTurnosHoy.textContent = "0";
-        resultadoFecha.innerHTML = `<p style="color:#C42685;">No hay turnos para este día</p>`;
-      }
-    })
-    .catch(err => {
-      cargandoFecha.style.display = "none";
-      console.error("Error en fetch o en el parseo:", err);
-      alert("Error al buscar turnos por fecha.");
+// ═══════════════════════════════════════
+// TAB VACUNAS
+// ═══════════════════════════════════════
+async function cargarVacunas(){
+  document.getElementById("vacSemana").innerHTML='<div class="vac-empty">Cargando…</div>';
+  document.getElementById("vacMes").innerHTML='<div class="vac-empty">Cargando…</div>';
+  try{
+    const r=await fetch(URL_SCRIPT+"?buscar=todos");
+    const d=await r.json();
+    const hoy=new Date(); hoy.setHours(0,0,0,0);
+    const semana=[],mes=[];
+    (d.resultados||[]).forEach(p=>{
+      const f=parseFecha(p.proxima_vacuna);
+      if(!f) return;
+      const diff=Math.ceil((f-hoy)/(1000*60*60*24));
+      if(diff>=0&&diff<=7) semana.push({...p,_f:f});
+      else if(diff>7&&diff<=30) mes.push({...p,_f:f});
     });
-}
-
-
-</script>
-  <script>
-    
-    function renderizarBloquesExtras(index, extras) {
-  const contenedor = document.getElementById(`extraCampos-${index}`);
-  if (!contenedor) return;
-  contenedor.innerHTML = ""; // Limpiar bloques previos
-
-  if (!extras) return; // No hay extras, no hacemos nada
-
-  // Agrupar datos por número de bloque
-  const bloques = {};
-
-  Object.entries(extras).forEach(([clave, valor]) => {
-    const partes = clave.split("_");
-    if (partes.length !== 2) return; // clave mal formada
-    const campo = partes[0];
-    const num = partes[1];
-    if (!bloques[num]) bloques[num] = {};
-    bloques[num][campo] = valor;
-  });
-
-  // Crear bloques solo si tienen datos (al menos un campo con texto)
-  Object.entries(bloques).forEach(([num, bloque]) => {
-    const tieneDatos = Object.values(bloque).some(v => v && v.trim() !== "");
-    if (tieneDatos) {
-      crearBloqueConDatos(contenedor, bloque);
-    }
-  });
-}
-
-function crearBloqueConDatos(contenedor, bloque) {
-  const bloqueDiv = document.createElement("div");
-  bloqueDiv.className = "bloque-campos";
-  bloqueDiv.style.borderTop = "3px dotted #000000";
-  bloqueDiv.style.marginTop = "10px";
-  bloqueDiv.style.paddingTop = "10px";
-
-  // Fecha
-  const labelFecha = document.createElement("label");
-  labelFecha.textContent = "Fecha:";
-  const inputFecha = document.createElement("input");
-  inputFecha.type = "date";
-  if (bloque.Fecha) {
-  // Convertir "2025-08-01" o ISO a formato válido para <input type="date">
-  const fechaISO = new Date(bloque.Fecha).toISOString().split("T")[0];
-  inputFecha.value = fechaISO;
-} else {
-  inputFecha.value = "";
-}
-
-  inputFecha.disabled = true;
-
-  // Motivo (multiple)
-  const labelMotivo = document.createElement("label");
-  labelMotivo.textContent = "Motivo:";
-  const selectMotivo = document.createElement("select");
-  selectMotivo.multiple = true;
-  selectMotivo.disabled = true;
-  ["Consulta", "Vacuna", "Antiparasitario", "Tratamiento", "Cirugía", "Otro"].forEach(opcion => {
-    const opt = document.createElement("option");
-    opt.value = opcion;
-    opt.textContent = opcion;
-    // Seleccionar si está en los datos
-    if (bloque.Motivo) {
-      const motivos = bloque.Motivo.split(",").map(s => s.trim());
-      if (motivos.includes(opcion)) opt.selected = true;
-    }
-    selectMotivo.appendChild(opt);
-  });
-
-  // Descripción
-  const labelDescripcion = document.createElement("label");
-labelDescripcion.textContent = "Descripción:";
-const inputDescripcion = document.createElement("textarea");
-inputDescripcion.type = "text";
-inputDescripcion.value = bloque.Descripción || "";
-inputDescripcion.disabled = true;
-
-  // Observaciones
-  const labelObs = document.createElement("label");
-  labelObs.textContent = "Observaciones:";
-  const textareaObs = document.createElement("textarea");
-  textareaObs.rows = 3;
-  textareaObs.value = bloque.Observaciones || "";
-  textareaObs.disabled = true;
-
-  // Agregar todos los elementos al bloque
-  bloqueDiv.appendChild(labelFecha);
-  bloqueDiv.appendChild(inputFecha);
-  bloqueDiv.appendChild(labelMotivo);
-  bloqueDiv.appendChild(selectMotivo);
-  bloqueDiv.appendChild(labelDescripcion);
-  bloqueDiv.appendChild(inputDescripcion);
-  bloqueDiv.appendChild(labelObs);
-  bloqueDiv.appendChild(textareaObs);
-
-  contenedor.appendChild(bloqueDiv);
-}
-
-    
-  function agregarBloqueCampos(index) {
-  const container = document.getElementById(`extraCampos-${index}`);
-
-  const bloque = document.createElement("div");
-  bloque.className = "bloque-campos";
-  bloque.style.borderTop = "1px dotted #EDEDED";
-  bloque.style.marginTop = "10px";
-  bloque.style.paddingTop = "10px";
-
-  // Fecha (automática)
-  const fechaLabel = document.createElement("label");
-  fechaLabel.textContent = "Fecha:";
-  const fechaInput = document.createElement("input");
-  fechaInput.type = "date";
-  fechaInput.valueAsDate = new Date();
-  fechaInput.disabled = true;  // DESHABILITADO al crear
-
-  // Motivo (multi-opciones)
-  const motivoLabel = document.createElement("label");
-  motivoLabel.textContent = "Motivo:";
-  const motivoSelect = document.createElement("select");
-  motivoSelect.multiple = true;
-  motivoSelect.disabled = true; // DESHABILITADO al crear
-  ["Consulta", "Vacuna", "Antiparasitario", "Tratamiento", "Cirugía"].forEach(opcion => {
-    const opt = document.createElement("option");
-    opt.value = opcion;
-    opt.textContent = opcion;
-    motivoSelect.appendChild(opt);
-  });
-
-  // Descripción (texto corto)
-  const descripcionLabel = document.createElement("label");
-  descripcionLabel.textContent = "Descripción:";
-  const descripcionTextarea = document.createElement("textarea");
-  descripcionTextarea.type = "text";
-  descripcionTextarea.disabled = true;  // DESHABILITADO al crear
-
-  // Observaciones (texto largo)
-  const observacionesLabel = document.createElement("label");
-  observacionesLabel.textContent = "Observaciones:";
-  const observacionesTextarea = document.createElement("textarea");
-  observacionesTextarea.disabled = true; // DESHABILITADO al crear
-
-  // Agregar todos los campos al bloque
-  bloque.appendChild(fechaLabel);
-  bloque.appendChild(fechaInput);
-
-  bloque.appendChild(motivoLabel);
-  bloque.appendChild(motivoSelect);
-
-  bloque.appendChild(descripcionLabel);
-  bloque.appendChild(descripcionTextarea);
-
-  bloque.appendChild(observacionesLabel);
-  bloque.appendChild(observacionesTextarea);
-
-  // Agregar el bloque al contenedor del registro indicado
-  container.appendChild(bloque);
-}
-function parseFechaDDMMYYYY(str) {
-  // str esperado: "05/08/2025"
-  if (!str) return null;
-  const partes = str.split("/");
-  if (partes.length !== 3) return null;
-  const [dia, mes, anio] = partes.map(Number);
-  return new Date(anio, mes - 1, dia);
-}
-
-</script>
- <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    if (sessionStorage.getItem('logueado') === 'true') {
-      document.body.classList.add('logueado');
-    }
-  });
-</script> 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const creditosSpan = document.getElementById("creditosActuales");
-  const btnCreditos = document.getElementById("creditosBtn");
-  const tooltip = document.getElementById("tooltip");
-  const tooltipText = document.getElementById("tooltipText");
-  const btnAgregar = document.getElementById("agregarCreditosBtn");
-
-  // 1️⃣ Cargar créditos desde tu script de servidor
-  function cargarCreditos() {
-    fetch(urlScript + "?accion=creditos")
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          creditosSpan.textContent = data.creditos;
-        } else {
-          creditosSpan.textContent = "Error";
-        }
-      })
-      .catch(() => creditosSpan.textContent = "Error");
+    document.getElementById("badgeVac").textContent=semana.length+mes.length;
+    renderVacGroup("vacSemana",semana);
+    renderVacGroup("vacMes",mes);
+  } catch(e){
+    document.getElementById("vacSemana").innerHTML='<div class="vac-empty">Error al cargar</div>';
+    document.getElementById("vacMes").innerHTML='<div class="vac-empty">Error al cargar</div>';
   }
-
-  document.getElementById("agregarCreditosBtn").addEventListener("click", () => {
-  const numero = "5493435020970";
-
-  // Leer usuario guardado en sessionStorage
-  const usuario = sessionStorage.getItem("usuario") || "Usuario";
-
-  const mensaje = encodeURIComponent(`Hola, soy ${usuario} y quiero agregar créditos.`);
-  const url = `https://wa.me/${numero}?text=${mensaje}`;
-  window.open(url, "_blank");
-});
-
-
-  // 3️⃣ Mostrar/ocultar burbuja
-  btnCreditos.addEventListener("click", (e) => {
-    e.stopPropagation();
-    tooltipText.innerHTML = `Créditos disponibles: <b>${creditosSpan.textContent}</b>`;
-    tooltip.classList.toggle("visible");
-  });
-
-  // Cerrar si haces clic fuera
-  document.addEventListener("click", (e) => {
-    if (!btnCreditos.contains(e.target) && !tooltip.contains(e.target)) {
-      tooltip.classList.remove("visible");
-    }
-  });
-
-  // Botón dentro de la burbuja
-  btnAgregar.addEventListener("click", () => {
-    comprarCreditos(50); // ejemplo: abre pago para 50 créditos
-  });
-
-  // Ejecutar carga inicial
-  cargarCreditos();
-});
-</script>
-
-  <script>
-  const toggleBtn = document.getElementById('navbarToggle');
-  const menu = document.getElementById('navbarMenu');
-
-  // Abrir/cerrar menú
-  toggleBtn.addEventListener('click', () => {
-    menu.classList.toggle('active');
-    toggleBtn.classList.toggle('active'); // Cambia hamburguesa a X
-  });
-
-  // Cerrar menú al hacer clic en un enlace
-  document.querySelectorAll('.navbar-menu .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('active');
-      toggleBtn.classList.remove('active'); // Volver a hamburguesa
-    });
-  });
-    
-    function logout() {
-  sessionStorage.removeItem("logueado");
-  mostrarApp(false);
-
-  // Cerrar menú y resetear botón hamburguesa
-  menu.classList.remove('active');
-  toggleBtn.classList.remove('active');
-
-  // Opcional: si ocultás todo con una clase en body, la quitás también
-  document.body.classList.remove('logueado');
 }
 
+function renderVacGroup(elId,lista){
+  const el=document.getElementById(elId);
+  if(!lista.length){el.innerHTML='<div class="vac-empty">✅ Sin vacunas en este período</div>';return;}
+  el.innerHTML=lista.map(p=>{
+    const txt=encodeURIComponent(`Hola! Recordatorio para ${p.nombreMascota} (ID: ${p.dniMascota}): próxima vacuna el ${fmtDDMMYYYY(p._f)}. — Dra. Bruzera`);
+    return `<div class="vac-row">
+      <div class="vac-row-info">
+        <strong>${iconoMascota(p.tipoMascota)} ${p.nombreMascota}</strong>
+        <span>${p.nombre} · ${p.dniMascota}</span>
+      </div>
+      <span class="vac-fecha">${fmtDDMMYYYY(p._f)}</span>
+      <a class="btn-wa" href="https://api.whatsapp.com/send?text=${txt}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        WA
+      </a>
+    </div>`;
+  }).join("");
+}
 </script>
-
-  
 </body>
-    
 </html>
