@@ -472,6 +472,10 @@
       <h2>Turnos de hoy</h2>
       <span class="hoy-date" id="hoyFecha"></span>
     </div>
+    <div class="pac-actions" style="margin-bottom:14px;">
+      <button class="btn-sm btn-secondary" onclick="cargarProximos()">📅 Ver próximos turnos</button>
+      <button class="btn-sm btn-primary"   onclick="cargarHoy()">↻ Solo hoy</button>
+    </div>
     <div id="hoyList"><div class="hoy-empty">Cargando turnos…</div></div>
   </div>
 
@@ -712,18 +716,47 @@ async function cargarHoy(){
     const d=await r.json();
     const lista=d.resultados||[];
     document.getElementById("badgeHoy").textContent=lista.length;
-    const el=document.getElementById("hoyList");
-    if(!lista.length){el.innerHTML='<div class="hoy-empty">No hay turnos para hoy</div>';return;}
-    el.innerHTML=lista.map(t=>`
-      <div class="turno-card" onclick="abrirFichaDesdeTurno('${t.dniMascota}','${t.nombreMascota}','${t.tipoMascota}')">
-        <div class="turno-hora">${leerHoraStr(t.turno)}</div>
-        <div class="turno-info">
-          <strong>${iconoMascota(t.tipoMascota)} ${t.nombreMascota}</strong>
-          <span>${t.nombre} · ${t.telefono}</span>
-        </div>
-        <span class="turno-id">${t.dniMascota}</span>
-      </div>`).join("");
+    renderTurnos(lista,"Turnos de hoy");
   } catch(e){ document.getElementById("hoyList").innerHTML='<div class="hoy-empty">Error al cargar turnos</div>'; }
+}
+
+async function cargarProximos(){
+  showLoader("Cargando próximos turnos…");
+  try{
+    const r=await fetch(URL_SCRIPT+"?buscar=todos");
+    const d=await r.json();
+    hideLoader();
+    const hoy=new Date(); hoy.setHours(0,0,0,0);
+    // Filtrar solo turnos desde hoy en adelante y ordenar
+    const lista=(d.resultados||[]).filter(t=>{
+      const f=parseFecha(t.fecha);
+      return f && f>=hoy;
+    }).sort((a,b)=>{
+      const fa=parseFecha(a.fecha), fb=parseFecha(b.fecha);
+      if(fa-fb!==0) return fa-fb;
+      return (a.turno||"").localeCompare(b.turno||"");
+    });
+    document.getElementById("badgeHoy").textContent=lista.length;
+    renderTurnos(lista,"Próximos turnos");
+  } catch(e){ hideLoader(); document.getElementById("hoyList").innerHTML='<div class="hoy-empty">Error al cargar</div>'; }
+}
+
+function renderTurnos(lista, titulo){
+  document.getElementById("hoyFecha").textContent=titulo;
+  const el=document.getElementById("hoyList");
+  if(!lista.length){el.innerHTML='<div class="hoy-empty">Sin turnos en este período</div>';return;}
+  el.innerHTML=lista.map(t=>`
+    <div class="turno-card" onclick="abrirFichaDesdeTurno('${t.dniMascota}','${t.nombreMascota}','${t.tipoMascota}')">
+      <div class="turno-hora" style="font-size:.75rem;min-width:64px;">
+        <div>${leerFechaStr(t.fecha)}</div>
+        <div style="font-size:.9rem;font-weight:700;">${leerHoraStr(t.turno)}</div>
+      </div>
+      <div class="turno-info">
+        <strong>${iconoMascota(t.tipoMascota)} ${t.nombreMascota}</strong>
+        <span>${t.nombre} · ${t.telefono}</span>
+      </div>
+      <span class="turno-id">${t.dniMascota}</span>
+    </div>`).join("");
 }
 
 // ═══════════════════════════════════════
@@ -821,24 +854,43 @@ function renderFicha(){
   document.getElementById("fichaSubtitle").textContent=`${r.tipoMascota} · ID: ${r.dniMascota}`;
   document.getElementById("btnEditFicha").textContent=fichaEditando?"💾 Guardar datos":"✏️ Editar datos";
 
+  // Para campos de fecha: disabled → text con dd/mm/yyyy; editing → date con yyyy-mm-dd
+  function fechaParaMostrar(v){ return leerFechaStr(v)||"—"; }
+  function fechaParaInput(v){
+    // Convierte cualquier formato a yyyy-mm-dd para <input type="date">
+    const f=parseFecha(v);
+    if(!f) return "";
+    return `${f.getFullYear()}-${String(f.getMonth()+1).padStart(2,'0')}-${String(f.getDate()).padStart(2,'0')}`;
+  }
+
   const campos=[
-    {id:"fNombre",      label:"Dueño",          val:r.nombre,       full:false},
-    {id:"fTelefono",    label:"Teléfono",        val:r.telefono,     full:false},
-    {id:"fEmail",       label:"Email",           val:r.email,        full:false},
-    {id:"fEspecie",     label:"Especie",         val:r.tipoMascota,  full:false},
-    {id:"fPeso",        label:"Peso",            val:r.peso||"",     full:false},
-    {id:"fNacimiento",  label:"Fecha nac.",      val:leerFechaStr(r.fehcaDeNac)||"", full:false, tipo:"date"},
-    {id:"fVeterinario", label:"Veterinario",     val:r.veterinario||"",  full:true, textarea:true},
-    {id:"fProxVac",     label:"Próxima vacuna",  val:leerFechaStr(r.proxima_vacuna)||"", full:false, tipo:"date"},
+    {id:"fNombre",      label:"Dueño",         val:r.nombre,           full:false},
+    {id:"fTelefono",    label:"Teléfono",       val:r.telefono,         full:false},
+    {id:"fEmail",       label:"Email",          val:r.email,            full:false},
+    {id:"fEspecie",     label:"Especie",        val:r.tipoMascota,      full:false},
+    {id:"fPeso",        label:"Peso",           val:r.peso||"",         full:false},
+    {id:"fNacimiento",  label:"Fecha nac.",     val:r.fehcaDeNac,       full:false, esFecha:true},
+    {id:"fVeterinario", label:"Veterinario",    val:r.veterinario||"",  full:true,  textarea:true},
+    {id:"fProxVac",     label:"Próxima vacuna", val:r.proxima_vacuna,   full:false, esFecha:true},
   ];
 
   const grid=document.getElementById("fichaGrid");
   grid.innerHTML=campos.map(c=>{
     const fullClass=c.full?" full":"";
-    const disabled=fichaEditando?"":' disabled';
-    const input=c.textarea
-      ? `<textarea id="${c.id}"${disabled}>${c.val}</textarea>`
-      : `<input id="${c.id}" type="${c.tipo||'text'}" value="${c.val||''}"${disabled}/>`;
+    let input;
+    if(c.textarea){
+      input=`<textarea id="${c.id}"${fichaEditando?"":" disabled"}>${c.val||""}</textarea>`;
+    } else if(c.esFecha){
+      if(fichaEditando){
+        // editable: input type date con valor yyyy-mm-dd
+        input=`<input id="${c.id}" type="date" value="${fechaParaInput(c.val)}"/>`;
+      } else {
+        // solo lectura: mostrar dd/mm/yyyy como texto
+        input=`<input id="${c.id}" type="text" value="${fechaParaMostrar(c.val)}" disabled/>`;
+      }
+    } else {
+      input=`<input id="${c.id}" type="text" value="${c.val||""}"${fichaEditando?"":" disabled"}/>`;
+    }
     return `<div class="ficha-field${fullClass}"><label>${c.label}</label>${input}</div>`;
   }).join("");
 
@@ -850,7 +902,7 @@ function renderFicha(){
   el.innerHTML=[...bloques].reverse().map(b=>`
     <div class="visita-card">
       <div class="visita-head">
-        <span class="visita-fecha">${b.Fecha||"Sin fecha"}</span>
+        <span class="visita-fecha">${leerFechaStr(b.Fecha)||"Sin fecha"}</span>
         <span class="visita-motivo">${b.Motivo||"Visita"}</span>
       </div>
       <p><strong>Desc:</strong> ${b.Descripción||"—"}</p>
