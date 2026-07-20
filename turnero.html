@@ -736,24 +736,39 @@ function seleccionarDia(y, m, d, elDia) {
 function renderizarTurnos() {
   const fechaTxt = fmt(diaSeleccionado);
   const nombreDia = nombresDias[diaSeleccionado.getDay()];
-  const disponibles = turnosPorDia[nombreDia] || [];
-  const contenedor  = document.getElementById("contenedorTurnos");
-  const mensaje     = document.getElementById("mensajeTurnos");
+  const { manana = [], tarde = [] } = turnosPorDia[nombreDia] || {};
+  const contenedor = document.getElementById("contenedorTurnos");
+  const mensaje    = document.getElementById("mensajeTurnos");
   contenedor.innerHTML = "";
   if (mensaje) mensaje.textContent = "";
+
   let count = 0;
-  disponibles.forEach(t => {
-    const ocupado = turnosOcupados.some(o => o.fecha === fechaTxt && o.turno === t);
-    if (!ocupado) {
+
+  function renderBloque(titulo, lista) {
+    const disponiblesBloque = lista.filter(t => !turnosOcupados.some(o => o.fecha === fechaTxt && o.turno === t));
+    if (disponiblesBloque.length === 0) return;
+
+    const tituloEl = document.createElement("h4");
+    tituloEl.textContent = titulo;
+    tituloEl.style.cssText = "grid-column:1 / -1;color:var(--violeta);margin:8px 0 4px;font-size:.95rem;";
+    contenedor.appendChild(tituloEl);
+
+    disponiblesBloque.forEach(t => {
       count++;
       const btn = document.createElement("button");
       btn.className = "turno-button";
       btn.textContent = t;
       btn.onclick = () => seleccionarTurno(t);
       contenedor.appendChild(btn);
-    }
-  });
-  if (count === 0) contenedor.innerHTML = "<p style='color:var(--texto-suave)'><em>Sin turnos disponibles para este día.</em></p>";
+    });
+  }
+
+  renderBloque("Por la mañana:", manana);
+  renderBloque("Por la tarde:", tarde);
+
+  if (count === 0) {
+    contenedor.innerHTML = "<p style='color:var(--texto-suave)'><em>Sin turnos disponibles para este día.</em></p>";
+  }
 }
 
 function seleccionarTurno(turno) {
