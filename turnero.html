@@ -764,20 +764,30 @@ function renderizarTurnos() {
   let count = 0;
 
   function renderBloque(titulo, lista) {
-    const disponiblesBloque = lista.filter(t => !turnosOcupados.some(o => o.fecha === fechaTxt && o.turno === t));
-    if (disponiblesBloque.length === 0) return;
+    if (lista.length === 0) return;
+    count += lista.length;
 
     const tituloEl = document.createElement("h4");
     tituloEl.textContent = titulo;
     tituloEl.style.cssText = "grid-column:1 / -1;color:var(--violeta);margin:8px 0 4px;font-size:.95rem;";
     contenedor.appendChild(tituloEl);
 
-    disponiblesBloque.forEach(t => {
-      count++;
+    lista.forEach(t => {
+      const ocupado = turnosOcupados.some(o => o.fecha === fechaTxt && o.turno === t);
       const btn = document.createElement("button");
       btn.className = "turno-button";
       btn.textContent = t;
-      btn.onclick = () => seleccionarTurno(t);
+
+      if (ocupado) {
+        btn.disabled = true;
+        btn.style.background = "#993b74";
+        btn.style.cursor = "not-allowed";
+        btn.style.boxShadow = "none";
+        btn.style.opacity = "0.85";
+      } else {
+        btn.onclick = () => seleccionarTurno(t);
+      }
+
       contenedor.appendChild(btn);
     });
   }
