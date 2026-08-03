@@ -210,7 +210,7 @@
     <img src="https://i.ibb.co/hFyg48KD/Logo-Dra-Bruzera.png" alt="Logo"/>
     <h2>Sesión requerida</h2>
     <p>Iniciá sesión en el panel principal para ver Finanzas.</p>
-    <a class="login-btn" href="panel.html">Ir al panel</a>
+    <a class="login-btn" href="index.html">Ir al panel</a>
   </div>
 </div>
 
@@ -221,7 +221,7 @@
     <div class="nav-brand-text">Dra. Lili Bruzera <small>Finanzas</small></div>
   </a>
   <div class="nav-right">
-    <a class="btn-site" href="panel.html">← Panel</a>
+    <a class="btn-site" href="index.html">← Panel</a>
     <button class="btn-logout" onclick="doLogout()">Salir</button>
   </div>
 </header>
@@ -312,7 +312,7 @@
 // ═══════════════════════════════════════
 // CONFIG — reemplazá por la URL del NUEVO Apps Script (Finanzas.gs)
 // ═══════════════════════════════════════
-const URL_SCRIPT_FINANZAS = "https://script.google.com/macros/s/AKfycbxMcQwFUfJoe4calNVWzRKpbfpVm8-QsvPS1X8Qi0zqc_iI7betQUyGuJSLkzqvgMVwsQ/exec";
+const URL_SCRIPT_FINANZAS = "PEGAR_AQUI_LA_URL_DEL_NUEVO_APPS_SCRIPT";
 
 function showLoader(msg="Cargando…"){ document.getElementById("loader").classList.add("on"); document.getElementById("loaderTxt").textContent=msg; }
 function hideLoader(){ document.getElementById("loader").classList.remove("on"); }
@@ -323,7 +323,7 @@ function hideLoader(){ document.getElementById("loader").classList.remove("on");
 function doLogout(){
   sessionStorage.removeItem("logueado");
   sessionStorage.removeItem("usuario");
-  location.href="panel.html";
+  location.href="index.html";
 }
 window.addEventListener("load", () => {
   if (sessionStorage.getItem("logueado") === "1") {
