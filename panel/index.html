@@ -47,7 +47,7 @@
     .nav-brand img { width:34px; border-radius:6px; }
     .nav-brand-text { font-family:'Playfair Display',serif; font-size:.9rem; color:var(--vio); line-height:1.15; }
     .nav-brand-text small { display:block; font-family:'DM Sans',sans-serif; font-size:.68rem; color:var(--txt-s); font-weight:300; }
-    .nav-right { display:flex; align-items:center; gap:10px; }
+    .nav-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
     .credits-pill {
       display:flex; align-items:center; gap:6px;
       background: var(--vio-s); color:var(--vio);
@@ -435,6 +435,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
       <span id="creditsVal">—</span> créditos
     </button>
+    <a class="btn-site" href="precios.html">Precios</a>
     <a class="btn-site" href="finanzas.html">Finanzas</a>
     <a class="btn-site" href="../turnero.html">Turnero</a>
     <button class="btn-logout" onclick="doLogout()">Salir</button>
@@ -883,10 +884,8 @@ function renderFicha(){
       input=`<textarea id="${c.id}"${fichaEditando?"":" disabled"}>${c.val||""}</textarea>`;
     } else if(c.esFecha){
       if(fichaEditando){
-        // editable: input type date con valor yyyy-mm-dd
         input=`<input id="${c.id}" type="date" value="${fechaParaInput(c.val)}"/>`;
       } else {
-        // solo lectura: mostrar dd/mm/yyyy como texto
         input=`<input id="${c.id}" type="text" value="${fechaParaMostrar(c.val)}" disabled/>`;
       }
     } else {
@@ -1004,7 +1003,6 @@ async function guardarVisita(){
       fichaActual.extras=nuevosExtras;
       if(proxVac) fichaActual.proxima_vacuna=proxVac;
       toggleNuevaVisita();
-      // limpiar form
       document.querySelectorAll("#motivoChips .chip-toggle.sel").forEach(c=>c.classList.remove("sel"));
       document.getElementById("nvDesc").value="";
       document.getElementById("nvObs").value="";
