@@ -1092,7 +1092,7 @@
       <div id="ofertasLoading" class="of-loading">cargando…</div>
 
       <div class="of-info">
-        <p class="of-eyebrow" id="ofEyebrow">LÍNEA POWER ULTRA %50 OFF en la segunda unidad</p>
+        <p class="of-eyebrow" id="ofEyebrow">LÍNEA POWER ULTRA</p>
         <p class="of-eyebrow" id="ofEyebrow">%50 OFF en la segunda unidad</p>
         <h3 class="of-name" id="ofName">—</h3>
         <p class="of-weight" id="ofWeight">—</p>
@@ -1222,86 +1222,61 @@
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 <script>
 (function () {
-  // ═══════════════════════════════════════════════════════════
-  // DATOS DE LOS 5 PRODUCTOS
-  // Editá nombre / rango de peso / precio, y pegá la URL de cada
-  // foto en su casillero. Si dejás "" no rompe nada: se muestra
-  // un color liso de la paleta en esa cara.
-  // ═══════════════════════════════════════════════════════════
-
-  const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 }; // frente/dorso 12x7.5, profundidad 2
+  const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 };
 
   const PRODUCTS = [
     {
-      name: "Power Ultra Toy",          // EDITAR nombre real
-      weight: "De 2 a 4 kg",              // EDITAR rango de peso
-      price: "$6.000",                   // EDITAR precio
+      name: "Power Ultra Toy",
+      weight: "De 2 a 4 kg",
+      price: "$6.000",
       waMessage: "Hola! Quería consultar por Power Ultra Toy",
       textures: {
-        front:  "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png", // FOTO: frente completo (igual al de Mediano: perro + logo + dosificación)
-        back:   "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png", // FOTO: dorso completo (info técnica + fórmula + Brouwer)
-        left:   "", // FOTO: lateral angosto vertical — lado "Fecha/Lote/Vencimiento"
-        right:  "", // FOTO: lateral angosto vertical — lado "Perros ... de X a Y kilos"
-        top:    "", // FOTO: borde angosto horizontal — "Power Ultra" + rango de peso
-        bottom: "", // FOTO: borde angosto horizontal — código de barras
+        front:  "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png",
+        back:   "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png",
+        left: "", right: "", top: "", bottom: "",
       },
     },
     {
-      name: "Power Ultra Chico",         // EDITAR nombre real
-      weight: "5 a 10 kg",               // EDITAR rango de peso
-      price: "$6.500",                   // EDITAR precio
+      name: "Power Ultra Chico",
+      weight: "5 a 10 kg",
+      price: "$6.500",
       waMessage: "Hola! Quería consultar por Power Ultra Chico",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", left: "", right: "", top: "", bottom: "" },
     },
     {
-      name: "Power Ultra Mediano",       // EDITAR si corresponde
-      weight: "11 a 20 kg",              // ya confirmado en la caja que me pasaste
-      price: "$7.300",                   // EDITAR precio real
+      name: "Power Ultra Mediano",
+      weight: "11 a 20 kg",
+      price: "$7.300",
       waMessage: "Hola! Quería consultar por Power Ultra Mediano",
-      textures: {
-        // Acá van las 6 fotos que ya sacaste de la caja real:
-        front:  "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", // FOTO: 1000675911.jpg (frente)
-        back:   "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", // FOTO: 1000675912.jpg (dorso)
-        left:   "", // FOTO: 1000675914.jpg (lateral Fecha/Lote)
-        right:  "", // FOTO: 1000675913.jpg (lateral Perros medianos)
-        top:    "", // FOTO: 1000675915.jpg (borde Power Ultra)
-        bottom: "", // FOTO: 1000675916.jpg (borde código de barras)
-      },
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", left: "", right: "", top: "", bottom: "" },
     },
     {
-      name: "Power Ultra Grande",        // EDITAR nombre real
-      weight: "21 a 40 kg",              // EDITAR rango de peso
-      price: "$9.900",                   // EDITAR precio
+      name: "Power Ultra Grande",
+      weight: "21 a 40 kg",
+      price: "$9.900",
       waMessage: "Hola! Quería consultar por Power Ultra Grande",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", left: "", right: "", top: "", bottom: "" },
     },
     {
-      name: "Power Ultra Gigante",       // EDITAR nombre real
-      weight: "41 a 60 kg",            // EDITAR rango de peso
-      price: "$12.400",                   // EDITAR precio
+      name: "Power Ultra Gigante",
+      weight: "41 a 60 kg",
+      price: "$12.400",
       waMessage: "Hola! Quería consultar por Power Ultra Gigante",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", left: "", right: "", top: "", bottom: "" },
     },
   ];
 
-  const WA_PHONE = "5493435303848"; // mismo número que usa el resto del sitio
+  const WA_PHONE = "5493435303848";
 
-  // colores de respaldo (paleta veterinaria) para caras sin foto todavía
-  const FALLBACK = {
-    front:  0xF5E6F0, // rosa suave
-    back:   0xEAE8F5, // violeta suave
-    left:   0xEAE8F5,
-    right:  0xEAE8F5,
-    top:    0xFFFFFF,
-    bottom: 0xFFFFFF,
+  // fallback SOLO para front/back si algún día falta la foto
+  const FALLBACK_COLOR = {
+    front:  0xF5E6F0,
+    back:   0xEAE8F5,
   };
 
-  // ═══════════════════════════════════════════════════════════
-  // SETUP THREE.JS
-  // ═══════════════════════════════════════════════════════════
   function init() {
     if (typeof THREE === "undefined") {
-      console.warn("Three.js no está cargado. Agregá el script de three.js antes de este bloque.");
+      console.warn("Three.js no está cargado.");
       return;
     }
 
@@ -1314,7 +1289,6 @@
     const priceEl = document.getElementById("ofPrice");
     const waEl = document.getElementById("ofWaBtn");
 
-    // puntitos indicadores
     PRODUCTS.forEach((_, i) => {
       const d = document.createElement("div");
       d.className = "of-dot" + (i === 0 ? " on" : "");
@@ -1326,31 +1300,37 @@
     const height = mount.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = null; // transparente: se ve el gradiente CSS de .of-stage
-    renderer_bg: {}
+    scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 50);
-    camera.position.set(0, 0.15, 5.6);
+    // cámara apuntando un poco más arriba para que la caja se vea más alta en el cuadro
+    camera.position.set(0, -0.05, 5.6);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // ── FIX del "quemado": en three.js r128 la corrección de color se hace así ──
+    if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
+    if (THREE.ACESFilmicToneMapping) renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+
     mount.appendChild(renderer.domElement);
 
-    // luces suaves, tono cálido/rosado acorde a la marca
-    const key = new THREE.DirectionalLight(0xfff5f0, 1.9);
+    // luces más equilibradas (antes sumaban demasiada intensidad y lavaban la foto)
+    const key = new THREE.DirectionalLight(0xfff5f0, 1.15);
     key.position.set(3, 4, 3);
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     scene.add(key);
 
-    const rimPink = new THREE.DirectionalLight(0xc42685, 0.5);
+    const rimPink = new THREE.DirectionalLight(0xc42685, 0.35);
     rimPink.position.set(-3, 1, -2);
     scene.add(rimPink);
 
-    const fill = new THREE.AmbientLight(0xeae8f5, 1.4);
+    const fill = new THREE.AmbientLight(0xeae8f5, 0.55);
     scene.add(fill);
 
     const ground = new THREE.Mesh(
@@ -1362,39 +1342,78 @@
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // ── geometría con las dimensiones reales de la caja ──
-    const W = BOX_DIMENSIONS_CM.width / 10;   // 12cm -> 1.2
-    const H = BOX_DIMENSIONS_CM.height / 10;  // 7.5cm -> 0.75
-    const D = BOX_DIMENSIONS_CM.depth / 10;   // 2cm  -> 0.2
+    const W = BOX_DIMENSIONS_CM.width / 10;
+    const H = BOX_DIMENSIONS_CM.height / 10;
+    const D = BOX_DIMENSIONS_CM.depth / 10;
     const geo = new THREE.BoxGeometry(W, H, D);
 
     const loader = new THREE.TextureLoader();
-    function buildMaterial(src, fallbackColor) {
+
+    // ── textura de degradé gris para los cantos sin foto todavía ──
+    function makeEdgeTexture(direction) {
+      const canvas = document.createElement("canvas");
+      canvas.width = direction === "vertical" ? 64 : 256;
+      canvas.height = direction === "vertical" ? 256 : 64;
+      const ctx = canvas.getContext("2d");
+      const grad = direction === "vertical"
+        ? ctx.createLinearGradient(0, 0, 0, canvas.height)
+        : ctx.createLinearGradient(0, 0, canvas.width, 0);
+      grad.addColorStop(0,    "#ffffff");
+      grad.addColorStop(0.18, "#f4f4f6");
+      grad.addColorStop(0.5,  "#d6d6db");
+      grad.addColorStop(0.82, "#f4f4f6");
+      grad.addColorStop(1,    "#ffffff");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const tex = new THREE.CanvasTexture(canvas);
+      if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
+      return tex;
+    }
+
+    const EDGE_TEX = {
+      left:   makeEdgeTexture("vertical"),
+      right:  makeEdgeTexture("vertical"),
+      top:    makeEdgeTexture("horizontal"),
+      bottom: makeEdgeTexture("horizontal"),
+    };
+
+    function loadPhotoTexture(src) {
+      const tex = loader.load(src);
+      if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = 4;
+      return tex;
+    }
+
+    // fallback puede ser una Texture (cantos) o un color hex (front/back)
+    function buildMaterial(src, fallback) {
+      const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, metalness: 0.02, transparent: true });
       if (src) {
-        const tex = loader.load(src);
-        if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = 4;
-        return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, transparent: true });
+        mat.map = loadPhotoTexture(src);
+      } else if (fallback instanceof THREE.Texture) {
+        mat.map = fallback;
+      } else {
+        mat.color.setHex(fallback);
       }
-      return new THREE.MeshStandardMaterial({ color: fallbackColor, roughness: 0.6, transparent: true });
+      return mat;
     }
 
     // orden BoxGeometry: [+x, -x, +y, -y, +z, -z] = [right, left, top, bottom, front, back]
     function materialsFor(product) {
       const t = product.textures;
       return [
-        buildMaterial(t.right,  FALLBACK.right),
-        buildMaterial(t.left,   FALLBACK.left),
-        buildMaterial(t.top,    FALLBACK.top),
-        buildMaterial(t.bottom, FALLBACK.bottom),
-        buildMaterial(t.front,  FALLBACK.front),
-        buildMaterial(t.back,   FALLBACK.back),
+        buildMaterial(t.right,  EDGE_TEX.right),
+        buildMaterial(t.left,   EDGE_TEX.left),
+        buildMaterial(t.top,    EDGE_TEX.top),
+        buildMaterial(t.bottom, EDGE_TEX.bottom),
+        buildMaterial(t.front,  FALLBACK_COLOR.front),
+        buildMaterial(t.back,   FALLBACK_COLOR.back),
       ];
     }
 
     let mats = materialsFor(PRODUCTS[0]);
     const box = new THREE.Mesh(geo, mats);
     box.castShadow = true;
+    box.position.y = 0.32; // caja más arriba en el cuadro
     scene.add(box);
 
     loadingEl.classList.add("hidden");
@@ -1412,25 +1431,25 @@
     }
     updateInfo(0);
 
-    // ── estado de scroll / mouse / transición ──
-    const state = { progress: 0, mouseX: 0, mouseY: 0 };
+    const state = { progress: 0, displayProgress: 0, mouseX: 0, mouseY: 0 };
     let currentChapter = 0;
     let swapping = false;
-    let swapT = 0; // 0..1 a lo largo de la animación de swap
+    let swapT = 0;
 
     function swapToChapter(idx) {
       const p = PRODUCTS[idx];
       const t = p.textures;
-      const srcs = [t.right, t.left, t.top, t.bottom, t.front, t.back];
-      const fbs = [FALLBACK.right, FALLBACK.left, FALLBACK.top, FALLBACK.bottom, FALLBACK.front, FALLBACK.back];
+      const srcs      = [t.right, t.left, t.top, t.bottom, t.front, t.back];
+      const fallbacks = [EDGE_TEX.right, EDGE_TEX.left, EDGE_TEX.top, EDGE_TEX.bottom, FALLBACK_COLOR.front, FALLBACK_COLOR.back];
       mats.forEach((m, i) => {
-        if (m.map) { m.map.dispose(); m.map = null; }
+        if (m.map && !(m.map instanceof THREE.CanvasTexture)) { m.map.dispose(); }
         if (srcs[i]) {
-          const tex = loader.load(srcs[i]);
-          if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-          m.map = tex;
+          m.map = loadPhotoTexture(srcs[i]);
+        } else if (fallbacks[i] instanceof THREE.Texture) {
+          m.map = fallbacks[i];
         } else {
-          m.color.setHex(fbs[i]);
+          m.map = null;
+          m.color.setHex(fallbacks[i]);
         }
         m.needsUpdate = true;
       });
@@ -1440,18 +1459,23 @@
     let raf;
     const clock = new THREE.Clock();
     const tmpTarget = new THREE.Vector3();
-    const TURNS = PRODUCTS.length; // una vuelta completa por producto
+    const TURNS = PRODUCTS.length;
 
     function animate() {
       raf = requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      const totalAngle = state.progress * TURNS * Math.PI * 2;
+      // inercia en el giro: ya no salta 1:1 con el scroll, se siente más fluido
+      state.displayProgress += (state.progress - state.displayProgress) * 0.08;
+
+      const totalAngle = state.displayProgress * TURNS * Math.PI * 2;
       box.rotation.y = t * 0.06 + totalAngle;
       box.rotation.x = Math.sin(t * 0.4) * 0.03 + state.mouseY * 0.12;
-      box.position.y = Math.sin(t * 0.6) * 0.02;
+      box.position.y = 0.32 + Math.sin(t * 0.6) * 0.025;
+      const breathe = 1 + Math.sin(t * 0.5) * 0.008;
+      box.scale.set(breathe, breathe, breathe);
 
-      const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.progress * PRODUCTS.length));
+      const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.displayProgress * PRODUCTS.length));
       if (chapter !== currentChapter && !swapping) {
         swapping = true;
         swapT = 0;
@@ -1460,7 +1484,7 @@
 
       if (swapping) {
         swapT += 0.06;
-        const dip = Math.sin(Math.min(swapT, 1) * Math.PI); // 0 -> 1 -> 0
+        const dip = Math.sin(Math.min(swapT, 1) * Math.PI);
         mats.forEach((m) => { m.opacity = 1 - dip * 0.75; });
         if (swapT >= 0.5 && swapT - 0.06 < 0.5) {
           swapToChapter(currentChapter);
@@ -1471,7 +1495,7 @@
         }
       }
 
-      tmpTarget.set(state.mouseX * 0.25, 0.1 + state.mouseY * -0.1, 0);
+      tmpTarget.set(state.mouseX * 0.25, 0.32 + state.mouseY * -0.1, 0);
       camera.lookAt(tmpTarget);
 
       renderer.render(scene, camera);
@@ -1510,8 +1534,6 @@
   }
 })();
 </script>
-
-
 
   
 <!-- ═══ CONTACTO ═══ -->
