@@ -1077,195 +1077,271 @@
 
 
   
-<section id="ofertas">
-  <div class="ofertas-header fade-up">
-    <div class="section-label">Ofertas</div>
-    <h2 class="section-title">Pipetas para <em>cada tamaño</em></h2>
-    <p class="section-sub">Misma protección, para cada etapa y peso de tu mascota.</p>
-  </div>
 
-  <!-- ═══ DESKTOP: escena 3D ═══ -->
-  <div class="of-desktop-wrap" id="ofDesktopWrap">
-    <div id="ofertasScrollWrap" class="of-scrollwrap">
-      <div class="of-stage">
-        <div id="ofertasMount" class="of-mount"></div>
-        <div class="of-vignette"></div>
-        <div id="ofertasLoading" class="of-loading">cargando…</div>
+<section id="ofertas" aria-label="Ofertas de pipetas Power Ultra">
+  <div class="of-track" id="ofTrack">
+    <div class="of-stage" id="ofStage">
+      <div class="of-bg" id="ofBgA"></div>
+      <div class="of-bg" id="ofBgB"></div>
 
-        <div class="of-info">
-          <p class="of-eyebrow" id="ofEyebrow1">LÍNEA POWER ULTRA</p>
-          <p class="of-eyebrow of-eyebrow-offer" id="ofEyebrow2">50% OFF en la segunda unidad</p>
-          <h3 class="of-name" id="ofName">—</h3>
-          <p class="of-weight" id="ofWeight">—</p>
-          <div class="of-bottom-row">
-            <span class="of-price" id="ofPrice">—</span>
-            <a class="of-wa-btn" id="ofWaBtn" href="#" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
-              Consultar
-            </a>
-          </div>
-        </div>
+      <div class="of-chapters" id="ofChapters"></div>
 
-        <div class="of-dots" id="ofDots"></div>
-        <div class="of-cue">scroll para girar · mové el mouse</div>
-      </div>
+      <div class="of-railnav" id="ofRailNav" aria-label="Navegación de ofertas"></div>
     </div>
   </div>
-
-  <!-- ═══ MOBILE: carrusel de tarjetas ═══ -->
-  <div class="of-mobile" id="ofMobile">
-    <p class="of-mobile-offer">50% OFF en la segunda unidad</p>
-    <div class="of-carousel" id="ofCarousel"></div>
-    <div class="of-mobile-dots" id="ofMobileDots"></div>
-  </div>
 </section>
-
 <style>
-  #ofertas { background: var(--blanco); padding-bottom: 40px; }
-  .ofertas-header { max-width: 1060px; margin: 0 auto 8px; }
+/* ═══════════════════════════════════════
+   OFERTAS — scroll storytelling
+═══════════════════════════════════════ */
+#ofertas { padding: 0; background: var(--crema); }
 
-  /* ── DESKTOP ── */
-  .of-desktop-wrap { display: block; }
-  .of-scrollwrap { position: relative; height: 420vh; }
-  .of-stage {
-    position: sticky;
-    top: var(--nav-h);
-    height: calc(100svh - var(--nav-h));
-    overflow: hidden;
-    border-radius: 28px;
-    margin: 24px 48px 0;
-    background: linear-gradient(160deg, var(--crema) 0%, var(--rosa-suave) 55%, var(--violeta-suave) 100%);
-  }
-  .of-mount { position: absolute; inset: 0; }
-  .of-vignette {
-    position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 40%, rgba(54,42,111,0.10) 100%);
-  }
-  .of-loading {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; color: var(--texto-suave);
-    background: var(--crema);
-    transition: opacity 0.4s;
-    z-index: 3;
-  }
-  .of-loading.hidden { opacity: 0; pointer-events: none; }
+.of-track { position: relative; width: 100%; }
 
-  .of-info { position: absolute; left: 32px; bottom: 40px; z-index: 2; }
-  .of-info-card {}
-  .of-info {
-    background: var(--blanco);
-    border-radius: 20px;
-    padding: 24px 28px;
-    box-shadow: 0 12px 36px rgba(54,42,111,0.12);
-    max-width: 340px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .of-info.swap-out { opacity: 0; transform: translateY(8px); }
+.of-stage {
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100svh - var(--nav-h));
+  overflow: hidden;
+  isolation: isolate;
+}
 
-  .of-eyebrow {
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-    color: var(--rosa); margin-bottom: 6px; text-transform: uppercase;
-  }
-  .of-eyebrow-offer { color: var(--violeta); margin-bottom: 10px; opacity: 0.8; }
-  .of-name {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--violeta);
-    margin-bottom: 4px;
-  }
-  .of-weight { font-size: 0.86rem; color: var(--texto-suave); margin-bottom: 16px; }
-  .of-bottom-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .of-price {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem; font-weight: 700; color: var(--violeta);
-    background: var(--crema);
-    border-radius: 100px;
-    padding: 8px 18px;
-  }
-  .of-wa-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #25D366; color: var(--blanco);
-    padding: 10px 20px; border-radius: 100px;
-    font-size: 0.82rem; font-weight: 600; text-decoration: none;
-    box-shadow: 0 5px 16px rgba(37,211,102,0.3);
-    transition: background 0.2s, transform 0.2s;
-  }
-  .of-wa-btn:hover { background: #1da851; transform: translateY(-2px); }
+.of-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
 
-  .of-dots { position: absolute; top: 24px; left: 32px; z-index: 2; display: flex; gap: 6px; }
-  .of-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(54,42,111,0.2);
-    transition: background 0.35s ease, transform 0.25s ease;
-  }
-  .of-dot.on { transform: scale(1.6); }
+.of-chapters { position: relative; z-index: 2; width: 100%; height: 100%; }
 
-  .of-cue {
-    position: absolute; bottom: 24px; right: 32px; z-index: 2;
-    font-size: 0.68rem; letter-spacing: 0.06em; color: var(--texto-suave);
-  }
+.of-chapter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 6vw;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity, filter;
+}
+.of-chapter.active { pointer-events: auto; }
 
-  /* ── MOBILE ── */
-  .of-mobile { display: none; }
-  .of-mobile-offer {
-    max-width: 1060px; margin: 0 auto 12px; padding: 0 20px;
-    font-size: 0.78rem; font-weight: 600; color: var(--rosa);
-    text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .of-carousel {
-    display: flex; gap: 14px; overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding: 4px 20px 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .of-carousel::-webkit-scrollbar { display: none; }
+/* ── Capítulo intro ── */
+.of-chapter-intro {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 26px;
+  color: rgba(255,255,255,0.92);
+}
+.of-intro-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.of-intro-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 11vw, 7.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+.of-intro-title em {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.42em;
+  color: var(--rosa);
+  margin-top: 10px;
+}
+.of-intro-tagline {
+  max-width: 480px;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.68);
+}
+.of-scrollcue {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.of-scrollcue-arrow { font-size: 1rem; animation: ofBounce 1.8s ease-in-out infinite; }
+@keyframes ofBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(6px); opacity: 1; }
+}
 
-  .of-mcard {
-    flex: 0 0 78%;
-    max-width: 300px;
-    scroll-snap-align: center;
-    background: var(--blanco);
-    border-radius: 22px;
-    padding: 18px;
-    box-shadow: 0 8px 26px rgba(54,42,111,0.08);
-    transform: scale(0.94);
-    opacity: 0.75;
-    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-  }
-  .of-mcard.is-active {
-    transform: scale(1);
-    opacity: 1;
-    box-shadow: 0 16px 38px rgba(54,42,111,0.15);
-  }
-  .of-mcard-img {
-    aspect-ratio: 1/1;
-    border-radius: 16px;
-    background: linear-gradient(160deg, var(--crema), var(--rosa-suave));
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-    margin-bottom: 14px;
-  }
-  .of-mcard-img img {
-    width: 78%; height: 78%; object-fit: contain;
-    filter: drop-shadow(0 10px 16px rgba(54,42,111,0.16));
-  }
-  .of-mcard .of-name { font-size: 1.15rem; }
-  .of-mcard .of-weight { font-size: 0.8rem; margin-bottom: 12px; }
-  .of-mcard .of-price { background: var(--crema); font-size: 1rem; padding: 7px 15px; }
-  .of-mcard .of-wa-btn { padding: 9px 17px; font-size: 0.78rem; }
+/* ── Capítulo de oferta ── */
+.of-chapter-offer {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 5vw;
+  max-width: 1220px;
+  margin: 0 auto;
+  width: 100%;
+}
+.of-ch-ghost {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 42vw;
+  line-height: 1;
+  color: rgba(54,42,111,0.055);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.of-ch-text { position: relative; z-index: 2; }
+.of-ch-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  margin-bottom: 18px;
+}
+.of-ch-eyebrow::before {
+  content: '';
+  width: 20px; height: 1.5px;
+  background: var(--rosa);
+}
+.of-ch-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  line-height: 1.05;
+  color: var(--violeta);
+  margin-bottom: 12px;
+}
+.of-ch-meta { font-size: 0.95rem; color: var(--texto-suave); margin-bottom: 22px; }
+.of-ch-price {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--violeta);
+  margin-bottom: 28px;
+}
+.of-ch-price span {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  margin-bottom: 4px;
+}
+.of-ch-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--violeta);
+  text-decoration: none;
+  padding-bottom: 4px;
+}
+.of-ch-cta::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1.5px;
+  background: rgba(54,42,111,0.25);
+  transform-origin: left;
+}
+.of-ch-cta-arrow { transition: transform 0.3s cubic-bezier(.16,1,.3,1); }
+@media (hover: hover) and (pointer: fine) {
+  .of-ch-cta:hover { color: var(--rosa); }
+  .of-ch-cta:hover::after { background: var(--rosa); }
+  .of-ch-cta:hover .of-ch-cta-arrow { transform: translateX(6px); }
+}
 
-  .of-mobile-dots { display: flex; justify-content: center; gap: 6px; margin-top: 2px; }
+.of-ch-visual {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.of-ch-visual-inner {
+  transform: translate(calc(var(--mx, 0) * 16px), calc(var(--my, 0) * 10px)) rotate(calc(var(--mx, 0) * 2.4deg));
+  transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+}
+.of-ch-visual-inner img {
+  width: min(64vw, 340px);
+  filter: drop-shadow(0 24px 34px rgba(54,42,111,0.18));
+  user-select: none;
+  -webkit-user-drag: none;
+}
 
-  @media (max-width: 860px) {
-    .of-desktop-wrap { display: none; }
-    .of-mobile { display: block; padding-top: 4px; }
+/* ── Navegación lateral ── */
+.of-railnav {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: 28px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.of-rail-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(54,42,111,0.2);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.of-rail-dot.active { background: var(--rosa); transform: scale(1.6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .of-scrollcue-arrow { animation: none; }
+  .of-ch-visual-inner { transition: none; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 860px) {
+  .of-chapter { padding: 0 24px; }
+  .of-chapter-offer {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 28px;
+    text-align: center;
   }
+  .of-ch-visual { order: 1; }
+  .of-ch-text { order: 2; }
+  .of-ch-eyebrow { justify-content: center; }
+  .of-ch-eyebrow::before { display: none; }
+  .of-ch-cta { margin: 0 auto; }
+  .of-ch-ghost { font-size: 60vw; }
+  .of-ch-visual-inner img { width: min(58vw, 260px); }
+  .of-railnav { right: auto; left: 50%; top: auto; bottom: 18px; transform: translateX(-50%); flex-direction: row; }
+  .of-rail-dot.active { transform: scale(1.5); }
+  .of-intro-tagline { padding: 0 12px; }
+}
 </style>
-
-<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 <script>
 (function () {
   const PRODUCTS = [
@@ -1283,293 +1359,187 @@
       front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png" },
     { name: "Power Ultra Gigante", weight: "41 a 60 kg", price: "$12.400",
       waMessage: "Hola! Quería consultar por Power Ultra Gigante",
-      front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png" },
+      front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png" }
   ];
   const WA_PHONE = "5493435303848";
-  const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 };
-  const FALLBACK_COLOR = { front: 0xF5E6F0, back: 0xEAE8F5 };
-  const isDesktop = window.matchMedia("(min-width: 861px)").matches;
 
-  // ═══════ MOBILE: carrusel (sin Three.js) ═══════
-  function initMobileCarousel() {
-    const track = document.getElementById("ofCarousel");
-    const dotsWrap = document.getElementById("ofMobileDots");
-    if (!track || !dotsWrap) return;
+  const INTRO_BG = "linear-gradient(160deg, #241B47 0%, #362A6F 55%, #4a3a86 100%)";
+  const OFFER_BG = [
+    "linear-gradient(160deg, #FAF6F0 0%, #F5E6F0 100%)",
+    "linear-gradient(150deg, #F5E6F0 0%, #EAE8F5 100%)",
+    "linear-gradient(160deg, #EAE8F5 0%, #FAF6F0 100%)",
+    "linear-gradient(150deg, #FAF6F0 0%, #F0E9DF 100%)",
+    "linear-gradient(160deg, #F5E6F0 0%, #FAF6F0 100%)"
+  ];
 
+  function buildChapters() {
+    const chapters = [{ type: "intro", bg: INTRO_BG }];
     PRODUCTS.forEach((p, i) => {
-      const card = document.createElement("div");
-      card.className = "of-mcard" + (i === 0 ? " is-active" : "");
-      card.innerHTML = `
-        <div class="of-mcard-img"><img src="${p.front}" alt="${p.name}" loading="lazy"></div>
-        <p class="of-name">${p.name}</p>
-        <p class="of-weight">${p.weight}</p>
-        <div class="of-bottom-row">
-          <span class="of-price">${p.price}</span>
-          <a class="of-wa-btn" href="https://wa.me/${WA_PHONE}?text=${encodeURIComponent(p.waMessage)}" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="white" width="15" height="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
-            Consultar
-          </a>
-        </div>`;
-      track.appendChild(card);
-    });
-
-    const cards = Array.from(track.querySelectorAll(".of-mcard"));
-    cards.forEach((_, i) => {
-      const d = document.createElement("div");
-      d.className = "of-dot" + (i === 0 ? " on" : "");
-      d.addEventListener("click", () => {
-        cards[i].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      chapters.push({
+        type: "offer",
+        product: p,
+        number: i + 1,
+        total: PRODUCTS.length,
+        bg: OFFER_BG[i % OFFER_BG.length]
       });
-      dotsWrap.appendChild(d);
     });
-    const dotEls = Array.from(dotsWrap.children);
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.intersectionRatio > 0.6) {
-          const idx = cards.indexOf(entry.target);
-          cards.forEach((c) => c.classList.remove("is-active"));
-          entry.target.classList.add("is-active");
-          dotEls.forEach((d) => d.classList.remove("on"));
-          if (dotEls[idx]) dotEls[idx].classList.add("on");
-        }
-      });
-    }, { root: track, threshold: [0.6] });
-    cards.forEach((c) => io.observe(c));
+    return chapters;
   }
-  initMobileCarousel();
 
-  // ═══════ DESKTOP: escena 3D ═══════
-  if (!isDesktop) return;
-  if (typeof THREE === "undefined") { console.warn("Three.js no cargó."); return; }
+  function renderChapter(ch) {
+    const el = document.createElement("div");
+    el.className = "of-chapter " + (ch.type === "intro" ? "of-chapter-intro" : "of-chapter-offer");
 
-  function initDesktop() {
-    const mount = document.getElementById("ofertasMount");
-    const wrap = document.getElementById("ofertasScrollWrap");
-    const loadingEl = document.getElementById("ofertasLoading");
-    const dotsEl = document.getElementById("ofDots");
-    const infoEl = document.getElementById("ofertasMount").closest(".of-stage").querySelector(".of-info");
-    const nameEl = document.getElementById("ofName");
-    const weightEl = document.getElementById("ofWeight");
-    const priceEl = document.getElementById("ofPrice");
-    const waEl = document.getElementById("ofWaBtn");
-
-    function readCssColor(varName, fallbackHex) {
-      const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-      try { return raw ? new THREE.Color().setStyle(raw) : new THREE.Color(fallbackHex); }
-      catch (e) { return new THREE.Color(fallbackHex); }
+    if (ch.type === "intro") {
+      el.innerHTML =
+        '<p class="of-intro-eyebrow">Dra. Lili Bruzera · Protección antiparasitaria</p>' +
+        '<h2 class="of-intro-title">OFERTAS<em>para cada mascota</em></h2>' +
+        '<p class="of-intro-tagline">Cinco fórmulas Power Ultra, una para cada tamaño. Llevate la segunda unidad al 50%.</p>' +
+        '<div class="of-scrollcue" aria-hidden="true"><span>Scroll para explorar</span><span class="of-scrollcue-arrow">↓</span></div>';
+    } else {
+      const p = ch.product;
+      const num = String(ch.number).padStart(2, "0");
+      const total = String(ch.total).padStart(2, "0");
+      el.innerHTML =
+        '<span class="of-ch-ghost" aria-hidden="true">' + num + '</span>' +
+        '<div class="of-ch-text">' +
+          '<p class="of-ch-eyebrow">Oferta ' + num + ' de ' + total + '</p>' +
+          '<h3 class="of-ch-title">' + p.name + '</h3>' +
+          '<p class="of-ch-meta">' + p.weight + '</p>' +
+          '<p class="of-ch-price"><span>50% OFF en la segunda unidad</span>' + p.price + '</p>' +
+          '<a class="of-ch-cta" href="https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(p.waMessage) + '" target="_blank" rel="noopener" aria-label="Consultar la oferta de ' + p.name + ' por WhatsApp">' +
+            '<span>Consultar esta oferta</span><span class="of-ch-cta-arrow">→</span>' +
+          '</a>' +
+        '</div>' +
+        '<div class="of-ch-visual"><div class="of-ch-visual-inner"><img src="' + p.front + '" alt="' + p.name + '" loading="lazy"></div></div>';
     }
-    const ROSA = readCssColor("--rosa", "#c42685");
-    const VIOLETA = readCssColor("--violeta", "#362a6f");
-    function dotColorFor(idx) {
-      const t = PRODUCTS.length > 1 ? idx / (PRODUCTS.length - 1) : 0;
-      return "#" + new THREE.Color().lerpColors(ROSA, VIOLETA, t).getHexString();
-    }
+    return el;
+  }
 
-    PRODUCTS.forEach((_, i) => {
-      const d = document.createElement("div");
-      d.className = "of-dot" + (i === 0 ? " on" : "");
-      d.id = "ofDot" + i;
-      d.style.background = i === 0 ? dotColorFor(0) : "rgba(54,42,111,0.2)";
-      dotsEl.appendChild(d);
-    });
+  function initOfertasExperience() {
+    const track = document.getElementById("ofTrack");
+    const stage = document.getElementById("ofStage");
+    const chaptersWrap = document.getElementById("ofChapters");
+    const bgA = document.getElementById("ofBgA");
+    const bgB = document.getElementById("ofBgB");
+    const railNav = document.getElementById("ofRailNav");
+    if (!track || !stage || !chaptersWrap) return;
 
-    let width = mount.clientWidth, height = mount.clientHeight;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const chapters = buildChapters();
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 50);
-    const CAM_Z_BASE = 5.4, CAM_Z_DOLLY = 0.5;
-    camera.position.set(0, 0.05, CAM_Z_BASE);
+    chapters.forEach((ch) => chaptersWrap.appendChild(renderChapter(ch)));
+    const chapterEls = Array.from(chaptersWrap.children);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding; // fix del "quemado"
-    if (THREE.ACESFilmicToneMapping) renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
-    mount.appendChild(renderer.domElement);
-
-    const key = new THREE.DirectionalLight(0xfff5f0, 1.2);
-    key.position.set(3, 4, 3);
-    key.castShadow = true;
-    key.shadow.mapSize.set(1024, 1024);
-    scene.add(key);
-
-    const rim = new THREE.DirectionalLight(ROSA, 0.35);
-    rim.position.set(-3, 1, -2);
-    scene.add(rim);
-
-    scene.add(new THREE.AmbientLight(0xeae8f5, 0.6));
-
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(20, 20),
-      new THREE.ShadowMaterial({ opacity: 0.16, color: VIOLETA.getHex() })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.8;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    const W = BOX_DIMENSIONS_CM.width / 10, H = BOX_DIMENSIONS_CM.height / 10, D = BOX_DIMENSIONS_CM.depth / 10;
-    const geo = new THREE.BoxGeometry(W, H, D);
-    const loader = new THREE.TextureLoader();
-
-    function makeEdgeTexture(dir) {
-      const c = document.createElement("canvas");
-      c.width = dir === "v" ? 64 : 256; c.height = dir === "v" ? 256 : 64;
-      const ctx = c.getContext("2d");
-      const g = dir === "v" ? ctx.createLinearGradient(0, 0, 0, c.height) : ctx.createLinearGradient(0, 0, c.width, 0);
-      g.addColorStop(0, "#ffffff"); g.addColorStop(0.18, "#f4f4f6");
-      g.addColorStop(0.5, "#d6d6db"); g.addColorStop(0.82, "#f4f4f6"); g.addColorStop(1, "#ffffff");
-      ctx.fillStyle = g; ctx.fillRect(0, 0, c.width, c.height);
-      const tex = new THREE.CanvasTexture(c);
-      if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
-      return tex;
-    }
-    const EDGE = { l: makeEdgeTexture("v"), r: makeEdgeTexture("v"), t: makeEdgeTexture("h"), b: makeEdgeTexture("h") };
-
-    function loadTex(src) {
-      const t = loader.load(src);
-      if (THREE.sRGBEncoding) t.encoding = THREE.sRGBEncoding;
-      t.anisotropy = 4;
-      return t;
-    }
-    function matFor(src, fallback) {
-      const m = new THREE.MeshStandardMaterial({ roughness: 0.8, metalness: 0.02, transparent: true });
-      if (src) m.map = loadTex(src);
-      else if (fallback instanceof THREE.Texture) m.map = fallback;
-      else m.color.setHex(fallback);
-      return m;
-    }
-    function materialsFor(p) {
-      return [ matFor(null, EDGE.r), matFor(null, EDGE.l), matFor(null, EDGE.t), matFor(null, EDGE.b),
-               matFor(p.front, FALLBACK_COLOR.front), matFor(p.front, FALLBACK_COLOR.back) ];
-    }
-
-    let mats = materialsFor(PRODUCTS[0]);
-    const box = new THREE.Mesh(geo, mats);
-    box.castShadow = true;
-    box.position.y = 0.28;
-    scene.add(box);
-
-    loadingEl.classList.add("hidden");
-
-    function updateInfo(idx) {
-      const p = PRODUCTS[idx];
-      infoEl.classList.add("swap-out");
-      setTimeout(() => {
-        nameEl.textContent = p.name;
-        weightEl.textContent = p.weight;
-        priceEl.textContent = p.price;
-        waEl.href = "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(p.waMessage);
-        infoEl.classList.remove("swap-out");
-      }, 150);
-      for (let i = 0; i < PRODUCTS.length; i++) {
-        const dot = document.getElementById("ofDot" + i);
-        if (dot) { dot.classList.toggle("on", i === idx); dot.style.background = i === idx ? dotColorFor(i) : "rgba(54,42,111,0.2)"; }
-      }
-    }
-    updateInfo(0);
-
-    function swapTextures(idx) {
-      const p = PRODUCTS[idx];
-      const srcs = [null, null, null, null, p.front, p.front];
-      const fbs = [EDGE.r, EDGE.l, EDGE.t, EDGE.b, FALLBACK_COLOR.front, FALLBACK_COLOR.back];
-      mats.forEach((m, i) => {
-        if (m.map && !(m.map instanceof THREE.CanvasTexture)) m.map.dispose();
-        if (srcs[i]) m.map = loadTex(srcs[i]);
-        else if (fbs[i] instanceof THREE.Texture) m.map = fbs[i];
-        else { m.map = null; m.color.setHex(fbs[i]); }
-        m.needsUpdate = true;
+    chapters.forEach((ch, i) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "of-rail-dot" + (i === 0 ? " active" : "");
+      dot.setAttribute("aria-label", ch.type === "intro" ? "Ir a introducción de ofertas" : "Ir a oferta " + ch.number);
+      dot.addEventListener("click", () => {
+        const chVh = getChapterVh();
+        const targetTop = track.getBoundingClientRect().top + window.scrollY + i * (chVh / 100) * window.innerHeight + 2;
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
       });
-      updateInfo(idx);
+      railNav.appendChild(dot);
+    });
+    const railDots = Array.from(railNav.children);
+
+    function getChapterVh() {
+      return window.matchMedia("(max-width: 860px)").matches ? 78 : 100;
     }
 
-    function easeOutBack(x) {
-      const c1 = 1.70158, c3 = c1 + 1;
-      return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+    function layout() {
+      track.style.height = chapters.length * getChapterVh() + "vh";
     }
+    layout();
 
-    const state = { progress: 0, mouseX: 0, mouseY: 0, mouseXS: 0, mouseYS: 0, displayAngle: 0 };
-    let currentChapter = 0, swapping = false, swapT = 0;
-    const clock = new THREE.Clock();
-    const introDur = 1.0;
-    const BASE_SCALE = 1.75;
-
-    function targetAngleFor(chapter) {
-      return (chapter / PRODUCTS.length) * Math.PI * 2;
+    let currentLayer = "A";
+    let lastBgIndex = -1;
+    function setBackground(css) {
+      const incoming = currentLayer === "A" ? bgB : bgA;
+      const outgoing = currentLayer === "A" ? bgA : bgB;
+      incoming.style.background = css;
+      incoming.style.opacity = "1";
+      outgoing.style.opacity = "0";
+      currentLayer = currentLayer === "A" ? "B" : "A";
     }
+    bgA.style.background = chapters[0].bg;
+    bgA.style.opacity = "1";
 
-    function animate() {
-      requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
-
-      state.mouseXS += (state.mouseX - state.mouseXS) * 0.06;
-      state.mouseYS += (state.mouseY - state.mouseYS) * 0.06;
-
-      const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.progress * PRODUCTS.length));
-      if (chapter !== currentChapter && !swapping) {
-        swapping = true; swapT = 0; currentChapter = chapter;
+    function styleForT(t) {
+      const at = Math.abs(t);
+      const dwell = 0.55, edge = 1.05;
+      let opacity;
+      if (at >= edge) opacity = 0;
+      else if (at <= dwell) opacity = 1;
+      else {
+        const l = 1 - (at - dwell) / (edge - dwell);
+        opacity = l * l * (3 - 2 * l);
       }
-
-      // giro por pasos: se acerca suave al ángulo objetivo y se queda quieto ahí
-      const target = targetAngleFor(currentChapter);
-      state.displayAngle += (target - state.displayAngle) * 0.05;
-
-      box.rotation.y = state.displayAngle + state.mouseXS * 0.1;
-      box.rotation.x = state.mouseYS * 0.08 + Math.sin(t * 0.5) * 0.015; // balanceo mínimo, sin girar
-
-      const introP = t < introDur ? easeOutBack(Math.min(1, t / introDur)) : 1;
-      let pop = 0;
-      if (swapping) {
-        swapT += 0.045;
-        const dip = Math.sin(Math.min(swapT, 1) * Math.PI);
-        pop = dip * 0.07; // pequeño "acercamiento" al cambiar de producto
-        mats.forEach((m) => { m.opacity = 1 - dip * 0.7; });
-        if (swapT >= 0.5 && swapT - 0.045 < 0.5) swapTextures(currentChapter);
-        if (swapT >= 1) { swapping = false; mats.forEach((m) => { m.opacity = 1; }); }
-      }
-      box.scale.setScalar(Math.max(0.001, introP) * BASE_SCALE * (1 + pop));
-      box.position.y = 0.28 + Math.sin(t * 0.5) * 0.015;
-
-      // dolly suave a lo largo de todo el scroll: sensación de acercamiento progresivo
-      camera.position.z = CAM_Z_BASE - state.progress * CAM_Z_DOLLY;
-      camera.position.x = state.mouseXS * 0.12;
-      camera.lookAt(0, 0.28, 0);
-
-      renderer.render(scene, camera);
+      const clampedT = Math.max(-1, Math.min(1, t));
+      const ty = reduceMotion ? 0 : -clampedT * 46;
+      const blur = reduceMotion ? 0 : Math.min(8, at * 8);
+      const scale = reduceMotion ? 1 : 1 - Math.min(0.05, at * 0.05);
+      return { opacity: opacity, ty: ty, blur: blur, scale: scale };
     }
-    animate();
 
+    let ticking = false;
     function onScroll() {
-      const rect = wrap.getBoundingClientRect();
-      const total = wrap.offsetHeight - window.innerHeight;
-      state.progress = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }
-    onScroll();
+
+    function update() {
+      ticking = false;
+      const stageH = stage.offsetHeight;
+      const trackH = track.offsetHeight;
+      const rect = track.getBoundingClientRect();
+      const total = Math.max(trackH - stageH, 1);
+      const scrolled = Math.min(total, Math.max(0, -rect.top));
+      const progress = scrolled / total;
+      const chapterFloat = progress * (chapters.length - 1);
+
+      chapterEls.forEach((el, i) => {
+        const t = chapterFloat - i;
+        const s = styleForT(t);
+        el.style.opacity = s.opacity.toFixed(3);
+        el.style.transform = "translateY(" + s.ty.toFixed(1) + "px) scale(" + s.scale.toFixed(3) + ")";
+        el.style.filter = s.blur > 0.01 ? "blur(" + s.blur.toFixed(1) + "px)" : "none";
+        el.classList.toggle("active", s.opacity > 0.6);
+      });
+
+      const nearest = Math.max(0, Math.min(chapters.length - 1, Math.round(chapterFloat)));
+      if (nearest !== lastBgIndex) {
+        setBackground(chapters[nearest].bg);
+        railDots.forEach((d, i) => d.classList.toggle("active", i === nearest));
+        lastBgIndex = nearest;
+      }
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => { layout(); onScroll(); });
+    update();
 
-    window.addEventListener("pointermove", (e) => {
-      const r = mount.getBoundingClientRect();
-      state.mouseX = ((e.clientX - r.left) / r.width - 0.5) * 2;
-      state.mouseY = ((e.clientY - r.top) / r.height - 0.5) * 2;
-    });
-
-    window.addEventListener("resize", () => {
-      if (!window.matchMedia("(min-width: 861px)").matches) return; // cruzó a mobile: recargar para simplificar
-      width = mount.clientWidth; height = mount.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    });
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      stage.addEventListener("pointermove", (e) => {
+        const r = stage.getBoundingClientRect();
+        const mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        const my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        stage.style.setProperty("--mx", mx.toFixed(3));
+        stage.style.setProperty("--my", my.toFixed(3));
+      });
+      stage.addEventListener("pointerleave", () => {
+        stage.style.setProperty("--mx", 0);
+        stage.style.setProperty("--my", 0);
+      });
+    }
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initDesktop);
-  else initDesktop();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initOfertasExperience);
+  else initOfertasExperience();
 })();
 </script>
+
 
   
 <!-- ═══ CONTACTO ═══ -->
