@@ -1092,16 +1092,18 @@
       <div id="ofertasLoading" class="of-loading">cargando…</div>
 
       <div class="of-info">
-        <p class="of-eyebrow" id="ofEyebrow">LÍNEA POWER ULTRA</p>
-        <p class="of-eyebrow" id="ofEyebrow">%50 OFF en la segunda unidad</p>
-        <h3 class="of-name" id="ofName">—</h3>
-        <p class="of-weight" id="ofWeight">—</p>
-        <div class="of-bottom-row">
-          <span class="of-price" id="ofPrice">—</span>
-          <a class="of-wa-btn" id="ofWaBtn" href="#" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
-            Consultar
-          </a>
+        <div class="of-info-inner" id="ofInfoInner">
+          <p class="of-eyebrow" id="ofEyebrow1">LÍNEA POWER ULTRA</p>
+          <p class="of-eyebrow of-eyebrow-offer" id="ofEyebrow2">%50 OFF en la segunda unidad</p>
+          <h3 class="of-name" id="ofName">—</h3>
+          <p class="of-weight" id="ofWeight">—</p>
+          <div class="of-bottom-row">
+            <span class="of-price" id="ofPrice">—</span>
+            <a class="of-wa-btn" id="ofWaBtn" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+              Consultar
+            </a>
+          </div>
         </div>
       </div>
 
@@ -1122,8 +1124,6 @@
 
   .of-scrollwrap {
     position: relative;
-    /* 5 productos: espacio de scroll suficiente para que cada uno
-       tenga tiempo de "vivir" en pantalla antes de girar al siguiente */
     height: 480vh;
   }
 
@@ -1143,6 +1143,16 @@
     background: radial-gradient(ellipse at center, rgba(255,255,255,0) 40%, rgba(54,42,111,0.10) 100%);
   }
 
+  /* grano cinematográfico sutil, encima del render, debajo del texto */
+  .of-stage::after {
+    content: "";
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
   .of-loading {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -1157,11 +1167,29 @@
     position: absolute;
     left: 32px; right: 32px; bottom: 76px;
     z-index: 2;
+    display: flex;
   }
+
+  /* panel de vidrio esmerilado detrás del texto */
+  .of-info-inner {
+    background: rgba(255,255,255,0.38);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 22px;
+    padding: 22px 26px;
+    box-shadow: 0 12px 40px rgba(54,42,111,0.14);
+    max-width: 420px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .of-info-inner.swap-out { opacity: 0; transform: translateY(10px); }
+
   .of-eyebrow {
     font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-    color: var(--rosa); margin-bottom: 8px; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 6px; text-transform: uppercase;
+    transition: color 0.4s ease;
   }
+  .of-eyebrow-offer { color: var(--violeta); margin-bottom: 10px; opacity: 0.85; }
   .of-name {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
@@ -1184,6 +1212,7 @@
     border-radius: 100px;
     padding: 8px 18px;
     box-shadow: 0 4px 14px rgba(54,42,111,0.12);
+    transition: box-shadow 0.4s ease;
   }
   .of-wa-btn {
     display: inline-flex; align-items: center; gap: 8px;
@@ -1202,9 +1231,9 @@
   .of-dot {
     width: 6px; height: 6px; border-radius: 50%;
     background: rgba(54,42,111,0.2);
-    transition: background 0.25s, transform 0.25s;
+    transition: background 0.35s ease, transform 0.25s ease;
   }
-  .of-dot.on { background: var(--rosa); transform: scale(1.5); }
+  .of-dot.on { transform: scale(1.5); }
 
   .of-cue {
     position: absolute; bottom: 24px; right: 32px; z-index: 2;
@@ -1215,11 +1244,19 @@
   @media (max-width: 860px) {
     .of-stage { margin: 20px 16px 0; border-radius: 20px; }
     .of-info { left: 20px; right: 20px; bottom: 60px; }
+    .of-info-inner { max-width: none; padding: 18px 20px; }
     .of-cue { display: none; }
     .of-scrollwrap { height: 420vh; }
   }
 </style>
+
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script>
 (function () {
   const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 };
@@ -1229,6 +1266,7 @@
       name: "Power Ultra Toy",
       weight: "De 2 a 4 kg",
       price: "$6.000",
+      accent: 0xff8fc7,
       waMessage: "Hola! Quería consultar por Power Ultra Toy",
       textures: {
         front:  "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png",
@@ -1240,6 +1278,7 @@
       name: "Power Ultra Chico",
       weight: "5 a 10 kg",
       price: "$6.500",
+      accent: 0x8f9dff,
       waMessage: "Hola! Quería consultar por Power Ultra Chico",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", left: "", right: "", top: "", bottom: "" },
     },
@@ -1247,6 +1286,7 @@
       name: "Power Ultra Mediano",
       weight: "11 a 20 kg",
       price: "$7.300",
+      accent: 0xc79bff,
       waMessage: "Hola! Quería consultar por Power Ultra Mediano",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", left: "", right: "", top: "", bottom: "" },
     },
@@ -1254,6 +1294,7 @@
       name: "Power Ultra Grande",
       weight: "21 a 40 kg",
       price: "$9.900",
+      accent: 0xffb37a,
       waMessage: "Hola! Quería consultar por Power Ultra Grande",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", left: "", right: "", top: "", bottom: "" },
     },
@@ -1261,6 +1302,7 @@
       name: "Power Ultra Gigante",
       weight: "41 a 60 kg",
       price: "$12.400",
+      accent: 0x7adfd0,
       waMessage: "Hola! Quería consultar por Power Ultra Gigante",
       textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", left: "", right: "", top: "", bottom: "" },
     },
@@ -1268,11 +1310,19 @@
 
   const WA_PHONE = "5493435303848";
 
-  // fallback SOLO para front/back si algún día falta la foto
   const FALLBACK_COLOR = {
     front:  0xF5E6F0,
     back:   0xEAE8F5,
   };
+
+  function easeOutBack(x) {
+    const c1 = 1.70158, c3 = c1 + 1;
+    return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+  }
+
+  function hexToCss(hex) {
+    return "#" + hex.toString(16).padStart(6, "0");
+  }
 
   function init() {
     if (typeof THREE === "undefined") {
@@ -1284,15 +1334,17 @@
     const wrap = document.getElementById("ofertasScrollWrap");
     const loadingEl = document.getElementById("ofertasLoading");
     const dotsEl = document.getElementById("ofDots");
+    const infoInnerEl = document.getElementById("ofInfoInner");
     const nameEl = document.getElementById("ofName");
     const weightEl = document.getElementById("ofWeight");
     const priceEl = document.getElementById("ofPrice");
     const waEl = document.getElementById("ofWaBtn");
 
-    PRODUCTS.forEach((_, i) => {
+    PRODUCTS.forEach((p, i) => {
       const d = document.createElement("div");
       d.className = "of-dot" + (i === 0 ? " on" : "");
       d.id = "ofDot" + i;
+      d.style.background = i === 0 ? hexToCss(p.accent) : "rgba(54,42,111,0.2)";
       dotsEl.appendChild(d);
     });
 
@@ -1303,8 +1355,7 @@
     scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 50);
-    // cámara apuntando un poco más arriba para que la caja se vea más alta en el cuadro
-    camera.position.set(0, -0.05, 5.6);
+    camera.position.set(0, -0.05, 5.7);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
@@ -1312,23 +1363,37 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    // ── FIX del "quemado": en three.js r128 la corrección de color se hace así ──
     if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
     if (THREE.ACESFilmicToneMapping) renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
 
     mount.appendChild(renderer.domElement);
 
-    // luces más equilibradas (antes sumaban demasiada intensidad y lavaban la foto)
+    // ── post-procesado: bloom sutil (solo brilla lo realmente brillante) ──
+    let composer = null;
+    let bloomPass = null;
+    try {
+      if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
+        composer = new THREE.EffectComposer(renderer);
+        composer.addPass(new THREE.RenderPass(scene, camera));
+        bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(width, height), 0.55, 0.4, 0.83);
+        composer.addPass(bloomPass);
+      }
+    } catch (e) {
+      console.warn("Bloom no disponible, se sigue sin post-procesado.", e);
+      composer = null;
+    }
+
+    // luces
     const key = new THREE.DirectionalLight(0xfff5f0, 1.15);
     key.position.set(3, 4, 3);
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     scene.add(key);
 
-    const rimPink = new THREE.DirectionalLight(0xc42685, 0.35);
-    rimPink.position.set(-3, 1, -2);
-    scene.add(rimPink);
+    const rimLight = new THREE.DirectionalLight(PRODUCTS[0].accent, 0.55);
+    rimLight.position.set(-3, 1, -2);
+    scene.add(rimLight);
 
     const fill = new THREE.AmbientLight(0xeae8f5, 0.55);
     scene.add(fill);
@@ -1342,6 +1407,47 @@
     ground.receiveShadow = true;
     scene.add(ground);
 
+    // ── halo de luz debajo de la caja, color de acento por producto ──
+    function makeGlowTexture() {
+      const size = 256;
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+      grad.addColorStop(0, "rgba(255,255,255,0.9)");
+      grad.addColorStop(0.5, "rgba(255,255,255,0.25)");
+      grad.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, size, size);
+      return new THREE.CanvasTexture(canvas);
+    }
+    const glowMat = new THREE.SpriteMaterial({
+      map: makeGlowTexture(), color: PRODUCTS[0].accent,
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0,
+    });
+    const glow = new THREE.Sprite(glowMat);
+    glow.scale.set(2.6, 2.6, 1);
+    glow.position.set(0, -0.15, -0.4);
+    scene.add(glow);
+
+    // ── partículas flotantes (profundidad, sensación de estudio fotográfico) ──
+    const PARTICLE_COUNT = 90;
+    const particlePos = new Float32Array(PARTICLE_COUNT * 3);
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particlePos[i*3]     = (Math.random() - 0.5) * 6;
+      particlePos[i*3 + 1] = (Math.random() - 0.3) * 4;
+      particlePos[i*3 + 2] = (Math.random() - 0.5) * 5;
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute("position", new THREE.BufferAttribute(particlePos, 3));
+    const particleMat = new THREE.PointsMaterial({
+      color: 0xffffff, size: 0.022, transparent: true, opacity: 0.45,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    // ── caja principal ──
     const W = BOX_DIMENSIONS_CM.width / 10;
     const H = BOX_DIMENSIONS_CM.height / 10;
     const D = BOX_DIMENSIONS_CM.depth / 10;
@@ -1349,7 +1455,6 @@
 
     const loader = new THREE.TextureLoader();
 
-    // ── textura de degradé gris para los cantos sin foto todavía ──
     function makeEdgeTexture(direction) {
       const canvas = document.createElement("canvas");
       canvas.width = direction === "vertical" ? 64 : 256;
@@ -1384,7 +1489,6 @@
       return tex;
     }
 
-    // fallback puede ser una Texture (cantos) o un color hex (front/back)
     function buildMaterial(src, fallback) {
       const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, metalness: 0.02, transparent: true });
       if (src) {
@@ -1397,7 +1501,6 @@
       return mat;
     }
 
-    // orden BoxGeometry: [+x, -x, +y, -y, +z, -z] = [right, left, top, bottom, front, back]
     function materialsFor(product) {
       const t = product.textures;
       return [
@@ -1413,28 +1516,38 @@
     let mats = materialsFor(PRODUCTS[0]);
     const box = new THREE.Mesh(geo, mats);
     box.castShadow = true;
-    box.position.y = 0.32; // caja más arriba en el cuadro
+    box.position.y = 0.32;
     scene.add(box);
 
     loadingEl.classList.add("hidden");
 
     function updateInfo(idx) {
       const p = PRODUCTS[idx];
-      nameEl.textContent = p.name;
-      weightEl.textContent = p.weight;
-      priceEl.textContent = p.price;
-      waEl.href = "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(p.waMessage);
+      infoInnerEl.classList.add("swap-out");
+      setTimeout(() => {
+        nameEl.textContent = p.name;
+        weightEl.textContent = p.weight;
+        priceEl.textContent = p.price;
+        waEl.href = "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(p.waMessage);
+        infoInnerEl.classList.remove("swap-out");
+      }, 180);
       for (let i = 0; i < PRODUCTS.length; i++) {
         const dot = document.getElementById("ofDot" + i);
-        if (dot) dot.classList.toggle("on", i === idx);
+        if (dot) {
+          dot.classList.toggle("on", i === idx);
+          dot.style.background = i === idx ? hexToCss(PRODUCTS[i].accent) : "rgba(54,42,111,0.2)";
+        }
       }
     }
     updateInfo(0);
 
-    const state = { progress: 0, displayProgress: 0, mouseX: 0, mouseY: 0 };
+    const state = { progress: 0, displayProgress: 0, mouseX: 0, mouseY: 0, mouseXS: 0, mouseYS: 0 };
     let currentChapter = 0;
     let swapping = false;
     let swapT = 0;
+
+    const accentFrom = new THREE.Color(PRODUCTS[0].accent);
+    const accentTo = new THREE.Color(PRODUCTS[0].accent);
 
     function swapToChapter(idx) {
       const p = PRODUCTS[idx];
@@ -1460,32 +1573,53 @@
     const clock = new THREE.Clock();
     const tmpTarget = new THREE.Vector3();
     const TURNS = PRODUCTS.length;
+    const introDur = 1.1;
 
     function animate() {
       raf = requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      // inercia en el giro: ya no salta 1:1 con el scroll, se siente más fluido
       state.displayProgress += (state.progress - state.displayProgress) * 0.08;
+      state.mouseXS += (state.mouseX - state.mouseXS) * 0.06;
+      state.mouseYS += (state.mouseY - state.mouseYS) * 0.06;
 
       const totalAngle = state.displayProgress * TURNS * Math.PI * 2;
       box.rotation.y = t * 0.06 + totalAngle;
-      box.rotation.x = Math.sin(t * 0.4) * 0.03 + state.mouseY * 0.12;
+      box.rotation.x = Math.sin(t * 0.4) * 0.03 + state.mouseYS * 0.12;
       box.position.y = 0.32 + Math.sin(t * 0.6) * 0.025;
+
+      const introP = t < introDur ? easeOutBack(Math.min(1, t / introDur)) : 1;
       const breathe = 1 + Math.sin(t * 0.5) * 0.008;
-      box.scale.set(breathe, breathe, breathe);
+      box.scale.setScalar(Math.max(0.001, introP) * breathe);
+
+      glow.position.x = box.position.x;
+      glow.position.y = box.position.y - 0.42;
+      const glowPulse = 0.5 + Math.sin(t * 0.9) * 0.08;
+      glowMat.opacity = Math.min(1, t / introDur) * glowPulse;
+
+      particles.rotation.y = t * 0.015;
+      particles.position.y = Math.sin(t * 0.2) * 0.1;
+
+      // cámara: dolly según scroll + parallax suave de mouse
+      camera.position.z = 5.7 - state.displayProgress * 0.5;
+      camera.position.x = state.mouseXS * 0.18;
+      camera.position.y = -0.05 + state.mouseYS * -0.09;
 
       const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.displayProgress * PRODUCTS.length));
       if (chapter !== currentChapter && !swapping) {
         swapping = true;
         swapT = 0;
         currentChapter = chapter;
+        accentFrom.copy(accentTo);
+        accentTo.set(PRODUCTS[chapter].accent);
       }
 
       if (swapping) {
         swapT += 0.06;
         const dip = Math.sin(Math.min(swapT, 1) * Math.PI);
         mats.forEach((m) => { m.opacity = 1 - dip * 0.75; });
+        rimLight.color.lerpColors(accentFrom, accentTo, Math.min(swapT, 1));
+        glowMat.color.lerpColors(accentFrom, accentTo, Math.min(swapT, 1));
         if (swapT >= 0.5 && swapT - 0.06 < 0.5) {
           swapToChapter(currentChapter);
         }
@@ -1495,10 +1629,11 @@
         }
       }
 
-      tmpTarget.set(state.mouseX * 0.25, 0.32 + state.mouseY * -0.1, 0);
+      tmpTarget.set(state.mouseXS * 0.25, 0.32 + state.mouseYS * -0.1, 0);
       camera.lookAt(tmpTarget);
 
-      renderer.render(scene, camera);
+      if (composer) composer.render();
+      else renderer.render(scene, camera);
     }
     animate();
 
@@ -1523,6 +1658,7 @@
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      if (composer) composer.setSize(w, h);
     }
     window.addEventListener("resize", onResize);
   }
