@@ -1076,45 +1076,7 @@
 
 
 
-  <!--
-  ═══════════════════════════════════════════════════════════════
-  SECCIÓN "OFERTAS" — caja 3D que gira y cambia de producto con el scroll
-  ═══════════════════════════════════════════════════════════════
-
-  CÓMO INTEGRARLA A TU index.html:
-
-  1) Este bloque asume que ya existen las variables de --root definidas
-     en tu <style> principal (--crema, --rosa, --violeta, etc.) y las
-     fuentes Playfair Display / DM Sans ya importadas. No hace falta
-     repetirlas.
-
-  2) Pegá la <section id="ofertas"> donde quieras que aparezca en el
-     flujo de la página — sugiero entre #servicios y #turnos, así:
-        ...</section>  <!-- cierre de #servicios -->
-        <!-- ACÁ pegás toda la sección ofertas -->
-        <section id="turnos"> ...
-
-  3) Antes de cerrar </body>, agregá el script de Three.js (una sola vez):
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-     y DESPUÉS el <script> de esta sección (está al final de este archivo).
-
-  4) Opcional: agregá un link "Ofertas" en tu <ul class="nav-links"> y
-     en el <nav class="nav-drawer"> apuntando a href="#ofertas".
-
-  5) CARGA DE FOTOS: buscá "PRODUCTS = [" más abajo. Cada producto tiene
-     6 casilleros de imagen (front, back, left, right, top, bottom) con
-     comentarios que indican exactamente qué foto va en cada uno — son
-     los mismos 6 ángulos que ya sacaste para la Pipeta Power Ultra
-     Mediano (frente, dorso, 2 laterales angostos, borde de arriba,
-     borde de abajo/código de barras). Mientras no cargues la url de
-     una foto, esa cara se muestra con un color liso de la paleta de
-     la veterinaria (no se rompe el diseño).
-
-  6) Las dimensiones de la caja (12 x 7.5 x 2 cm) ya están cargadas
-     abajo en BOX_DIMENSIONS_CM — si algún producto de la línea tiene
-     una caja de otro tamaño, ajustalo ahí.
--->
-
+  
 <section id="ofertas">
   <div class="ofertas-header fade-up">
     <div class="section-label">Ofertas</div>
