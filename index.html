@@ -1108,13 +1108,12 @@
       </div>
 
       <div class="of-dots" id="ofDots"></div>
-      <div class="of-cue">scroll para girar · mové el mouse</div>
+      <div class="of-cue" id="ofCue">scroll para girar · mové el mouse</div>
     </div>
   </div>
 </section>
 
 <style>
-  /* ── Ofertas: reutiliza la paleta y tipografía ya definidas en :root ── */
   #ofertas { background: var(--blanco); padding-bottom: 0; }
 
   .ofertas-header {
@@ -1135,20 +1134,21 @@
     border-radius: 28px;
     margin: 24px 48px 0;
     background: linear-gradient(160deg, var(--crema) 0%, var(--rosa-suave) 55%, var(--violeta-suave) 100%);
+    touch-action: pan-y; /* permite scroll vertical normal; el drag horizontal se intercepta a mano en JS */
   }
-  .of-mount { position: absolute; inset: 0; }
+  .of-mount { position: absolute; inset: 0; cursor: grab; }
+  .of-mount.dragging { cursor: grabbing; }
 
   .of-vignette {
     position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(ellipse at center, rgba(255,255,255,0) 40%, rgba(54,42,111,0.10) 100%);
   }
 
-  /* grano cinematográfico sutil, encima del render, debajo del texto */
   .of-stage::after {
     content: "";
     position: absolute; inset: 0; z-index: 1;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.03;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
@@ -1168,11 +1168,12 @@
     left: 32px; right: 32px; bottom: 76px;
     z-index: 2;
     display: flex;
+    pointer-events: none; /* que no interfiera con el drag de la caja */
   }
+  .of-info-inner { pointer-events: auto; }
 
-  /* panel de vidrio esmerilado detrás del texto */
   .of-info-inner {
-    background: rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.4);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid rgba(255,255,255,0.5);
@@ -1193,7 +1194,7 @@
   .of-name {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-size: clamp(1.2rem, 3vw, 1.9rem);
     color: var(--violeta);
     margin-bottom: 4px;
   }
@@ -1207,12 +1208,11 @@
   }
   .of-price {
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; font-weight: 700; color: var(--violeta);
+    font-size: 1.2rem; font-weight: 700; color: var(--violeta);
     background: var(--blanco);
     border-radius: 100px;
     padding: 8px 18px;
     box-shadow: 0 4px 14px rgba(54,42,111,0.12);
-    transition: box-shadow 0.4s ease;
   }
   .of-wa-btn {
     display: inline-flex; align-items: center; gap: 8px;
@@ -1239,13 +1239,23 @@
     position: absolute; bottom: 24px; right: 32px; z-index: 2;
     font-size: 0.68rem; letter-spacing: 0.06em;
     color: var(--texto-suave);
+    pointer-events: none;
   }
 
   @media (max-width: 860px) {
-    .of-stage { margin: 20px 16px 0; border-radius: 20px; }
-    .of-info { left: 20px; right: 20px; bottom: 60px; }
-    .of-info-inner { max-width: none; padding: 18px 20px; }
+    .of-stage { margin: 14px 10px 0; border-radius: 18px; }
+    .of-info {
+      left: 14px; right: 14px;
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    }
+    .of-info-inner { max-width: none; padding: 14px 18px; border-radius: 18px; }
+    .of-name { font-size: 1.15rem; margin-bottom: 2px; }
+    .of-weight { font-size: 0.76rem; margin-bottom: 10px; }
+    .of-price { font-size: 1.02rem; padding: 6px 14px; }
+    .of-wa-btn { padding: 8px 15px; font-size: 0.76rem; }
+    .of-eyebrow { font-size: 0.64rem; margin-bottom: 4px; }
     .of-cue { display: none; }
+    .of-dots { top: 14px; left: 18px; }
     .of-scrollwrap { height: 420vh; }
   }
 </style>
@@ -1262,66 +1272,40 @@
   const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 };
 
   const PRODUCTS = [
-    {
-      name: "Power Ultra Toy",
-      weight: "De 2 a 4 kg",
-      price: "$6.000",
-      accent: 0xff8fc7,
+    { name: "Power Ultra Toy", weight: "De 2 a 4 kg", price: "$6.000",
       waMessage: "Hola! Quería consultar por Power Ultra Toy",
-      textures: {
-        front:  "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png",
-        back:   "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png",
-        left: "", right: "", top: "", bottom: "",
-      },
-    },
-    {
-      name: "Power Ultra Chico",
-      weight: "5 a 10 kg",
-      price: "$6.500",
-      accent: 0x8f9dff,
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021732/jrrumptdjevkuacnyaob.png", left: "", right: "", top: "", bottom: "" } },
+    { name: "Power Ultra Chico", weight: "5 a 10 kg", price: "$6.500",
       waMessage: "Hola! Quería consultar por Power Ultra Chico",
-      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", left: "", right: "", top: "", bottom: "" },
-    },
-    {
-      name: "Power Ultra Mediano",
-      weight: "11 a 20 kg",
-      price: "$7.300",
-      accent: 0xc79bff,
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/efgqjh6jgaanbo2fvein.png", left: "", right: "", top: "", bottom: "" } },
+    { name: "Power Ultra Mediano", weight: "11 a 20 kg", price: "$7.300",
       waMessage: "Hola! Quería consultar por Power Ultra Mediano",
-      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", left: "", right: "", top: "", bottom: "" },
-    },
-    {
-      name: "Power Ultra Grande",
-      weight: "21 a 40 kg",
-      price: "$9.900",
-      accent: 0xffb37a,
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021731/azjvu5yv3lqnuofexp6x.png", left: "", right: "", top: "", bottom: "" } },
+    { name: "Power Ultra Grande", weight: "21 a 40 kg", price: "$9.900",
       waMessage: "Hola! Quería consultar por Power Ultra Grande",
-      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", left: "", right: "", top: "", bottom: "" },
-    },
-    {
-      name: "Power Ultra Gigante",
-      weight: "41 a 60 kg",
-      price: "$12.400",
-      accent: 0x7adfd0,
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/zexpwv497tb5h2oebvc5.png", left: "", right: "", top: "", bottom: "" } },
+    { name: "Power Ultra Gigante", weight: "41 a 60 kg", price: "$12.400",
       waMessage: "Hola! Quería consultar por Power Ultra Gigante",
-      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", left: "", right: "", top: "", bottom: "" },
-    },
+      textures: { front: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", back: "https://res.cloudinary.com/dwgwbdtud/image/upload/v1788021730/bbavsezetjjygcoujtq3.png", left: "", right: "", top: "", bottom: "" } },
   ];
 
   const WA_PHONE = "5493435303848";
+  const FALLBACK_COLOR = { front: 0xF5E6F0, back: 0xEAE8F5 };
 
-  const FALLBACK_COLOR = {
-    front:  0xF5E6F0,
-    back:   0xEAE8F5,
-  };
+  // ── colores de marca: tomados de tu paleta (rosa/violeta ya usados en el código original) ──
+  function readCssColor(varName, fallbackHex) {
+    try {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      if (!raw) return new THREE.Color(fallbackHex);
+      return new THREE.Color().setStyle(raw);
+    } catch (e) {
+      return new THREE.Color(fallbackHex);
+    }
+  }
 
   function easeOutBack(x) {
     const c1 = 1.70158, c3 = c1 + 1;
     return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
-  }
-
-  function hexToCss(hex) {
-    return "#" + hex.toString(16).padStart(6, "0");
   }
 
   function init() {
@@ -1339,59 +1323,66 @@
     const weightEl = document.getElementById("ofWeight");
     const priceEl = document.getElementById("ofPrice");
     const waEl = document.getElementById("ofWaBtn");
+    const cueEl = document.getElementById("ofCue");
+
+    let isMobile = window.innerWidth <= 860;
+    cueEl.textContent = isMobile ? "" : "scroll para girar · arrastrá para jugar";
+
+    // brand colors (fallback = los mismos hex que ya tenías en rimPink / shadow)
+    const ROSA = readCssColor("--rosa", "#c42685");
+    const VIOLETA = readCssColor("--violeta", "#362a6f");
+    const ROSA_SUAVE = readCssColor("--rosa-suave", "#f5e6f0");
+
+    function accentFor(idx) {
+      const t = PRODUCTS.length > 1 ? idx / (PRODUCTS.length - 1) : 0;
+      return new THREE.Color().lerpColors(ROSA, VIOLETA, t);
+    }
+    function hexToCss(c) { return "#" + c.getHexString(); }
 
     PRODUCTS.forEach((p, i) => {
       const d = document.createElement("div");
       d.className = "of-dot" + (i === 0 ? " on" : "");
       d.id = "ofDot" + i;
-      d.style.background = i === 0 ? hexToCss(p.accent) : "rgba(54,42,111,0.2)";
+      d.style.background = i === 0 ? hexToCss(accentFor(0)) : "rgba(54,42,111,0.2)";
       dotsEl.appendChild(d);
     });
 
-    const width = mount.clientWidth;
-    const height = mount.clientHeight;
+    let width = mount.clientWidth;
+    let height = mount.clientHeight;
 
     const scene = new THREE.Scene();
     scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 50);
-    camera.position.set(0, -0.05, 5.7);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
     if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
     if (THREE.ACESFilmicToneMapping) renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
-
     mount.appendChild(renderer.domElement);
 
-    // ── post-procesado: bloom sutil (solo brilla lo realmente brillante) ──
     let composer = null;
     let bloomPass = null;
     try {
       if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
         composer = new THREE.EffectComposer(renderer);
         composer.addPass(new THREE.RenderPass(scene, camera));
-        bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(width, height), 0.55, 0.4, 0.83);
+        bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(width, height), 0.32, 0.4, 0.85);
         composer.addPass(bloomPass);
       }
-    } catch (e) {
-      console.warn("Bloom no disponible, se sigue sin post-procesado.", e);
-      composer = null;
-    }
+    } catch (e) { composer = null; }
 
-    // luces
     const key = new THREE.DirectionalLight(0xfff5f0, 1.15);
     key.position.set(3, 4, 3);
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     scene.add(key);
 
-    const rimLight = new THREE.DirectionalLight(PRODUCTS[0].accent, 0.55);
+    const rimLight = new THREE.DirectionalLight(accentFor(0), 0.5);
     rimLight.position.set(-3, 1, -2);
     scene.add(rimLight);
 
@@ -1400,14 +1391,13 @@
 
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(20, 20),
-      new THREE.ShadowMaterial({ opacity: 0.18, color: 0x362a6f })
+      new THREE.ShadowMaterial({ opacity: 0.18, color: VIOLETA.getHex() })
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.75;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // ── halo de luz debajo de la caja, color de acento por producto ──
     function makeGlowTexture() {
       const size = 256;
       const canvas = document.createElement("canvas");
@@ -1415,23 +1405,20 @@
       const ctx = canvas.getContext("2d");
       const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
       grad.addColorStop(0, "rgba(255,255,255,0.9)");
-      grad.addColorStop(0.5, "rgba(255,255,255,0.25)");
+      grad.addColorStop(0.5, "rgba(255,255,255,0.22)");
       grad.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, size, size);
       return new THREE.CanvasTexture(canvas);
     }
     const glowMat = new THREE.SpriteMaterial({
-      map: makeGlowTexture(), color: PRODUCTS[0].accent,
+      map: makeGlowTexture(), color: accentFor(0),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0,
     });
     const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(2.6, 2.6, 1);
-    glow.position.set(0, -0.15, -0.4);
     scene.add(glow);
 
-    // ── partículas flotantes (profundidad, sensación de estudio fotográfico) ──
-    const PARTICLE_COUNT = 90;
+    const PARTICLE_COUNT = 80;
     const particlePos = new Float32Array(PARTICLE_COUNT * 3);
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particlePos[i*3]     = (Math.random() - 0.5) * 6;
@@ -1441,13 +1428,12 @@
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute("position", new THREE.BufferAttribute(particlePos, 3));
     const particleMat = new THREE.PointsMaterial({
-      color: 0xffffff, size: 0.022, transparent: true, opacity: 0.45,
+      color: ROSA_SUAVE, size: 0.022, transparent: true, opacity: 0.4,
       blending: THREE.AdditiveBlending, depthWrite: false,
     });
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
-    // ── caja principal ──
     const W = BOX_DIMENSIONS_CM.width / 10;
     const H = BOX_DIMENSIONS_CM.height / 10;
     const D = BOX_DIMENSIONS_CM.depth / 10;
@@ -1474,12 +1460,9 @@
       if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
       return tex;
     }
-
     const EDGE_TEX = {
-      left:   makeEdgeTexture("vertical"),
-      right:  makeEdgeTexture("vertical"),
-      top:    makeEdgeTexture("horizontal"),
-      bottom: makeEdgeTexture("horizontal"),
+      left: makeEdgeTexture("vertical"), right: makeEdgeTexture("vertical"),
+      top: makeEdgeTexture("horizontal"), bottom: makeEdgeTexture("horizontal"),
     };
 
     function loadPhotoTexture(src) {
@@ -1488,19 +1471,13 @@
       tex.anisotropy = 4;
       return tex;
     }
-
     function buildMaterial(src, fallback) {
       const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, metalness: 0.02, transparent: true });
-      if (src) {
-        mat.map = loadPhotoTexture(src);
-      } else if (fallback instanceof THREE.Texture) {
-        mat.map = fallback;
-      } else {
-        mat.color.setHex(fallback);
-      }
+      if (src) mat.map = loadPhotoTexture(src);
+      else if (fallback instanceof THREE.Texture) mat.map = fallback;
+      else mat.color.setHex(fallback);
       return mat;
     }
-
     function materialsFor(product) {
       const t = product.textures;
       return [
@@ -1516,8 +1493,31 @@
     let mats = materialsFor(PRODUCTS[0]);
     const box = new THREE.Mesh(geo, mats);
     box.castShadow = true;
-    box.position.y = 0.32;
     scene.add(box);
+
+    // ── layout responsive: tamaño y posición según dispositivo ──
+    let BASE_SCALE = 1.35;
+    let BOX_Y = 0.32;
+    let CAM_Z_BASE = 5.7;
+    let CAM_Z_RANGE = 1.0;
+
+    function applyResponsiveLayout() {
+      isMobile = window.innerWidth <= 860;
+      if (isMobile) {
+        BASE_SCALE = 1.75;
+        BOX_Y = 0.62;
+        CAM_Z_BASE = 5.4;
+        CAM_Z_RANGE = 0.7;
+      } else {
+        BASE_SCALE = 1.5;
+        BOX_Y = 0.32;
+        CAM_Z_BASE = 5.7;
+        CAM_Z_RANGE = 1.1;
+      }
+      glow.scale.set(2.6 * (BASE_SCALE / 1.4), 2.6 * (BASE_SCALE / 1.4), 1);
+      cueEl.textContent = isMobile ? "" : "scroll para girar · arrastrá para jugar";
+    }
+    applyResponsiveLayout();
 
     loadingEl.classList.add("hidden");
 
@@ -1535,19 +1535,23 @@
         const dot = document.getElementById("ofDot" + i);
         if (dot) {
           dot.classList.toggle("on", i === idx);
-          dot.style.background = i === idx ? hexToCss(PRODUCTS[i].accent) : "rgba(54,42,111,0.2)";
+          dot.style.background = i === idx ? hexToCss(accentFor(i)) : "rgba(54,42,111,0.2)";
         }
       }
     }
     updateInfo(0);
 
-    const state = { progress: 0, displayProgress: 0, mouseX: 0, mouseY: 0, mouseXS: 0, mouseYS: 0 };
+    const state = {
+      progress: 0, displayProgress: 0,
+      mouseX: 0, mouseY: 0, mouseXS: 0, mouseYS: 0,
+      manualSpin: 0, spinVelocity: 0,
+    };
     let currentChapter = 0;
     let swapping = false;
     let swapT = 0;
 
-    const accentFrom = new THREE.Color(PRODUCTS[0].accent);
-    const accentTo = new THREE.Color(PRODUCTS[0].accent);
+    const accentFrom = accentFor(0);
+    const accentTo = accentFor(0);
 
     function swapToChapter(idx) {
       const p = PRODUCTS[idx];
@@ -1556,14 +1560,9 @@
       const fallbacks = [EDGE_TEX.right, EDGE_TEX.left, EDGE_TEX.top, EDGE_TEX.bottom, FALLBACK_COLOR.front, FALLBACK_COLOR.back];
       mats.forEach((m, i) => {
         if (m.map && !(m.map instanceof THREE.CanvasTexture)) { m.map.dispose(); }
-        if (srcs[i]) {
-          m.map = loadPhotoTexture(srcs[i]);
-        } else if (fallbacks[i] instanceof THREE.Texture) {
-          m.map = fallbacks[i];
-        } else {
-          m.map = null;
-          m.color.setHex(fallbacks[i]);
-        }
+        if (srcs[i]) m.map = loadPhotoTexture(srcs[i]);
+        else if (fallbacks[i] instanceof THREE.Texture) m.map = fallbacks[i];
+        else { m.map = null; m.color.setHex(fallbacks[i]); }
         m.needsUpdate = true;
       });
       updateInfo(idx);
@@ -1583,27 +1582,28 @@
       state.mouseXS += (state.mouseX - state.mouseXS) * 0.06;
       state.mouseYS += (state.mouseY - state.mouseYS) * 0.06;
 
+      // resorte del drag: vuelve suave a 0 tras soltar
+      state.spinVelocity += -state.manualSpin * 0.02;
+      state.spinVelocity *= 0.92;
+      state.manualSpin += state.spinVelocity;
+
       const totalAngle = state.displayProgress * TURNS * Math.PI * 2;
-      box.rotation.y = t * 0.06 + totalAngle;
+      box.rotation.y = t * 0.05 + totalAngle + state.manualSpin;
       box.rotation.x = Math.sin(t * 0.4) * 0.03 + state.mouseYS * 0.12;
-      box.position.y = 0.32 + Math.sin(t * 0.6) * 0.025;
+      box.position.y = BOX_Y + Math.sin(t * 0.6) * 0.025;
 
       const introP = t < introDur ? easeOutBack(Math.min(1, t / introDur)) : 1;
       const breathe = 1 + Math.sin(t * 0.5) * 0.008;
-      box.scale.setScalar(Math.max(0.001, introP) * breathe);
+      box.scale.setScalar(Math.max(0.001, introP) * breathe * BASE_SCALE);
 
       glow.position.x = box.position.x;
       glow.position.y = box.position.y - 0.42;
+      glow.position.z = -0.4;
       const glowPulse = 0.5 + Math.sin(t * 0.9) * 0.08;
       glowMat.opacity = Math.min(1, t / introDur) * glowPulse;
 
       particles.rotation.y = t * 0.015;
       particles.position.y = Math.sin(t * 0.2) * 0.1;
-
-      // cámara: dolly según scroll + parallax suave de mouse
-      camera.position.z = 5.7 - state.displayProgress * 0.5;
-      camera.position.x = state.mouseXS * 0.18;
-      camera.position.y = -0.05 + state.mouseYS * -0.09;
 
       const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.displayProgress * PRODUCTS.length));
       if (chapter !== currentChapter && !swapping) {
@@ -1611,25 +1611,26 @@
         swapT = 0;
         currentChapter = chapter;
         accentFrom.copy(accentTo);
-        accentTo.set(PRODUCTS[chapter].accent);
+        accentTo.copy(accentFor(chapter));
       }
 
+      let zoomBurst = 0;
       if (swapping) {
         swapT += 0.06;
         const dip = Math.sin(Math.min(swapT, 1) * Math.PI);
+        zoomBurst = dip * 0.4; // acerca la cámara al girar hacia el siguiente producto
         mats.forEach((m) => { m.opacity = 1 - dip * 0.75; });
         rimLight.color.lerpColors(accentFrom, accentTo, Math.min(swapT, 1));
         glowMat.color.lerpColors(accentFrom, accentTo, Math.min(swapT, 1));
-        if (swapT >= 0.5 && swapT - 0.06 < 0.5) {
-          swapToChapter(currentChapter);
-        }
-        if (swapT >= 1) {
-          swapping = false;
-          mats.forEach((m) => { m.opacity = 1; });
-        }
+        if (swapT >= 0.5 && swapT - 0.06 < 0.5) swapToChapter(currentChapter);
+        if (swapT >= 1) { swapping = false; mats.forEach((m) => { m.opacity = 1; }); }
       }
 
-      tmpTarget.set(state.mouseXS * 0.25, 0.32 + state.mouseYS * -0.1, 0);
+      camera.position.z = CAM_Z_BASE - state.displayProgress * CAM_Z_RANGE - zoomBurst;
+      camera.position.x = state.mouseXS * 0.18;
+      camera.position.y = -0.05 + state.mouseYS * -0.09;
+
+      tmpTarget.set(state.mouseXS * 0.25, BOX_Y + state.mouseYS * -0.1, 0);
       camera.lookAt(tmpTarget);
 
       if (composer) composer.render();
@@ -1646,19 +1647,67 @@
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    function onMove(e) {
+    // parallax con mouse (desktop)
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType === "touch") return; // el touch se maneja abajo como drag
       const r = mount.getBoundingClientRect();
       state.mouseX = ((e.clientX - r.left) / r.width - 0.5) * 2;
       state.mouseY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    });
+
+    // ── drag-to-spin (mouse y dedo): "juego" extra ──
+    let dragActive = false;
+    let dragDecided = false;
+    let dragIsSpin = false;
+    let startX = 0, startY = 0, lastX = 0;
+
+    function dragStart(e) {
+      dragActive = true; dragDecided = false; dragIsSpin = false;
+      startX = e.clientX; startY = e.clientY; lastX = e.clientX;
+      mount.classList.add("dragging");
+      if (mount.setPointerCapture) { try { mount.setPointerCapture(e.pointerId); } catch(err){} }
     }
-    window.addEventListener("pointermove", onMove);
+    function dragMove(e) {
+      if (e.pointerType !== "touch") {
+        const r = mount.getBoundingClientRect();
+        state.mouseX = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        state.mouseY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      }
+      if (!dragActive) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!dragDecided) {
+        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+          dragDecided = true;
+          dragIsSpin = Math.abs(dx) > Math.abs(dy) * 1.15;
+        }
+      }
+      if (dragIsSpin) {
+        if (e.cancelable) e.preventDefault();
+        const delta = e.clientX - lastX;
+        state.manualSpin += delta * 0.012;
+        state.spinVelocity = delta * 0.012;
+        lastX = e.clientX;
+      }
+    }
+    function dragEnd() {
+      dragActive = false; dragDecided = false; dragIsSpin = false;
+      mount.classList.remove("dragging");
+    }
+
+    mount.addEventListener("pointerdown", dragStart, { passive: true });
+    mount.addEventListener("pointermove", dragMove, { passive: false });
+    mount.addEventListener("pointerup", dragEnd, { passive: true });
+    mount.addEventListener("pointercancel", dragEnd, { passive: true });
+    mount.addEventListener("pointerleave", dragEnd, { passive: true });
 
     function onResize() {
-      const w = mount.clientWidth, h = mount.clientHeight;
-      camera.aspect = w / h;
+      width = mount.clientWidth; height = mount.clientHeight;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-      if (composer) composer.setSize(w, h);
+      renderer.setSize(width, height);
+      if (composer) composer.setSize(width, height);
+      applyResponsiveLayout();
     }
     window.addEventListener("resize", onResize);
   }
@@ -1670,7 +1719,6 @@
   }
 })();
 </script>
-
   
 <!-- ═══ CONTACTO ═══ -->
 <section id="contacto">
