@@ -1468,29 +1468,33 @@
     bgA.style.opacity = "1";
 
   function styleForT(t) {
-  const sign = t < 0 ? -1 : 1;
-  const at = Math.abs(t);
-  const dwell = 0.45, edge = 0.95; // meseta más ancha: el producto queda fijo y nítido más tiempo
-  let opacity, blur, scale, ty;
+    const sign = t < 0 ? -1 : 1;
+    const at = Math.abs(t);
+    const dwell = 0.45, edge = 0.95;
+    let opacity, blur, scale, ty;
 
-  if (at <= dwell) {
-    // meseta: completamente nítido, a escala real y sin desplazamiento
-    opacity = 1; blur = 0; scale = 1; ty = 0;
-  } else if (at < edge) {
-    const l = (at - dwell) / (edge - dwell);
-    const eased = l * l * (3 - 2 * l);
-    opacity = 1 - eased;
-    blur = reduceMotion ? 0 : eased * 8;
-    scale = reduceMotion ? 1 : 1 - eased * 0.05;
-    ty = reduceMotion ? 0 : -sign * eased * 46;
-  } else {
-    opacity = 0; blur = 8; scale = 0.96; ty = -sign * 46;
+    if (at <= dwell) {
+      opacity = 1; blur = 0; scale = 1; ty = 0;
+    } else if (at < edge) {
+      const l = (at - dwell) / (edge - dwell);
+      const eased = l * l * (3 - 2 * l);
+      opacity = 1 - eased;
+      blur = reduceMotion ? 0 : eased * 8;
+      scale = reduceMotion ? 1 : 1 - eased * 0.05;
+      ty = reduceMotion ? 0 : -sign * eased * 46;
+    } else {
+      opacity = 0; blur = 8; scale = 0.96; ty = -sign * 46;
+    }
+
+    return { opacity: opacity, ty: ty, blur: blur, scale: scale };
   }
 
-  return { opacity: opacity, ty: ty, blur: blur, scale: scale };
-}
+  let ticking = false;
+  function onScroll() {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }
 
-    function update() {
+  function update() {
       ticking = false;
       const stageH = stage.offsetHeight;
       const trackH = track.offsetHeight;
