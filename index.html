@@ -1074,6 +1074,483 @@
   <p class="turnos-note">Lunes a viernes 09:00-12:00 y 17:00–20:30 · Sábados 10:00–13:00</p>
 </section>
 
+
+
+  <!--
+  ═══════════════════════════════════════════════════════════════
+  SECCIÓN "OFERTAS" — caja 3D que gira y cambia de producto con el scroll
+  ═══════════════════════════════════════════════════════════════
+
+  CÓMO INTEGRARLA A TU index.html:
+
+  1) Este bloque asume que ya existen las variables de --root definidas
+     en tu <style> principal (--crema, --rosa, --violeta, etc.) y las
+     fuentes Playfair Display / DM Sans ya importadas. No hace falta
+     repetirlas.
+
+  2) Pegá la <section id="ofertas"> donde quieras que aparezca en el
+     flujo de la página — sugiero entre #servicios y #turnos, así:
+        ...</section>  <!-- cierre de #servicios -->
+        <!-- ACÁ pegás toda la sección ofertas -->
+        <section id="turnos"> ...
+
+  3) Antes de cerrar </body>, agregá el script de Three.js (una sola vez):
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+     y DESPUÉS el <script> de esta sección (está al final de este archivo).
+
+  4) Opcional: agregá un link "Ofertas" en tu <ul class="nav-links"> y
+     en el <nav class="nav-drawer"> apuntando a href="#ofertas".
+
+  5) CARGA DE FOTOS: buscá "PRODUCTS = [" más abajo. Cada producto tiene
+     6 casilleros de imagen (front, back, left, right, top, bottom) con
+     comentarios que indican exactamente qué foto va en cada uno — son
+     los mismos 6 ángulos que ya sacaste para la Pipeta Power Ultra
+     Mediano (frente, dorso, 2 laterales angostos, borde de arriba,
+     borde de abajo/código de barras). Mientras no cargues la url de
+     una foto, esa cara se muestra con un color liso de la paleta de
+     la veterinaria (no se rompe el diseño).
+
+  6) Las dimensiones de la caja (12 x 7.5 x 2 cm) ya están cargadas
+     abajo en BOX_DIMENSIONS_CM — si algún producto de la línea tiene
+     una caja de otro tamaño, ajustalo ahí.
+-->
+
+<section id="ofertas">
+  <div class="ofertas-header fade-up">
+    <div class="section-label">Ofertas</div>
+    <h2 class="section-title">Pipetas para <em>cada tamaño</em></h2>
+    <p class="section-sub">Misma protección, para cada etapa y peso de tu mascota. Scrolleá para ver toda la línea.</p>
+  </div>
+
+  <div id="ofertasScrollWrap" class="of-scrollwrap">
+    <div class="of-stage">
+      <div id="ofertasMount" class="of-mount"></div>
+      <div class="of-vignette"></div>
+
+      <div id="ofertasLoading" class="of-loading">cargando…</div>
+
+      <div class="of-info">
+        <p class="of-eyebrow" id="ofEyebrow">LÍNEA POWER ULTRA</p>
+        <h3 class="of-name" id="ofName">—</h3>
+        <p class="of-weight" id="ofWeight">—</p>
+        <div class="of-bottom-row">
+          <span class="of-price" id="ofPrice">—</span>
+          <a class="of-wa-btn" id="ofWaBtn" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+            Consultar
+          </a>
+        </div>
+      </div>
+
+      <div class="of-dots" id="ofDots"></div>
+      <div class="of-cue">scroll para girar · mové el mouse</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Ofertas: reutiliza la paleta y tipografía ya definidas en :root ── */
+  #ofertas { background: var(--blanco); padding-bottom: 0; }
+
+  .ofertas-header {
+    max-width: 1060px;
+    margin: 0 auto 8px;
+  }
+
+  .of-scrollwrap {
+    position: relative;
+    /* 5 productos: espacio de scroll suficiente para que cada uno
+       tenga tiempo de "vivir" en pantalla antes de girar al siguiente */
+    height: 480vh;
+  }
+
+  .of-stage {
+    position: sticky;
+    top: var(--nav-h);
+    height: calc(100svh - var(--nav-h));
+    overflow: hidden;
+    border-radius: 28px;
+    margin: 24px 48px 0;
+    background: linear-gradient(160deg, var(--crema) 0%, var(--rosa-suave) 55%, var(--violeta-suave) 100%);
+  }
+  .of-mount { position: absolute; inset: 0; }
+
+  .of-vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 40%, rgba(54,42,111,0.10) 100%);
+  }
+
+  .of-loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; color: var(--texto-suave);
+    background: var(--crema);
+    transition: opacity 0.4s;
+    z-index: 3;
+  }
+  .of-loading.hidden { opacity: 0; pointer-events: none; }
+
+  .of-info {
+    position: absolute;
+    left: 32px; right: 32px; bottom: 76px;
+    z-index: 2;
+  }
+  .of-eyebrow {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+    color: var(--rosa); margin-bottom: 8px; text-transform: uppercase;
+  }
+  .of-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    color: var(--violeta);
+    margin-bottom: 4px;
+  }
+  .of-weight {
+    font-size: 0.86rem;
+    color: var(--texto-suave);
+    margin-bottom: 16px;
+  }
+  .of-bottom-row {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .of-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700; color: var(--violeta);
+    background: var(--blanco);
+    border-radius: 100px;
+    padding: 8px 18px;
+    box-shadow: 0 4px 14px rgba(54,42,111,0.12);
+  }
+  .of-wa-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #25D366; color: var(--blanco);
+    padding: 10px 20px; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 600; text-decoration: none;
+    box-shadow: 0 5px 16px rgba(37,211,102,0.3);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .of-wa-btn:hover { background: #1da851; transform: translateY(-2px); }
+
+  .of-dots {
+    position: absolute; top: 24px; left: 32px; z-index: 2;
+    display: flex; gap: 6px;
+  }
+  .of-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(54,42,111,0.2);
+    transition: background 0.25s, transform 0.25s;
+  }
+  .of-dot.on { background: var(--rosa); transform: scale(1.5); }
+
+  .of-cue {
+    position: absolute; bottom: 24px; right: 32px; z-index: 2;
+    font-size: 0.68rem; letter-spacing: 0.06em;
+    color: var(--texto-suave);
+  }
+
+  @media (max-width: 860px) {
+    .of-stage { margin: 20px 16px 0; border-radius: 20px; }
+    .of-info { left: 20px; right: 20px; bottom: 60px; }
+    .of-cue { display: none; }
+    .of-scrollwrap { height: 420vh; }
+  }
+</style>
+
+<script>
+(function () {
+  // ═══════════════════════════════════════════════════════════
+  // DATOS DE LOS 5 PRODUCTOS
+  // Editá nombre / rango de peso / precio, y pegá la URL de cada
+  // foto en su casillero. Si dejás "" no rompe nada: se muestra
+  // un color liso de la paleta en esa cara.
+  // ═══════════════════════════════════════════════════════════
+
+  const BOX_DIMENSIONS_CM = { width: 12, height: 7.5, depth: 2 }; // frente/dorso 12x7.5, profundidad 2
+
+  const PRODUCTS = [
+    {
+      name: "Power Ultra Toy",          // EDITAR nombre real
+      weight: "Hasta 4 kg",              // EDITAR rango de peso
+      price: "$0.000",                   // EDITAR precio
+      waMessage: "Hola! Quería consultar por Power Ultra Toy",
+      textures: {
+        front:  "", // FOTO: frente completo (igual al de Mediano: perro + logo + dosificación)
+        back:   "", // FOTO: dorso completo (info técnica + fórmula + Brouwer)
+        left:   "", // FOTO: lateral angosto vertical — lado "Fecha/Lote/Vencimiento"
+        right:  "", // FOTO: lateral angosto vertical — lado "Perros ... de X a Y kilos"
+        top:    "", // FOTO: borde angosto horizontal — "Power Ultra" + rango de peso
+        bottom: "", // FOTO: borde angosto horizontal — código de barras
+      },
+    },
+    {
+      name: "Power Ultra Chico",         // EDITAR nombre real
+      weight: "4 a 10 kg",               // EDITAR rango de peso
+      price: "$0.000",                   // EDITAR precio
+      waMessage: "Hola! Quería consultar por Power Ultra Chico",
+      textures: { front: "", back: "", left: "", right: "", top: "", bottom: "" },
+    },
+    {
+      name: "Power Ultra Mediano",       // EDITAR si corresponde
+      weight: "11 a 20 kg",              // ya confirmado en la caja que me pasaste
+      price: "$6.200",                   // EDITAR precio real
+      waMessage: "Hola! Quería consultar por Power Ultra Mediano",
+      textures: {
+        // Acá van las 6 fotos que ya sacaste de la caja real:
+        front:  "", // FOTO: 1000675911.jpg (frente)
+        back:   "", // FOTO: 1000675912.jpg (dorso)
+        left:   "", // FOTO: 1000675914.jpg (lateral Fecha/Lote)
+        right:  "", // FOTO: 1000675913.jpg (lateral Perros medianos)
+        top:    "", // FOTO: 1000675915.jpg (borde Power Ultra)
+        bottom: "", // FOTO: 1000675916.jpg (borde código de barras)
+      },
+    },
+    {
+      name: "Power Ultra Grande",        // EDITAR nombre real
+      weight: "21 a 30 kg",              // EDITAR rango de peso
+      price: "$0.000",                   // EDITAR precio
+      waMessage: "Hola! Quería consultar por Power Ultra Grande",
+      textures: { front: "", back: "", left: "", right: "", top: "", bottom: "" },
+    },
+    {
+      name: "Power Ultra Gigante",       // EDITAR nombre real
+      weight: "Más de 30 kg",            // EDITAR rango de peso
+      price: "$0.000",                   // EDITAR precio
+      waMessage: "Hola! Quería consultar por Power Ultra Gigante",
+      textures: { front: "", back: "", left: "", right: "", top: "", bottom: "" },
+    },
+  ];
+
+  const WA_PHONE = "5493435303848"; // mismo número que usa el resto del sitio
+
+  // colores de respaldo (paleta veterinaria) para caras sin foto todavía
+  const FALLBACK = {
+    front:  0xF5E6F0, // rosa suave
+    back:   0xEAE8F5, // violeta suave
+    left:   0xEAE8F5,
+    right:  0xEAE8F5,
+    top:    0xFFFFFF,
+    bottom: 0xFFFFFF,
+  };
+
+  // ═══════════════════════════════════════════════════════════
+  // SETUP THREE.JS
+  // ═══════════════════════════════════════════════════════════
+  function init() {
+    if (typeof THREE === "undefined") {
+      console.warn("Three.js no está cargado. Agregá el script de three.js antes de este bloque.");
+      return;
+    }
+
+    const mount = document.getElementById("ofertasMount");
+    const wrap = document.getElementById("ofertasScrollWrap");
+    const loadingEl = document.getElementById("ofertasLoading");
+    const dotsEl = document.getElementById("ofDots");
+    const nameEl = document.getElementById("ofName");
+    const weightEl = document.getElementById("ofWeight");
+    const priceEl = document.getElementById("ofPrice");
+    const waEl = document.getElementById("ofWaBtn");
+
+    // puntitos indicadores
+    PRODUCTS.forEach((_, i) => {
+      const d = document.createElement("div");
+      d.className = "of-dot" + (i === 0 ? " on" : "");
+      d.id = "ofDot" + i;
+      dotsEl.appendChild(d);
+    });
+
+    const width = mount.clientWidth;
+    const height = mount.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = null; // transparente: se ve el gradiente CSS de .of-stage
+    renderer_bg: {}
+
+    const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 50);
+    camera.position.set(0, 0.15, 5.6);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    mount.appendChild(renderer.domElement);
+
+    // luces suaves, tono cálido/rosado acorde a la marca
+    const key = new THREE.DirectionalLight(0xfff5f0, 1.9);
+    key.position.set(3, 4, 3);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    scene.add(key);
+
+    const rimPink = new THREE.DirectionalLight(0xc42685, 0.5);
+    rimPink.position.set(-3, 1, -2);
+    scene.add(rimPink);
+
+    const fill = new THREE.AmbientLight(0xeae8f5, 1.4);
+    scene.add(fill);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20),
+      new THREE.ShadowMaterial({ opacity: 0.18, color: 0x362a6f })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.75;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // ── geometría con las dimensiones reales de la caja ──
+    const W = BOX_DIMENSIONS_CM.width / 10;   // 12cm -> 1.2
+    const H = BOX_DIMENSIONS_CM.height / 10;  // 7.5cm -> 0.75
+    const D = BOX_DIMENSIONS_CM.depth / 10;   // 2cm  -> 0.2
+    const geo = new THREE.BoxGeometry(W, H, D);
+
+    const loader = new THREE.TextureLoader();
+    function buildMaterial(src, fallbackColor) {
+      if (src) {
+        const tex = loader.load(src);
+        if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 4;
+        return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, transparent: true });
+      }
+      return new THREE.MeshStandardMaterial({ color: fallbackColor, roughness: 0.6, transparent: true });
+    }
+
+    // orden BoxGeometry: [+x, -x, +y, -y, +z, -z] = [right, left, top, bottom, front, back]
+    function materialsFor(product) {
+      const t = product.textures;
+      return [
+        buildMaterial(t.right,  FALLBACK.right),
+        buildMaterial(t.left,   FALLBACK.left),
+        buildMaterial(t.top,    FALLBACK.top),
+        buildMaterial(t.bottom, FALLBACK.bottom),
+        buildMaterial(t.front,  FALLBACK.front),
+        buildMaterial(t.back,   FALLBACK.back),
+      ];
+    }
+
+    let mats = materialsFor(PRODUCTS[0]);
+    const box = new THREE.Mesh(geo, mats);
+    box.castShadow = true;
+    scene.add(box);
+
+    loadingEl.classList.add("hidden");
+
+    function updateInfo(idx) {
+      const p = PRODUCTS[idx];
+      nameEl.textContent = p.name;
+      weightEl.textContent = p.weight;
+      priceEl.textContent = p.price;
+      waEl.href = "https://wa.me/" + WA_PHONE + "?text=" + encodeURIComponent(p.waMessage);
+      for (let i = 0; i < PRODUCTS.length; i++) {
+        const dot = document.getElementById("ofDot" + i);
+        if (dot) dot.classList.toggle("on", i === idx);
+      }
+    }
+    updateInfo(0);
+
+    // ── estado de scroll / mouse / transición ──
+    const state = { progress: 0, mouseX: 0, mouseY: 0 };
+    let currentChapter = 0;
+    let swapping = false;
+    let swapT = 0; // 0..1 a lo largo de la animación de swap
+
+    function swapToChapter(idx) {
+      const p = PRODUCTS[idx];
+      const t = p.textures;
+      const srcs = [t.right, t.left, t.top, t.bottom, t.front, t.back];
+      const fbs = [FALLBACK.right, FALLBACK.left, FALLBACK.top, FALLBACK.bottom, FALLBACK.front, FALLBACK.back];
+      mats.forEach((m, i) => {
+        if (m.map) { m.map.dispose(); m.map = null; }
+        if (srcs[i]) {
+          const tex = loader.load(srcs[i]);
+          if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+          m.map = tex;
+        } else {
+          m.color.setHex(fbs[i]);
+        }
+        m.needsUpdate = true;
+      });
+      updateInfo(idx);
+    }
+
+    let raf;
+    const clock = new THREE.Clock();
+    const tmpTarget = new THREE.Vector3();
+    const TURNS = PRODUCTS.length; // una vuelta completa por producto
+
+    function animate() {
+      raf = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      const totalAngle = state.progress * TURNS * Math.PI * 2;
+      box.rotation.y = t * 0.06 + totalAngle;
+      box.rotation.x = Math.sin(t * 0.4) * 0.03 + state.mouseY * 0.12;
+      box.position.y = Math.sin(t * 0.6) * 0.02;
+
+      const chapter = Math.min(PRODUCTS.length - 1, Math.floor(state.progress * PRODUCTS.length));
+      if (chapter !== currentChapter && !swapping) {
+        swapping = true;
+        swapT = 0;
+        currentChapter = chapter;
+      }
+
+      if (swapping) {
+        swapT += 0.06;
+        const dip = Math.sin(Math.min(swapT, 1) * Math.PI); // 0 -> 1 -> 0
+        mats.forEach((m) => { m.opacity = 1 - dip * 0.75; });
+        if (swapT >= 0.5 && swapT - 0.06 < 0.5) {
+          swapToChapter(currentChapter);
+        }
+        if (swapT >= 1) {
+          swapping = false;
+          mats.forEach((m) => { m.opacity = 1; });
+        }
+      }
+
+      tmpTarget.set(state.mouseX * 0.25, 0.1 + state.mouseY * -0.1, 0);
+      camera.lookAt(tmpTarget);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    function onScroll() {
+      const rect = wrap.getBoundingClientRect();
+      const total = wrap.offsetHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
+      state.progress = p;
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    function onMove(e) {
+      const r = mount.getBoundingClientRect();
+      state.mouseX = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      state.mouseY = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    }
+    window.addEventListener("pointermove", onMove);
+
+    function onResize() {
+      const w = mount.clientWidth, h = mount.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener("resize", onResize);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
+  
 <!-- ═══ CONTACTO ═══ -->
 <section id="contacto">
   <div class="contacto-grid">
