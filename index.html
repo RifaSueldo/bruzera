@@ -1471,26 +1471,29 @@
  function styleForT(t) {
   const sign = t < 0 ? -1 : 1;
   const at = Math.abs(t);
-  const dwell = 0.62, edge = 1.0;   // antes 0.45 / 0.95 — más tiempo nítido
-  let opacity, blur, scale, ty;
 
+  // Entrando (t<0): se mantiene nítido hasta el centro — no se toca.
+  // Saliendo (t>0): se esfuma rápido y desaparece antes de que
+  // el siguiente llegue a su propia zona nítida.
+  const dwell = t < 0 ? 0.45 : 0.12;
+  const edge  = t < 0 ? 0.95 : 0.55;
+
+  let opacity, blur, scale, ty;
   if (at <= dwell) {
     opacity = 1; blur = 0; scale = 1; ty = 0;
   } else if (at < edge) {
     const l = (at - dwell) / (edge - dwell);
     const eased = l * l * (3 - 2 * l);
     opacity = 1 - eased;
-    blur = reduceMotion ? 0 : Math.pow(eased, 1.7) * 4;   // antes eased*8 — máximo más bajo y entra más tarde
-    scale = reduceMotion ? 1 : 1 - eased * 0.035;          // antes 0.05 — menos brusco
-    ty = reduceMotion ? 0 : -sign * eased * 34;            // antes 46
+    blur = reduceMotion ? 0 : eased * 10;
+    scale = reduceMotion ? 1 : 1 - eased * 0.05;
+    ty = reduceMotion ? 0 : -sign * eased * 40;
   } else {
-    opacity = 0; blur = 4; scale = 0.965; ty = -sign * 34;
+    opacity = 0; blur = 10; scale = 0.95; ty = -sign * 40;
   }
 
   return { opacity: opacity, ty: ty, blur: blur, scale: scale };
 }
-
-  let ticking = false;
   function onScroll() {
     if (!ticking) { requestAnimationFrame(update); ticking = true; }
   }
