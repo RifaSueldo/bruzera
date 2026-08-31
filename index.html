@@ -1288,10 +1288,11 @@
   transition: transform 0.5s cubic-bezier(.16,1,.3,1);
 }
 .of-ch-visual-inner img {
-  width: min(64vw, 340px);
-  filter: drop-shadow(0 24px 34px rgba(54,42,111,0.18));
+  width: min(68vw, 400px);
+  filter: drop-shadow(0 26px 38px rgba(54,42,111,0.18));
   user-select: none;
   -webkit-user-drag: none;
+  transition: width 0.3s ease;
 }
 
 /* ── Navegación lateral ── */
@@ -1336,7 +1337,7 @@
   .of-ch-eyebrow::before { display: none; }
   .of-ch-cta { margin: 0 auto; }
   .of-ch-ghost { font-size: 60vw; }
-  .of-ch-visual-inner img { width: min(58vw, 260px); }
+ .of-ch-visual-inner img { width: min(62vw, 300px); }
   .of-railnav { right: auto; left: 50%; top: auto; bottom: 18px; transform: translateX(-50%); flex-direction: row; }
   .of-rail-dot.active { transform: scale(1.5); }
   .of-intro-tagline { padding: 0 12px; }
@@ -1467,27 +1468,27 @@
     bgA.style.background = chapters[0].bg;
     bgA.style.opacity = "1";
 
-  function styleForT(t) {
-    const sign = t < 0 ? -1 : 1;
-    const at = Math.abs(t);
-    const dwell = 0.45, edge = 0.95;
-    let opacity, blur, scale, ty;
+ function styleForT(t) {
+  const sign = t < 0 ? -1 : 1;
+  const at = Math.abs(t);
+  const dwell = 0.62, edge = 1.0;   // antes 0.45 / 0.95 — más tiempo nítido
+  let opacity, blur, scale, ty;
 
-    if (at <= dwell) {
-      opacity = 1; blur = 0; scale = 1; ty = 0;
-    } else if (at < edge) {
-      const l = (at - dwell) / (edge - dwell);
-      const eased = l * l * (3 - 2 * l);
-      opacity = 1 - eased;
-      blur = reduceMotion ? 0 : eased * 8;
-      scale = reduceMotion ? 1 : 1 - eased * 0.05;
-      ty = reduceMotion ? 0 : -sign * eased * 46;
-    } else {
-      opacity = 0; blur = 8; scale = 0.96; ty = -sign * 46;
-    }
-
-    return { opacity: opacity, ty: ty, blur: blur, scale: scale };
+  if (at <= dwell) {
+    opacity = 1; blur = 0; scale = 1; ty = 0;
+  } else if (at < edge) {
+    const l = (at - dwell) / (edge - dwell);
+    const eased = l * l * (3 - 2 * l);
+    opacity = 1 - eased;
+    blur = reduceMotion ? 0 : Math.pow(eased, 1.7) * 4;   // antes eased*8 — máximo más bajo y entra más tarde
+    scale = reduceMotion ? 1 : 1 - eased * 0.035;          // antes 0.05 — menos brusco
+    ty = reduceMotion ? 0 : -sign * eased * 34;            // antes 46
+  } else {
+    opacity = 0; blur = 4; scale = 0.965; ty = -sign * 34;
   }
+
+  return { opacity: opacity, ty: ty, blur: blur, scale: scale };
+}
 
   let ticking = false;
   function onScroll() {
