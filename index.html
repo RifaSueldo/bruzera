@@ -1693,5 +1693,110 @@
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 </script>
+
+  <div id="pawTrail" aria-hidden="true"></div>
+<style>
+  #pawTrail {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  .paw-print {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    color: var(--rosa);
+    opacity: 0.42;
+    transform-origin: center;
+    animation: pawFade 1100ms ease-out forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes pawFade {
+    0%   { opacity: 0.42; transform: scale(0.9) rotate(var(--paw-rot, 0deg)); }
+    15%  { opacity: 0.42; transform: scale(1) rotate(var(--paw-rot, 0deg)); }
+    100% { opacity: 0; transform: scale(0.72) rotate(var(--paw-rot, 0deg)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #pawTrail { display: none; }
+  }
+</style>
+<script>
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  if (reduceMotion || !isTouch) return;
+
+  const wrap = document.getElementById('pawTrail');
+  if (!wrap) return;
+
+  const PAW_SVG =
+    '<svg viewBox="0 0 40 40" width="100%" height="100%" fill="currentColor">' +
+      '<ellipse cx="20" cy="27" rx="10" ry="8.5"/>' +
+      '<ellipse cx="7" cy="15" rx="4.3" ry="5.4" transform="rotate(-18 7 15)"/>' +
+      '<ellipse cx="16" cy="7.5" rx="4.6" ry="5.8" transform="rotate(-6 16 7.5)"/>' +
+      '<ellipse cx="25" cy="7.5" rx="4.6" ry="5.8" transform="rotate(6 25 7.5)"/>' +
+      '<ellipse cx="34" cy="15" rx="4.3" ry="5.4" transform="rotate(18 34 15)"/>' +
+    '</svg>';
+
+  const MIN_DIST = 26;   // espaciado entre huellas ("paso")
+  const MAX_PRINTS = 40; // límite de huellas simultáneas en pantalla
+  let lastX = null, lastY = null;
+  let stepSide = 1;      // alterna pata izquierda / derecha
+  let activePrints = [];
+
+  function spawnPaw(x, y, dirAngle) {
+    const el = document.createElement('div');
+    el.className = 'paw-print';
+    el.innerHTML = PAW_SVG;
+
+    const perpAngle = dirAngle + Math.PI / 2;
+    const offset = 9;
+    const ox = Math.cos(perpAngle) * offset * stepSide;
+    const oy = Math.sin(perpAngle) * offset * stepSide;
+
+    const toeOut = 14 * stepSide;
+    const rotDeg = (dirAngle * 180 / Math.PI) + 90 + toeOut;
+
+    el.style.left = (x + ox - 11) + 'px';
+    el.style.top = (y + oy - 11) + 'px';
+    el.style.setProperty('--paw-rot', rotDeg + 'deg');
+
+    wrap.appendChild(el);
+    activePrints.push(el);
+    if (activePrints.length > MAX_PRINTS) {
+      const old = activePrints.shift();
+      if (old) old.remove();
+    }
+    el.addEventListener('animationend', () => {
+      el.remove();
+      activePrints = activePrints.filter((p) => p !== el);
+    });
+
+    stepSide *= -1;
+  }
+
+  function handleMove(x, y) {
+    if (lastX === null) { lastX = x; lastY = y; return; }
+    const dx = x - lastX, dy = y - lastY;
+    const dist = Math.hypot(dx, dy);
+    if (dist < MIN_DIST) return;
+    spawnPaw(x, y, Math.atan2(dy, dx));
+    lastX = x; lastY = y;
+  }
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches.length !== 1) return; // ignora pellizcos/multitouch
+    const t = e.touches[0];
+    handleMove(t.clientX, t.clientY);
+  }, { passive: true });
+
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    lastX = null; lastY = null; // reinicia el punto de partida en cada nuevo toque
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
